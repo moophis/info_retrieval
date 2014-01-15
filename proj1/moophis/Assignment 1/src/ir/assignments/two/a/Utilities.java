@@ -57,7 +57,7 @@ public class Utilities {
 		}
 		
 		// then sort the words
-		Collections.sort(words);
+		//Collections.sort(words);
 		
 		reader.close();
 		return words;

@@ -15,11 +15,26 @@ import java.util.Map;
 /**
  * Comparator implementation of Frequency class 
  */
+
 class FrequencyComparator implements Comparator<Frequency> {
+	public static final FrequencyComparator FREQ = 
+			new FrequencyComparator(0);
+	public static final FrequencyComparator TXT = 
+			new FrequencyComparator(1);
+	private int type = 0;
+	
+	private FrequencyComparator(int type) {
+		this.type = type;
+	}
+	
 	@Override
 	public int compare(Frequency f1, Frequency f2) {
-		return f1.getFrequency() > f2.getFrequency() ?
-				-1 : f1.getFrequency() == f2.getFrequency() ? 0 : 1;
+		if (type == 0) {
+			return f1.getFrequency() > f2.getFrequency() ?
+					-1 : f1.getFrequency() == f2.getFrequency() ? 0 : 1;
+		} else {
+			return f1.getText().compareTo(f2.getText());
+		}
 	}
 }
 
@@ -76,7 +91,8 @@ public final class WordFrequencyCounter {
 			list.add(new Frequency(m.getKey(), m.getValue()));
 		}
 		
-		Collections.sort(list, new FrequencyComparator());		
+		Collections.sort(list, FrequencyComparator.TXT);		
+		Collections.sort(list, FrequencyComparator.FREQ);		
 		return list;
 	}
 	
@@ -88,8 +104,8 @@ public final class WordFrequencyCounter {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		File file = new File(args[0]);
-		//File file = new File("/Users/liqiangw/text.txt");
+		//File file = new File(args[0]);
+		File file = new File("/Users/liqiangw/text.txt");
 		List<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeWordFrequencies(words);
 		Utilities.printFrequencies(frequencies);
