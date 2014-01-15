@@ -5,7 +5,23 @@ import ir.assignments.two.a.Utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+/**
+ * Comparator implementation of Frequency class 
+ */
+class FrequencyComparator implements Comparator<Frequency> {
+	@Override
+	public int compare(Frequency f1, Frequency f2) {
+		return f1.getFrequency() > f2.getFrequency() ?
+				-1 : f1.getFrequency() == f2.getFrequency() ? 0 : 1;
+	}
+}
 
 /**
  * Counts the total number of words and their frequencies in a text file.
@@ -45,8 +61,25 @@ public final class WordFrequencyCounter {
 	 */
 	public static List<Frequency> computeWordFrequencies(List<String> words) {
 		// TODO Write body!
-		return null;
+		List<Frequency> list = new ArrayList<Frequency>();
+		HashMap<String, Integer> freqMap = new HashMap<String, Integer>();
+		
+		for (String s : words) {
+			if (!freqMap.containsKey(s)) {
+				freqMap.put(s, 1);
+			} else {
+				freqMap.put(s, freqMap.get(s) + 1);
+			}
+		}
+		
+		for (Map.Entry<String, Integer> m : freqMap.entrySet()) {
+			list.add(new Frequency(m.getKey(), m.getValue()));
+		}
+		
+		Collections.sort(list, new FrequencyComparator());		
+		return list;
 	}
+	
 	
 	/**
 	 * Runs the word frequency counter. The input should be the path to a text file.
@@ -56,8 +89,11 @@ public final class WordFrequencyCounter {
 	 */
 	public static void main(String[] args) throws IOException {
 		File file = new File(args[0]);
+		//File file = new File("/Users/liqiangw/text.txt");
 		List<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeWordFrequencies(words);
 		Utilities.printFrequencies(frequencies);
 	}
 }
+
+

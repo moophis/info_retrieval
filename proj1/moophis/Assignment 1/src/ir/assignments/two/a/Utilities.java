@@ -50,7 +50,7 @@ public class Utilities {
 				System.err.println("buf is null!");
 			} else {
 				for (String s : buf) {
-					if (s.length() > 0) // eliminate spaces
+					if (s.length() > 0)  // eliminate spaces
 						words.add(s);
 				}
 			}
