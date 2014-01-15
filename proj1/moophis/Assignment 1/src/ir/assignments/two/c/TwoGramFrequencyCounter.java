@@ -2,11 +2,16 @@ package ir.assignments.two.c;
 
 import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
+import ir.assignments.two.b.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Count the total number of 2-grams and their frequencies in a text file.
@@ -46,7 +51,35 @@ public final class TwoGramFrequencyCounter {
 	 */
 	private static List<Frequency> computeTwoGramFrequencies(ArrayList<String> words) {
 		// TODO Write body!
-		return null;
+		List<Frequency> list = new ArrayList<Frequency>();
+		HashMap<String, Integer> freqMap = new HashMap<String, Integer>();
+		
+		if (words.isEmpty())
+			return list;
+			
+		Iterator<String> it = words.iterator();
+		String first = it.next();
+		String second;
+		for (int i = 0; i < words.size() - 1; i++) {
+			second = it.next();
+			String twoGram = first + " " + second;
+			
+			if (!freqMap.containsKey(twoGram)) {
+				freqMap.put(twoGram, 1);
+			} else {
+				freqMap.put(twoGram, freqMap.get(twoGram) + 1);
+			}
+			
+			first = second;
+		}
+		
+		for (Map.Entry<String, Integer> m : freqMap.entrySet()) {
+			list.add(new Frequency(m.getKey(), m.getValue()));
+		}
+		Collections.sort(list, FrequencyComparator.TXT);		
+		Collections.sort(list, FrequencyComparator.FREQ);	
+		
+		return list;
 	}
 	
 	/**
@@ -57,6 +90,7 @@ public final class TwoGramFrequencyCounter {
 	 */
 	public static void main(String[] args) throws IOException {
 		File file = new File(args[0]);
+		//File file = new File("/Users/liqiangw/text.txt");
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeTwoGramFrequencies(words);
 		Utilities.printFrequencies(frequencies);

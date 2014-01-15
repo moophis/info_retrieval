@@ -7,36 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Comparator implementation of Frequency class 
- */
 
-class FrequencyComparator implements Comparator<Frequency> {
-	public static final FrequencyComparator FREQ = 
-			new FrequencyComparator(0);
-	public static final FrequencyComparator TXT = 
-			new FrequencyComparator(1);
-	private int type = 0;
-	
-	private FrequencyComparator(int type) {
-		this.type = type;
-	}
-	
-	@Override
-	public int compare(Frequency f1, Frequency f2) {
-		if (type == 0) {
-			return f1.getFrequency() > f2.getFrequency() ?
-					-1 : f1.getFrequency() == f2.getFrequency() ? 0 : 1;
-		} else {
-			return f1.getText().compareTo(f2.getText());
-		}
-	}
-}
 
 /**
  * Counts the total number of words and their frequencies in a text file.
