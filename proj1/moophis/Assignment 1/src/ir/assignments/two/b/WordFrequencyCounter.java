@@ -66,7 +66,7 @@ public final class WordFrequencyCounter {
 			list.add(new Frequency(m.getKey(), m.getValue()));
 		}
 		
-		Collections.sort(list, FrequencyComparator.TXT);		
+		Collections.sort(list, FrequencyComparator.TXT_ALNUM);		
 		Collections.sort(list, FrequencyComparator.FREQ);		
 		return list;
 	}
@@ -79,8 +79,8 @@ public final class WordFrequencyCounter {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		File file = new File(args[0]);
-		//File file = new File("/Users/liqiangw/text.txt");
+		//File file = new File(args[0]);
+		File file = new File("/Users/liqiangw/Test/HP2.txt");
 		List<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeWordFrequencies(words);
 		Utilities.printFrequencies(frequencies);

@@ -76,7 +76,7 @@ public final class TwoGramFrequencyCounter {
 		for (Map.Entry<String, Integer> m : freqMap.entrySet()) {
 			list.add(new Frequency(m.getKey(), m.getValue()));
 		}
-		Collections.sort(list, FrequencyComparator.TXT);		
+		Collections.sort(list, FrequencyComparator.TXT_ALNUM);		
 		Collections.sort(list, FrequencyComparator.FREQ);	
 		
 		return list;
@@ -89,8 +89,8 @@ public final class TwoGramFrequencyCounter {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		File file = new File(args[0]);
-		//File file = new File("/Users/liqiangw/text.txt");
+		//File file = new File(args[0]);
+		File file = new File("/Users/liqiangw/Test/HP2.txt");
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeTwoGramFrequencies(words);
 		Utilities.printFrequencies(frequencies);

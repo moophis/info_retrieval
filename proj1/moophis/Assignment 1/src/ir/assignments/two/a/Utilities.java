@@ -132,7 +132,7 @@ public class Utilities {
 	// @test 
 	public static void main(String[] args) throws IOException {
 		ArrayList<String> stringArray;
-		File f = new File("/Users/liqiangw/text.txt");
+		File f = new File("/Users/liqiangw/Test/HP2.txt");
 		System.out.println("Utility testing...");
 		
 		System.out.println(f.isFile());

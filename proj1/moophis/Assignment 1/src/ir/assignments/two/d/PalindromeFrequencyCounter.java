@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class PalindromeFrequencyCounter {
 	/**
@@ -74,12 +73,17 @@ public class PalindromeFrequencyCounter {
 		for (Map.Entry<String, Integer> m : freqMap.entrySet()) {
 			list.add(new Frequency(m.getKey(), m.getValue()));
 		}
+		
 		/*
-		 * FIXME: When there is a tie, should the sequence be kept in order
-		 * of occurrence? 
+		 * In my implementation, the size of a word in Frequency class 
+		 * is counted without considering spaces.
+		 * 
+		 * Since sorting by word size enjoys highest priority, I just 
+		 * put it lastly.
 		 */
-		//Collections.sort(list, FrequencyComparator.TXT);		
-		Collections.sort(list, FrequencyComparator.FREQ);	
+		Collections.sort(list, FrequencyComparator.TXT_ALNUM);		
+		Collections.sort(list, FrequencyComparator.FREQ);
+		Collections.sort(list, FrequencyComparator.TXT_WORDSIZE);
 
 		return list;
 	}
@@ -115,7 +119,7 @@ public class PalindromeFrequencyCounter {
 	private static boolean isPal(String str) {
 		if (str == "")
 			return true;
-		System.out.println(str);
+		//System.out.println(str);
 		
 		for (int i = 0, j = str.length() - 1; i <= j; i++, j--) {
 			// skip spaces
@@ -155,7 +159,7 @@ public class PalindromeFrequencyCounter {
 	 */
 	public static void main(String[] args) throws IOException {
 		//File file = new File(args[0]);
-		File file = new File("/Users/liqiangw/text.txt");
+		File file = new File("/Users/liqiangw/Test/HP2S.txt");
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computePalindromeFrequencies(words);
 		Utilities.printFrequencies(frequencies);
