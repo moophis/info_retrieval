@@ -44,7 +44,9 @@ public class Utilities {
 		// firstly read strings from the file
 		while ((line = reader.readLine()) != null) {
 			String[] buf;
-			buf = line.toLowerCase().split("\\W");
+//			buf = line.toLowerCase().split("\\W");
+			buf = line.toLowerCase().split("[^0-9A-Za-z]+"); // most stringent 
+//			buf = line.toLowerCase().split("[^0-9A-Za-z'_-]+"); // allow ' _ -
 			if (buf == null) {
 				System.err.println("buf is null!");
 			} else {
@@ -132,7 +134,7 @@ public class Utilities {
 	// @test 
 	public static void main(String[] args) throws IOException {
 		ArrayList<String> stringArray;
-		File f = new File("/Users/liqiangw/Test/HP2.txt");
+		File f = new File("/Users/liqiangw/Test/text.txt");
 		System.out.println("Utility testing...");
 		
 		System.out.println(f.isFile());
