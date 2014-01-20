@@ -88,7 +88,7 @@ public class PalindromeFrequencyCounter {
 			 * the word of single character is not counted
 			 * as a palindrome.
 			 * 
-			 * That would take O(n^2) time...
+			 * That would take O(n^2) time in worst cases...
 			 **/
 			for (int r = P[i]; r > 1; r = r - 2) {
 				if (str.charAt(i - r) == '?' && str.charAt(i + r) == '?') {
