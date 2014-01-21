@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -71,12 +70,12 @@ public class PalindromeFrequencyCounter {
 		 * http://www.felix021.com/blog/read.php?2040
 		 **/
 		String str = buildString(words);
-		System.out.println(str);
+//		System.out.println(str);
 		int[] P = manacherAlgorithm(buildString(words));
-		for (int i : P) {
-			System.out.print(i + " ");
-		}
-		System.out.println();
+//		for (int i : P) {
+//			System.out.print(i + " ");
+//		}
+//		System.out.println();
 		
 		// post-processing: split and convert re-assembled string into
 		// the original natural ones.
@@ -215,8 +214,6 @@ public class PalindromeFrequencyCounter {
 		StringBuilder sb = new StringBuilder();
 		final int len = s.length();
 		
-//		System.out.println("reparsing: " + s);
-		
 		/*
 		 * now we assume that the format of the input 
 		 * string is correct 
@@ -235,96 +232,6 @@ public class PalindromeFrequencyCounter {
 		return sb.toString();
 	}
 	
-	/**
-	 * (PHASED OUT, DO NOT USE)
-	 * Assemble the strings from words[from, to].
-	 * 
-	 * @param words raw words
-	 * @param from beginning index
-	 * @param to ending index
-	 */
-	private static String stringAssembler(ArrayList<String> words, int from, int to) {
-		String assemble = new String();
-		final int N = words.size();
-		
-		assert(from >=  0 && from < N && from <= to && to < N);
-		
-		for (int i = from; i < to; i++) { 
-			assemble += words.get(i);
-			assemble += " ";
-		}
-		assemble += words.get(to);
-		
-		return assemble;
-	}
-	
-	/**
-	 * (PHASED OUT, DO NOT USE)
-	 * Predicate whether the input string is a palindrome.
-	 * 
-	 * @param str Input string to be checked.
-	 * @return Judgment.
-	 */
-	private static boolean isPal(String str) {
-		if (str == "")
-			return true;
-		//System.out.println(str);
-		
-		for (int i = 0, j = str.length() - 1; i <= j; i++, j--) {
-			// skip spaces
-			while (str.charAt(i) == ' ')
-				i++;
-			while (str.charAt(j) == ' ')
-				j--;
-			
-			if (str.charAt(i) != str.charAt(j))
-				return false;
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * (PHASED OUT, DO NOT USE)
-	 * Predicate whether several strings combined are a palindrome.
-	 * 
-	 * @param from Index of the first word.
-	 * @param to Index of the last word.
-	 * @return Judgment.
-	 */
-	private static boolean isPal(ArrayList<String> words, int from, int to) {
-		final int N = words.size();
-		int totalSize = 0; 
-		
-		assert(from >=  0 && from < N && from <= to && to < N);
-		
-		// count the total size of strings
-		for (int i = from; i <= to; i++)
-			totalSize += words.get(i).length();
-		
-		// compare characters
-		int start = 0;
-		int end = words.get(to).length() - 1;
-		int currentFrom = from, currentTo = to;
-		for (int i = totalSize >> 1; i > 0; i--) {
-			// check whether we should move to next word
-			if (start >= words.get(currentFrom).length()) {
-				start = 0;
-				currentFrom++;
-			}
-			if (end < 0) {
-				end = words.get(--currentTo).length() - 1;
-			}
-			assert(currentFrom <= currentTo);
-			
-			// do compare
-			if (words.get(currentFrom).charAt(start++)
-					!= words.get(currentTo).charAt(end--)) 
-				return false;
-		}
-			
-		return true;
-	}
 	
 	/**
 	 * Runs the 2-gram counter. The input should be the path to a text file.

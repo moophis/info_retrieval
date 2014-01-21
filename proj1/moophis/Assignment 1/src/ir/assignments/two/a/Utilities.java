@@ -57,9 +57,6 @@ public class Utilities {
 			}
 		}
 		
-		// then sort the words
-		//Collections.sort(words);
-		
 		reader.close();
 		return words;
 	}
@@ -134,7 +131,7 @@ public class Utilities {
 	// @test 
 	public static void main(String[] args) throws IOException {
 		ArrayList<String> stringArray;
-		File f = new File("/Users/liqiangw/Test/text.txt");
+		File f = new File("/Users/liqiangw/Test/love.txt");
 		System.out.println("Utility testing...");
 		
 		System.out.println(f.isFile());

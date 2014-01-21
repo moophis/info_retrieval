@@ -1,4 +1,26 @@
 Please place your analysis of the runtime complexity of your palindrome algorithm in this file.
 
-The running complexity of my algorithm is O(m * n^2) where m is the average length of words, n is the number of words.
+In the body of the algorithm:
+(m: the average length of each word; n: # of words; p: # of result entries
+ q: average length of each palindrome word)
+buildString()							--- O(mn)
+manacherAlgorithm()						--- O(mn)
+iterate throught p[]: 					--- O(n)
+	for each i, iterate from i-P[i]
+	to i+P[i] by 2 hops each:			--- O(q)
+		reparseString()					--- O(q) 
+		updateMap()						--- O(q) 
+add result to ArrayList					--- O(p)
+sort the list by length					--- O(plog(p))
+sort the list by frequency				--- O(plog(p))
+sort the list by alphabetical order		--- O(pqlog(p))
+--------------------------------------------------------------------------
+total									--- O(mn) + O(q^2 * n) + O(plog(p))
 
+Normally for ordinary articles, m should not be very large, comparing to the word count
+of the whole articles. So we can regard O(m) and O(q) as O(1). In this case, p is usually smaller
+than n. So the running time in normal cases is O(n + plog(p)).
+	However, in very rare cases, the program might be very slow, because each palindrome
+words are really really long (i.e. consider a file full of repeating palindrome words like
+"mom mom mom ..."). In this case, O(p) is in the same order of O(n). Then the time complexity is
+O(mn) + O(n^3) + O(nplog(p)) = O(n^3).
