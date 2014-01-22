@@ -89,8 +89,8 @@ public final class TwoGramFrequencyCounter {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		File file = new File(args[0]);
-		//File file = new File("/Users/liqiangw/Test/HP2.txt");
+		//File file = new File(args[0]);
+		File file = new File("/Users/liqiangw/Test/HP2.txt");
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeTwoGramFrequencies(words);
 		Utilities.printFrequencies(frequencies);
