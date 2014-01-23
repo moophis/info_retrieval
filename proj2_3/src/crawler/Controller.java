@@ -10,7 +10,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
     public static void main(String[] args) throws Exception {
-        String crawlStorageFolder = "/data/crawl/root";
+        String crawlStorageFolder = "/Users/soushimei/Documents/data";
         int numberOfCrawlers = 7;
 
         CrawlConfig config = new CrawlConfig();
