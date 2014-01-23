@@ -1,23 +1,35 @@
 // Please place your analysis of the runtime complexity of your palindrome algorithm in this file.
-// Find palindromes
+// Brute Force algorithm
 Suppose each word has length at most m
 The length of word list is n 
-for each word in the input array:						O(n)
-  for each subsequent word left over:					O(n)
-     check if combination is a palindrome				O(m)
+for each word in the input array:			！！！！！！！！！！！！！！！O(n)
+  for each subsequent word left over:			！！！！！！！！！！！！！！！O(n)
+     check if combination is a palindrome		！！！！！！！！！！！！！！！O(n)
      if it is a palindrome
-        add entry to dictionary or increment counter	O(1)
+        add entry to dictionary or increment counter	！！！！！！！！！！！！！！！O(1)
         
 // read each unique string into tree map to sort their order by frequency
 for each dictionary entry, create a tree map item object
-sort the object											O(nlog(n))
+sort the object						！！！！！！！！！！！！！！！O(nlog(n))
 // feed the words and their frequency into output list
 for each tree map, add words and their frequency into 
 Frequency output list and sort them with alphabetical
-order													O(n*nlog(n))
+order							！！！！！！！！！！！！！！！O(n*nlog(n))
 
 Total:
- = [n(n(m + 1))] + [nlog(n)] + [n^2log(n)]
- = O((m + log n) * n^2)
+ = [n(n(n + 1))] + [nlog(n)] + [n^2log(n)]
+ = O((n + log n) * n^2)
+ = O(n ^3)
  
- Therefore, the algorithm runs in polynomial time O((m + log n) * n^2)
+Therefore, the algorithm runs in polynomial time O(n^3)
+
+--------------------------------------------------------------------------
+For Manacher¨s based palindrome algorithm
+manacherAlgorithm()                                             	！！！！！！！！！！！！！！！O(mn)
+for each pos in the array P
+	if the pos corresponding to a palindrome
+			and the palindrome is a word in the word list
+		add result to ArrayList  				！！！！！！！！！！！！！！！O(mn)
+sort the list								！！！！！！！！！！！！！！！O(mnlog(mn)) palindrome must be less than mn
+
+Total                                                                   ！！！！！！！！！！！！！！！O(mnlog(mn))

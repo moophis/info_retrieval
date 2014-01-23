@@ -145,7 +145,7 @@ public class PalindromeFrequencyCounter {
 					start += end;
 				}
 				palidromeWord = palidromeWord.trim();
-				if (palidromeWord.length() == 0)
+				if (palidromeWord.length() <= 1)
 					continue;
 				// insert the hit palindrome into the map
 				int freq = dictFreqs.containsKey(palidromeWord) ? dictFreqs.get(palidromeWord) : 0;
