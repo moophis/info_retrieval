@@ -57,14 +57,16 @@ public class CrawlerSW extends WebCrawler{
 			/*
 			 * Write fetched pages into files 
 			 */
+			Long currentTime = System.currentTimeMillis();
 			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
-					htmlParseData.getTitle() + ".txt");
+					currentTime.toString() + ".txt");
 //			StringToFile.toFile(html, Controller.crawlStorageFolder + "data/html/", 
 //					htmlParseData.getTitle() + ".html");
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
+			System.out.println("Fetch time: " + currentTime);
 		}
 	}
 }
