@@ -10,7 +10,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
     public static void main(String[] args) throws Exception {
-        String crawlStorageFolder = "/media/liqianw/IR";
+        String crawlStorageFolder = "/Users/soushimei/Documents/data";
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
         String userAgentString = "UCI IR 42682148 93845414";
