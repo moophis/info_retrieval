@@ -9,8 +9,10 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 
 public class Controller {
+	final static String crawlStorageFolder = "/Users/liqiangw/Test/data/";
+	
+//	final static String crawlStorageFolder = "/media/liqianw/IR";
     public static void main(String[] args) throws Exception {
-        String crawlStorageFolder = "/media/liqianw/IR";
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
         String userAgentString = "UCI IR 42682148 93845414";
@@ -45,5 +47,5 @@ public class Controller {
          * will reach the line after this only when crawling is finished.
          */
         controller.start(CrawlerSW.class, numberOfCrawlers);    
-}
+    }
 }

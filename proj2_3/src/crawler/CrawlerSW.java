@@ -39,6 +39,12 @@ public class CrawlerSW extends WebCrawler{
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
+			
+			/*
+			 * Write fetched pages into files 
+			 */
+			StringToFile.toFile(text, Controller.crawlStorageFolder, htmlParseData.getTitle() + ".txt");
+			StringToFile.toFile(html, Controller.crawlStorageFolder, htmlParseData.getTitle() + ".html");
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
