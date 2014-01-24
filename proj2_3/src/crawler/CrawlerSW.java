@@ -22,7 +22,21 @@ public class CrawlerSW extends WebCrawler{
 	@Override
 	public boolean shouldVisit(WebURL url) {
 		String href = url.getURL().toLowerCase();
-		return !FILTERS.matcher(href).matches() && href.startsWith("http://www.ics.uci.edu/");
+		if (FILTERS.matcher(href).matches()) {
+			return false;
+		}
+		if (!href.contains("ics.uci.edu")) {
+			return false;
+		}
+		if (href.contains("calendar") && href.contains("year=")) {
+			int pos = href.lastIndexOf("year=");
+			String year = href.substring(pos+4, href.length());
+			int numYear = Integer.parseInt(year);
+			if (numYear > 2015 || numYear < 2004) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
