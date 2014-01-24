@@ -12,10 +12,18 @@ public class Controller {
     public static void main(String[] args) throws Exception {
         String crawlStorageFolder = "/media/liqianw/IR";
         int numberOfCrawlers = 7;
-
+        int politenessDelay = 300;
+        String userAgentString = "UCI IR 42682148 93845414";
+        int maxDepthOfCrawling = 1000;
+        
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
-
+        config.setPolitenessDelay(politenessDelay);
+        config.setUserAgentString(userAgentString);
+        config.setResumableCrawling(true);
+        // Unlimited number of pages can be crawled.
+        config.setMaxPagesToFetch(-1);
+        config.setMaxDepthOfCrawling(maxDepthOfCrawling);
         /*
          * Instantiate the controller for this crawl.
          */
@@ -23,14 +31,13 @@ public class Controller {
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
-
+        
+        
         /*
          * For each crawl, you need to add some seed urls. These are the first
          * URLs that are fetched and then the crawler starts following links
          * which are found in these pages
          */
-        controller.addSeed("http://www.ics.uci.edu/~welling/");
-        controller.addSeed("http://www.ics.uci.edu/~lopes/");
         controller.addSeed("http://www.ics.uci.edu/");
 
         /*
