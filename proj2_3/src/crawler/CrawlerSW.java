@@ -49,12 +49,20 @@ public class CrawlerSW extends WebCrawler{
 			
 			/*
 			 * Write fetched pages into files 
+			 * Two files for each page:
+			 * 1. info file
+			 * 	<URL>
+			 * 	<Out-degree>
+			 * 2. text file (text content of the page)
 			 */
+			Integer size = links.size();
 			Long currentTime;
 			synchronized (this) {
 				currentTime = System.currentTimeMillis();
 			}
-			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/text/" , 
+			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" , 
+					currentTime.toString() + ".txt");
+			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" , 
 					currentTime.toString() + ".txt");
 			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
 					currentTime.toString() + ".txt");
