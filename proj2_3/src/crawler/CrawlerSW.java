@@ -30,6 +30,27 @@ public class CrawlerSW extends WebCrawler{
 		}
 		return specialPolicy(href);
 	}
+	
+	private boolean specialPolicy(String href) {
+		// only parse calendar events from 2006 ~ 2014
+		if (href.contains("calendar.ics.uci.edu") && href.contains("year=")) {
+			int pos = href.lastIndexOf("year=");
+			String year = href.substring(pos+4, href.length());
+			int numYear = Integer.parseInt(year);
+			if (numYear > 2014 || numYear < 2006) {
+				return false;
+			}
+		} 
+		// ignore the dynamic machine learning description page
+		if(href.contains("datasets.html?")) {
+			return false;
+		}
+		// ignore the machine learning dataset
+		if (href.contains("machine-learning-databases")) {
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	* This function is called when a page is fetched and ready 
@@ -72,25 +93,5 @@ public class CrawlerSW extends WebCrawler{
 			System.out.println("Number of outgoing links: " + links.size());
 			System.out.println("Fetch time: " + currentTime);
 		}
-	}
-	public boolean specialPolicy(String href) {
-		// only parse calendar events from 2006 ~ 2014
-		if (href.contains("calendar.ics.uci.edu") && href.contains("year=")) {
-			int pos = href.lastIndexOf("year=");
-			String year = href.substring(pos+4, href.length());
-			int numYear = Integer.parseInt(year);
-			if (numYear > 2014 || numYear < 2006) {
-				return false;
-			}
-		} 
-		// ignore the dynamic machine learning description page
-		if(href.contains("datasets.html?")) {
-			return false;
-		}
-		// ignore the machine learning dataset
-		if (href.contains("machine-learning-databases")) {
-			return false;
-		}
-		return true;
 	}
 }

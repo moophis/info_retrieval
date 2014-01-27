@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="lib/crawler4j-3.5-dependencies/tagsoup-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/crawler4j-3.5-dependencies/tika-core-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/crawler4j-3.5-dependencies/tika-parsers-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/crawler4j-3.5/crawler4j-3.5.jar"/>
+	<classpathentry kind="lib" path="lib/crawler4j-3.5/crawler4j-3.5.jar" sourcepath="/crawler4j/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
