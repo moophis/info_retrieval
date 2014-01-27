@@ -67,7 +67,6 @@ public class CrawlerSW extends WebCrawler{
 			String html = htmlParseData.getHtml();
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
 			
-			
 			/*
 			 * Write fetched pages into files 
 			 * Two files for each page:
@@ -88,10 +87,10 @@ public class CrawlerSW extends WebCrawler{
 			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
 					currentTime.toString() + ".txt");
 
-			System.out.println("Text length: " + text.length());
-			System.out.println("Html length: " + html.length());
-			System.out.println("Number of outgoing links: " + links.size());
-			System.out.println("Fetch time: " + currentTime);
+//			System.out.println("Text length: " + text.length());
+//			System.out.println("Html length: " + html.length());
+//			System.out.println("Number of outgoing links: " + links.size());
+//			System.out.println("Fetch time: " + currentTime);
 		}
 	}
 }
