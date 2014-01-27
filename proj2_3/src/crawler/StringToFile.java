@@ -6,7 +6,7 @@ public class StringToFile {
 	private static FileWriter fw;
 
 	public static void toFile(String buf, String path, String title) {
-//		System.out.println("File to: " + path + title);
+		System.out.println("File to: " + path + title);
 		try {
 			fw = new FileWriter(path + title, true);
 			

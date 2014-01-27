@@ -57,7 +57,7 @@ public class CrawlerSW extends WebCrawler{
 	* to be processed by your program.
 	*/
 	@Override
-	public void visit(Page page) {          
+	public synchronized void visit(Page page) {          
 		String url = page.getWebURL().getURL();
 		System.out.println("URL: " + url);
 
