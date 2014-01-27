@@ -28,15 +28,7 @@ public class CrawlerSW extends WebCrawler{
 		if (!href.contains("ics.uci.edu")) {
 			return false;
 		}
-		if (href.contains("calendar") && href.contains("year=")) {
-			int pos = href.lastIndexOf("year=");
-			String year = href.substring(pos+4, href.length());
-			int numYear = Integer.parseInt(year);
-			if (numYear > 2015 || numYear < 2004) {
-				return false;
-			}
-		}
-		return true;
+		return specialPolicy(href);
 	}
 
 	/**
@@ -53,6 +45,7 @@ public class CrawlerSW extends WebCrawler{
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
+			
 			
 			/*
 			 * Write fetched pages into files 
@@ -71,5 +64,25 @@ public class CrawlerSW extends WebCrawler{
 			System.out.println("Number of outgoing links: " + links.size());
 			System.out.println("Fetch time: " + currentTime);
 		}
+	}
+	public boolean specialPolicy(String href) {
+		// only parse calendar events from 2006 ~ 2014
+		if (href.contains("calendar.ics.uci.edu") && href.contains("year=")) {
+			int pos = href.lastIndexOf("year=");
+			String year = href.substring(pos+4, href.length());
+			int numYear = Integer.parseInt(year);
+			if (numYear > 2014 || numYear < 2006) {
+				return false;
+			}
+		} 
+		// ignore the dynamic machine learning page
+		if(href.contains("datasets.html?")) {
+			return false;
+		}
+		// ignore the machine learning dataset
+		if (href.contains("machine-learning-databases")) {
+			return false;
+		}
+		return true;
 	}
 }
