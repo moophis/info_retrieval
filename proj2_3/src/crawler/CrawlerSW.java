@@ -57,9 +57,10 @@ public class CrawlerSW extends WebCrawler{
 	* to be processed by your program.
 	*/
 	@Override
-	public synchronized void visit(Page page) {          
+	public synchronized void visit(Page page) {   
+		Long threadId = Thread.currentThread().getId();
 		String url = page.getWebURL().getURL();
-		System.out.println("URL: " + url);
+		System.out.println("URL: " + url + " ThreadID: " + threadId);
 
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -80,12 +81,13 @@ public class CrawlerSW extends WebCrawler{
 			synchronized (this) {
 				currentTime = System.currentTimeMillis();
 			}
+			String fileName = currentTime.toString() + "_" + threadId.toString();
 			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" , 
-					currentTime.toString() + ".txt");
+					fileName + ".txt");
 			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" , 
-					currentTime.toString() + ".txt");
+					fileName + ".txt");
 			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
-					currentTime.toString() + ".txt");
+					fileName + ".txt");
 
 //			System.out.println("Text length: " + text.length());
 //			System.out.println("Html length: " + html.length());
