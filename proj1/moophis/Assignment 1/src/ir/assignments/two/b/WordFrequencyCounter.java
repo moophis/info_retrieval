@@ -80,7 +80,7 @@ public final class WordFrequencyCounter {
 	 */
 	public static void main(String[] args) throws IOException {
 		//File file = new File(args[0]);
-		File file = new File("/Users/liqiangw/Test/HP2S.txt");
+		File file = new File("/Users/liqiangw/Test/test3.txt");
 		List<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeWordFrequencies(words);
 		Utilities.printFrequencies(frequencies);
