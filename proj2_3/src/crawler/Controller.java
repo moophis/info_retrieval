@@ -9,9 +9,9 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 
 public class Controller {
-//	final static String crawlStorageFolder = "/Users/liqiangw/Test/data/";
+	final static String crawlStorageFolder = "/Users/liqiangw/Test/data/";
 	
-	final static String crawlStorageFolder = "/media/liqianw/IR/";
+//	final static String crawlStorageFolder = "/media/liqianw/IR/";
     public static void main(String[] args) throws Exception {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;

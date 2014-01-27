@@ -9,12 +9,10 @@ public class StringToFile {
 	public static void toFile(String buf, String path, String title) {
 		System.out.println("File to: " + path + title);
 		try {
-			fw = new FileWriter(path + title);
-			bw = new BufferedWriter(fw);
+			fw = new FileWriter(path + title, true);
 			
-			bw.write(buf);
-			bw.flush();
-			bw.close();
+			fw.write(buf + "\n\n");
+			fw.flush();
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
