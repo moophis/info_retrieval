@@ -75,7 +75,7 @@ public class CrawlerSW extends WebCrawler{
 				return false;
 			}
 		} 
-		// ignore the dynamic machine learning page
+		// ignore the dynamic machine learning description page
 		if(href.contains("datasets.html?")) {
 			return false;
 		}
