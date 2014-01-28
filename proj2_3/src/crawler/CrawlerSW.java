@@ -8,6 +8,8 @@ import edu.uci.ics.crawler4j.url.WebURL;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 public class CrawlerSW extends WebCrawler{
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" 
             + "|png|tiff?|mid|mp2|mp3|mp4"
@@ -31,6 +33,9 @@ public class CrawlerSW extends WebCrawler{
 		return specialPolicy(href);
 	}
 	
+	 /**
+	 * Put any policies specifically to UC Irvine ICS site. 
+	 */
 	private boolean specialPolicy(String href) {
 		// only parse calendar events from 2006 ~ 2014
 		if (href.contains("calendar.ics.uci.edu") && href.contains("year=")) {
@@ -82,17 +87,33 @@ public class CrawlerSW extends WebCrawler{
 				currentTime = System.currentTimeMillis();
 			}
 			String fileName = currentTime.toString() + "_" + threadId.toString();
-			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" , 
-					fileName + ".txt");
-			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" , 
-					fileName + ".txt");
-			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
-					fileName + ".txt");
+			
+			System.out.println(getMD5(text));
+			
+//			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" , 
+//					fileName + ".txt");
+//			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" , 
+//					fileName + ".txt");
+//			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
+//					fileName + ".txt");
 
 //			System.out.println("Text length: " + text.length());
 //			System.out.println("Html length: " + html.length());
 //			System.out.println("Number of outgoing links: " + links.size());
 //			System.out.println("Fetch time: " + currentTime);
 		}
+	}
+	
+	/**
+	 * Generate MD5 value of a file content.
+	 * 
+	 * @param fileContent - Content of a file.
+	 * @return MD5 value.
+	 */
+	private String getMD5(String fileContent) {
+		if (fileContent == "")
+			return null;
+		
+		return DigestUtils.md5Hex(fileContent);
 	}
 }
