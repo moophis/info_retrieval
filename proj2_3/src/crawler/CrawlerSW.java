@@ -5,6 +5,7 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -56,53 +57,6 @@ public class CrawlerSW extends WebCrawler{
 		}
 		return true;
 	}
-
-	/**
-	* This function is called when a page is fetched and ready 
-	* to be processed by your program.
-	*/
-	@Override
-	public synchronized void visit(Page page) {   
-		Long threadId = Thread.currentThread().getId();
-		String url = page.getWebURL().getURL();
-		System.out.println("URL: " + url + " ThreadID: " + threadId);
-
-		if (page.getParseData() instanceof HtmlParseData) {
-			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String text = htmlParseData.getText();
-			String html = htmlParseData.getHtml();
-			List<WebURL> links = htmlParseData.getOutgoingUrls();
-			
-			/*
-			 * Write fetched pages into files 
-			 * Two files for each page:
-			 * 1. info file
-			 * 	<URL>
-			 * 	<Out-degree>
-			 * 2. text file (text content of the page)
-			 */
-			Integer size = links.size();
-			Long currentTime;
-			synchronized (this) {
-				currentTime = System.currentTimeMillis();
-			}
-			String fileName = currentTime.toString() + "_" + threadId.toString();
-			
-			System.out.println(getMD5(text));
-			
-//			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" , 
-//					fileName + ".txt");
-//			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" , 
-//					fileName + ".txt");
-//			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/" , 
-//					fileName + ".txt");
-
-//			System.out.println("Text length: " + text.length());
-//			System.out.println("Html length: " + html.length());
-//			System.out.println("Number of outgoing links: " + links.size());
-//			System.out.println("Fetch time: " + currentTime);
-		}
-	}
 	
 	/**
 	 * Generate MD5 value of a file content.
@@ -115,5 +69,60 @@ public class CrawlerSW extends WebCrawler{
 			return null;
 		
 		return DigestUtils.md5Hex(fileContent);
+	}
+
+   /**
+	* This function is called when a page is fetched and ready 
+	* to be processed by your program.
+	*/
+	@Override
+	public synchronized void visit(Page page) {   
+		Long threadId = Thread.currentThread().getId();
+		String url = page.getWebURL().getURL();
+		System.out.println("URL: " + url + " ThreadID: " + threadId);
+
+		if (page.getParseData() instanceof HtmlParseData) {
+			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+			String text = htmlParseData.getText();
+//			String html = htmlParseData.getHtml();
+			List<WebURL> links = htmlParseData.getOutgoingUrls();
+			
+			Integer size = links.size();
+//			Long currentTime;
+//			synchronized (this) {
+//				currentTime = System.currentTimeMillis();
+//			}
+//			String fileName = currentTime.toString() + "_" + threadId.toString();
+			
+			System.out.println(getMD5(text));
+			
+			/*
+			 * Pages fetched from different crawler threads are 
+			 * stored separately. 
+			 */
+			long offset = -1;
+			try {
+				offset = DatabaseBuilder.writePageContent(threadId, text);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String meta = null;
+			if (offset != -1) {
+				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
+				DatabaseBuilder.writePageIndex(threadId, meta);
+			}
+			
+//			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" 
+//					+ fileName + ".txt");
+//			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" 
+//					+ fileName + ".txt");
+//			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/"
+//					+ fileName + ".txt");
+
+//			System.out.println("Text length: " + text.length());
+//			System.out.println("Html length: " + html.length());
+//			System.out.println("Number of outgoing links: " + links.size());
+//			System.out.println("Fetch time: " + currentTime);
+		}
 	}
 }

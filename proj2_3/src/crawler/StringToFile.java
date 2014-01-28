@@ -5,10 +5,10 @@ import java.io.*;
 public class StringToFile {
 	private static FileWriter fw;
 
-	public static void toFile(String buf, String path, String title) {
-		System.out.println("File to: " + path + title);
+	public static void toFile(String buf, String path) {
+		System.out.println("File to: " + path);
 		try {
-			fw = new FileWriter(path + title, true);
+			fw = new FileWriter(path, true);
 			
 			fw.write(buf + "\n");
 			fw.flush();
