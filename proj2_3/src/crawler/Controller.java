@@ -12,6 +12,7 @@ public class Controller {
 //	final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
 	
 	final static String crawlStorageFolder = "/media/liqiangw/IR/";
+//	final static String crawlStorageFolder = "/home/liqiangw/IR/";
     public static void main(String[] args) throws Exception {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;

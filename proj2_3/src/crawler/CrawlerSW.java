@@ -17,7 +17,7 @@ public class CrawlerSW extends WebCrawler{
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|txt|cpp|c|h|cc|java|py|m|class|o|tmp"
             + "|perl|pl|vb|r|q|s|asm|rb|pas|bak|sh|awk"
-            + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
+            + "|rm|smil|wmv|swf|wma|zip|rar|gz|jar))$");
 
 	/**
 	* You should implement this function to specify whether
