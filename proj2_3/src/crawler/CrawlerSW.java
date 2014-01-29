@@ -13,10 +13,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class CrawlerSW extends WebCrawler{
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" 
-            + "|png|tiff?|mid|mp2|mp3|mp4"
+            + "|png|tiff?|mid|mp2|mp3|mp4|xml"
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|txt|cpp|c|h|cc|java|py|m|class|o|tmp"
-            + "|perl|pl|vb|r|q|s|asm|rb|pas|bak|sh|awk"
+            + "|perl|pl|vb|r|q|s|asm|rb|pas|bak|sh|awk|sed"
             + "|rm|smil|wmv|swf|wma|zip|rar|gz|jar))$");
 
 	/**
@@ -49,14 +49,18 @@ public class CrawlerSW extends WebCrawler{
 				return false;
 			}
 		} 
-		// ignore the dynamic machine learning description page
-		if(href.contains("datasets.html?")) {
+		if (href.contains("drzaius.ics.uci.edu/cgi-bin/")) {
+			return false;
+		}
+		// ignore the any other dynamic page
+		if(!href.contains("calendar.ics.uci.edu") && href.contains("?")) {
 			return false;
 		}
 		// ignore the machine learning dataset
 		if (href.contains("machine-learning-databases")) {
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -81,8 +85,13 @@ public class CrawlerSW extends WebCrawler{
 	public synchronized void visit(Page page) {   
 		Long threadId = Thread.currentThread().getId();
 		String url = page.getWebURL().getURL();
+		
 		System.out.println("URL: " + url + " ThreadID: " + threadId);
-
+		
+		// FIXME: skip this page temporarily.
+		if (url.contains("drzaius.ics.uci.edu/cgi-bin"))
+			return;
+		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
