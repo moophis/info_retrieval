@@ -1,8 +1,14 @@
 package crawler;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class DatabaseBuilder {
 	/**
@@ -71,6 +77,120 @@ public class DatabaseBuilder {
 	
 	// TODO: write test cases.
 	public static void main(String[] args) {
+		Long threadId = (long) 0;
 		
+		// write a-z 10 times
+		String text = "abcdefghijklmnopqrstuvwxyz";
+		int times = 10;
+		
+		// begin write page into text and info file
+		long offset = -1;
+		for (int i = 0; i < times; ++i) {
+			try {
+				offset = DatabaseBuilder.writePageContent(threadId, text);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String meta = null;
+			if (offset != -1) {
+				meta = DatabaseBuilder.buildIndexLine(DigestUtils.md5Hex(text), offset, 0, "This is an URL");
+				DatabaseBuilder.writePageIndex(threadId, meta);
+			}
+		}
+		
+		// begin read the index
+		List<Integer> positions = new ArrayList<Integer>();
+		String fileName = "thread0.txt";
+		String filePath = Controller.crawlStorageFolder + "data/info/";
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(filePath + fileName));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		} 
+		String line = "abc";
+		try {
+			while (line != null) {
+				line = br.readLine();
+				if (line != null) {
+					String[] strs = line.split(":");
+					positions.add(Integer.parseInt(strs[1]));
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			br.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// get the tail of the file 
+		RandomAccessFile raf = null;
+		filePath = Controller.crawlStorageFolder + "data/text/";
+		try {
+			raf = new RandomAccessFile(filePath+fileName, "r");
+			int post = (int) raf.length();
+			positions.add(post);
+		} catch (FileNotFoundException e) {
+			System.err.println("Index file for " + threadId.toString() + " does not exist."
+					          + " Now create one...");	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		}
+		try {
+			raf.close();
+		} catch (IOException e) {
+			// TODO TAuto-generated catch block 
+			e.printStackTrace();
+		}
+		
+		System.out.println("Print the positions");
+		for (Integer item : positions) {
+			System.out.println(item);
+		}
+		
+		// begin read the text file
+		filePath = Controller.crawlStorageFolder + "data/text/";
+		try {
+			raf = new RandomAccessFile(filePath+fileName, "r");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// print the length of the file
+		try {
+			System.out.println(fileName + "'s size is " + Integer.toString((int) raf.length()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// read file
+		try {
+			for (int i = 0; i < positions.size()-1; ++i) {
+				int beg = positions.get(i);
+				int size = positions.get(i+1) - positions.get(i);
+				byte[] b = new byte[size*10];
+				raf.seek(beg);
+				raf.read(b, 0, size);
+				System.out.println(beg);
+				System.out.println(new String(b));
+			}			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// close the file
+		try {
+			raf.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
