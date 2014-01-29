@@ -17,7 +17,7 @@ public class Controller {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
         String userAgentString = "UCI IR 42682148 93845414";
-        int maxDepthOfCrawling = 1000;
+        int maxDepthOfCrawling = 30;
         
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);

@@ -105,7 +105,7 @@ public class CrawlerSW extends WebCrawler{
 //			}
 //			String fileName = currentTime.toString() + "_" + threadId.toString();
 			
-			System.out.println(getMD5(text));
+//			System.out.println(getMD5(text));
 			
 			/*
 			 * Pages fetched from different crawler threads are 
