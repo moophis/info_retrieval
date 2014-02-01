@@ -196,7 +196,7 @@ public class Stats {
 		List<Frequency> freq = null;
 		List<String> words = new ArrayList<String>();
 		
-		for (Integer i = 13; i < 19; i++) {
+		for (Integer i = 13; i < 19; i++) {  // XXX thread 19 excluded
 			String path = Controller.crawlStorageFolder + "data/text/thread"
 					+ i.toString() + ".txt";
 			File f = new File(path);
@@ -219,6 +219,39 @@ public class Stats {
 				break;
 		}
 	}
+	
+	/**
+	 * Print the 20 most common 2-grams.
+	 */
+	public static void commonTwoGrams() throws IOException {
+		List<Frequency> freq = null;
+		ArrayList<String> words = new ArrayList<String>();
+		
+		for (Integer i = 13; i < 19; i++) {  // XXX thread 19 excluded
+			String path = Controller.crawlStorageFolder + "data/text/thread"
+					+ i.toString() + ".txt";
+			File f = new File(path);
+			System.out.println(f);
+			
+			List<String> w = Utilities.tokenizeFile(f);
+			words.addAll(w);
+		}
+		
+		freq = TwoGramFrequencyCounter.computeTwoGramFrequencies(words);
+		
+		int counter = 20;
+		for (Frequency f : freq) {
+			String word = f.getText();
+			String[] strings = word.split(" ");
+			if (!FILTERS.matcher(strings[0]).matches()
+					&& !FILTERS.matcher(strings[1]).matches()) {
+				System.out.println(f);
+				counter--;
+			}
+			if (counter == 0)
+				break;
+		}
+	}
 
 	/**
 	 * @param args
@@ -233,7 +266,8 @@ public class Stats {
 //		}
 		try {
 			//findLongestPage();
-			commonWords();
+//			commonWords();
+			commonTwoGrams();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
