@@ -52,6 +52,16 @@ public class CrawlerSW extends WebCrawler{
 		if (href.contains("drzaius.ics.uci.edu/cgi-bin/")) {
 			return false;
 		}
+		if (href.contains("fano.ics.uci.edu")) {
+			return false;
+		}
+		if (href.contains("djp3-pc2.ics.uci.edu")) {
+			return false;
+		}
+		// ignore machine learning dynamic pages
+		if (href.contains("http://archive.ics.uci.edu/ml/datasets.html?")) {
+			return false;
+		}
 		// ignore the any other dynamic page
 		if(!href.contains("calendar.ics.uci.edu") && href.contains("?")) {
 			return false;
