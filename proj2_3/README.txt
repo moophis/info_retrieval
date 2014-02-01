@@ -8,3 +8,4 @@ A: (Go to info directory, type:
    )
 
 3. How many subdomains?
+A: See class "Stats".

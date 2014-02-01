@@ -50,7 +50,7 @@ public class Stats {
 	}
 	
 	/**
-	 * Print  
+	 * Print sub domain frequencies to console and (or) a file.
 	 */
 	public static void subdomainsStats() throws IOException {
 		List<Frequency> list = null;
