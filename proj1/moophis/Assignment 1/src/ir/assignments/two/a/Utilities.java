@@ -45,8 +45,8 @@ public class Utilities {
 		while ((line = reader.readLine()) != null) {
 			String[] buf;
 //			buf = line.toLowerCase().split("\\W");
-			buf = line.toLowerCase().split("[^0-9A-Za-z]+"); // most stringent 
-//			buf = line.toLowerCase().split("[^0-9A-Za-z'_-]+"); // allow ' _ -
+//			buf = line.toLowerCase().split("[^0-9A-Za-z]+"); // most stringent 
+			buf = line.toLowerCase().split("[^0-9A-Za-z'_-]+"); // allow ' _ -
 			if (buf == null) {
 				System.err.println("buf is null!");
 			} else {
