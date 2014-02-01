@@ -13,7 +13,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class CrawlerSW extends WebCrawler{
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" 
-            + "|png|tiff?|mid|mp2|mp3|mp4|xml"
+            + "|png|tiff?|mid|mp2|mp3|mp4|xml|wmf"
             + "|wav|avi|mov|mpeg|ram|m4v|pdf|csv" 
             + "|txt|cpp|c|h|cc|java|py|m|class|o|tmp"
             + "|perl|pl|vb|r|q|s|asm|rb|pas|bak|sh|awk|sed"

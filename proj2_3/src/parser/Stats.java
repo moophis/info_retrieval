@@ -137,9 +137,9 @@ public class Stats {
 			while ((line = reader.readLine()) != null) {
 				nextPos = Long.parseLong(getPageInfo(line, "position"));
 				len = nextPos - curPos;
-				assert(len >= 0);
 				
-				System.out.println(url + ":" + len);
+				if (len <= 10)
+					System.out.println(url + ":" + len);
 				
 				if (len > maxlen) {
 					maxlen = len;
@@ -151,9 +151,9 @@ public class Stats {
 			}
 			// deal with the last line
 			len = textFile.length() - curPos;
-			assert(len >= 0);
 			System.out.println("file len: " + textFile.length());
-			System.out.println(url + ":" + len);
+			if (len <= 10)
+				System.out.println(url + ":" + len);
 			if (len > maxlen) {
 				maxlen = len;
 				longestPage = url;
