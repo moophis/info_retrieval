@@ -30,7 +30,8 @@ public class CrawlerSW extends WebCrawler{
 		if (FILTERS.matcher(href).matches()) {
 			return false;
 		}
-		if (!href.contains("ics.uci.edu")) {
+		if (!href.contains(".ics.uci.edu") 
+				&& !href.contains("/ics.uci.edu")) {
 			return false;
 		}
 		return specialPolicy(href);
@@ -67,11 +68,10 @@ public class CrawlerSW extends WebCrawler{
 			return false;
 		}
 		// ignore the any other dynamic page
-		/*
-		if(!href.contains("calendar.ics.uci.edu") && href.contains("?")) {
-			return false;
-		}
-		*/
+//		if(!href.contains("calendar.ics.uci.edu") && href.contains("?")) {
+//			return false;
+//		}
+	
 		// ignore the machine learning dataset
 		if (href.contains("machine-learning-databases")) {
 			return false;
@@ -103,10 +103,6 @@ public class CrawlerSW extends WebCrawler{
 		String url = page.getWebURL().getURL();
 		
 		System.out.println("URL: " + url + " ThreadID: " + threadId);
-		
-		// FIXME: skip this page temporarily.
-		if (url.contains("drzaius.ics.uci.edu/cgi-bin"))
-			return;
 		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
