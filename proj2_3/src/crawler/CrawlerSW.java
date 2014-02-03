@@ -62,10 +62,16 @@ public class CrawlerSW extends WebCrawler{
 		if (href.contains("http://archive.ics.uci.edu/ml/datasets.html?")) {
 			return false;
 		}
+		// ignore physics.ics.uci.edu
+		if (href.contains("physics.uci.edu")) {
+			return false;
+		}
 		// ignore the any other dynamic page
+		/*
 		if(!href.contains("calendar.ics.uci.edu") && href.contains("?")) {
 			return false;
 		}
+		*/
 		// ignore the machine learning dataset
 		if (href.contains("machine-learning-databases")) {
 			return false;

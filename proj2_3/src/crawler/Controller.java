@@ -7,10 +7,10 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
-	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
+//	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
 	
 //	public final static String crawlStorageFolder = "/home/liqiangw/IR/";
-//	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
+	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
     public static void main(String[] args) throws Exception {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
@@ -45,6 +45,7 @@ public class Controller {
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
-        controller.start(CrawlerSW.class, numberOfCrawlers);    
+        controller.start(CrawlerSW.class, numberOfCrawlers);
+        System.out.println("Finish!");
     }
 }

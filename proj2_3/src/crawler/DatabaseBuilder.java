@@ -53,10 +53,9 @@ public class DatabaseBuilder {
 			 */
 			pos = 0;	
 		} finally {
-			StringToFile.toFile(text, filePath);
-			raf.close();
+			raf.close();						
 		}
-		
+		StringToFile.toFile(text, filePath);
 		return pos;
 	}
 	
