@@ -184,7 +184,7 @@ public class Stats {
 			+ "|so|some|such|than|that|that's|the|their|theirs|them|themselves|then|there|there's"
 			+ "|these|they|they'd|they'll|they're|they've|this|those|through|to|too|under|until|up"
 			+ "|very|was|wasn't|we|we'd|we'll|we're|we've|were|weren't|what|what's|when|when's|where"
-			+ "|where's|which|while|who|who's|whom|why|why's|with|won't|would|wouldn't|you|you'd|you'll"
+			+ "|where's|which|while|who|who's|whom|why|why's|will|with|won't|would|wouldn't|you|you'd|you'll"
 			+ "|you're|you've|your|yours|yourself|yourselves|['_-]+|[0-9]{2}[ap]m)$"; 
 	private final static Pattern FILTERS = Pattern.compile(stopWords);
 	
@@ -196,7 +196,7 @@ public class Stats {
 		List<Frequency> freq = null;
 		List<String> words = new ArrayList<String>();
 		
-		for (Integer i = 13; i < 19; i++) {  // XXX thread 19 excluded
+		for (Integer i = 13; i <= 19; i++) {  
 			String path = Controller.crawlStorageFolder + "data/text/thread"
 					+ i.toString() + ".txt";
 			File f = new File(path);
@@ -227,7 +227,7 @@ public class Stats {
 		List<Frequency> freq = null;
 		ArrayList<String> words = new ArrayList<String>();
 		
-		for (Integer i = 13; i < 19; i++) {  // XXX thread 19 excluded
+		for (Integer i = 13; i <= 19; i++) {  
 			String path = Controller.crawlStorageFolder + "data/text/thread"
 					+ i.toString() + ".txt";
 			File f = new File(path);
@@ -265,7 +265,7 @@ public class Stats {
 //			e.printStackTrace();
 //		}
 		try {
-			//findLongestPage();
+//			findLongestPage();
 //			commonWords();
 			commonTwoGrams();
 		} catch (IOException e) {
