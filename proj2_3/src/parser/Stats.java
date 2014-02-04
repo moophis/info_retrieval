@@ -263,9 +263,9 @@ public class Stats {
 //			e.printStackTrace();
 //		}
 		try {
-//			findLongestPage();
+			findLongestPage();
 //			commonWords();
-			commonTwoGrams();
+//			commonTwoGrams();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -111,13 +111,6 @@ public class CrawlerSW extends WebCrawler{
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
 			
 			Integer size = links.size();
-//			Long currentTime;
-//			synchronized (this) {
-//				currentTime = System.currentTimeMillis();
-//			}
-//			String fileName = currentTime.toString() + "_" + threadId.toString();
-			
-//			System.out.println(getMD5(text));
 			
 			/*
 			 * Pages fetched from different crawler threads are 
