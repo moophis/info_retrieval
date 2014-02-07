@@ -106,7 +106,7 @@ public class CrawlerSW extends WebCrawler{
 		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String text = htmlParseData.getText();
+			String text = htmlParseData.getHtml();
 //			String html = htmlParseData.getHtml();
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
 			
