@@ -1,6 +1,8 @@
 package indexReader;
 
+import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MD52Doc {
 	private static MD52Doc uniqueInstance;
@@ -15,11 +17,42 @@ public class MD52Doc {
     private HashMap<String, String> dictionary = new HashMap<>();
 
 
-    public void write2Disk() {
+    public void write2Disk(String filePath) {
+        FileWriter fw;
+        try {
+            fw = new FileWriter(filePath, false);
 
+            for (Map.Entry<String, String> m : dictionary.entrySet()) {
+                String buf = new StringBuilder().append(m.getKey()).append("$").append(m.getValue()).toString();
+                fw.write(buf + "\n");
+            }
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    public void readFromDisk() {
+    public void readFromDisk(String filePath) {
+        File f = new File(filePath);
+        BufferedReader reader;
+        dictionary.clear();
 
+        try {
+            reader = new BufferedReader(new FileReader(f));
+            String line;
+            String md5 = "";
+            String url = "";
+            while ((line = reader.readLine()) != null) {
+                String[] strings = line.split("\\$");
+                md5 = strings[0];
+                url = strings[1];
+                dictionary.put(md5, url);
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("Error process " + filePath);
+            e.printStackTrace();
+        }
     }
 
     public boolean getURL(String MD5, String URL) {

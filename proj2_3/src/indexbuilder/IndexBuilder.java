@@ -3,8 +3,11 @@ package indexbuilder;
 
 import Strucutre.Page_Positions;
 import Strucutre.Word_Page_Position;
+import indexReader.Doc2MD5;
+import indexReader.MD52Doc;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,12 +20,10 @@ public class IndexBuilder {
     private final String RawHTMLFolder;
     private final String RawInfoFolder;
 
-    private String URL2MD5_filePath;
-    private String MD52URL_filePath;
-    private String PageRank_filePath;
-    private String InverseIndex_filePath;
-    private String InversIndexRank_filePath;
-
+    private String URL2MD5_fileName = "URL_to_MD5.txt";
+    private String MD52URL_fileName = "MD5_to_URL.txt";
+    private String PageRank_fileName = "PageRank.txt";
+    private String InverseIndex_fileName = "InverseIndex.txt";
 
     public IndexBuilder(String path) {
         this.path = path + "/";
@@ -84,7 +85,7 @@ public class IndexBuilder {
 
 
     /// Main function to build the index
-    public void buildIndex() {
+    public void buildIndex() throws IOException {
         System.out.println("Begin building index");
         if (!Initialization) {
             System.out.println("Fail to initialize index builder!");
@@ -97,13 +98,17 @@ public class IndexBuilder {
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
         DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
                 DocumentIndexFolder, RawHTMLFolder, RawInfoFolder);
-        docIndexBuilder.build(URL2MD5_filePath, MD52URL_filePath);
+        // docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
+        Doc2MD5.getInstance().readFromDisk(path + DocumentIndexFolder + URL2MD5_fileName);
+        // Doc2MD5.getInstance().write2Disk(path + DocumentIndexFolder + "copy " + URL2MD5_fileName);
+        MD52Doc.getInstance().readFromDisk(path + DocumentIndexFolder + MD52URL_fileName);
+        // MD52Doc.getInstance().write2Disk(path + DocumentIndexFolder + "copy " + MD52URL_fileName);
 
         // build page rank
         System.out.println("Build the PageRank index");
         PageRank pageRank = new PageRank(path,
                 DocumentIndexFolder, RawHTMLFolder, RawInfoFolder);
-        pageRank.calcPageRank(PageRank_filePath);
+        pageRank.calcPageRank(URL2MD5_fileName);
 
         System.out.println("Begin build inverse index");
         /*
@@ -144,8 +149,7 @@ public class IndexBuilder {
         System.out.println("Calculate the tf-idf rank of inverse index");
         InverseIndexRankBuilder inverseIndexRankBuilder;
         inverseIndexRankBuilder = new InverseIndexRankBuilder(path, DocumentIndexFolder);
-        String inverseIndexRankFileName;
-        inverseIndexRankFileName = inverseIndexRankBuilder.build(inverseIndexFileName);
+        inverseIndexRankBuilder.build(InverseIndex_fileName);
 
 
         System.out.println("Finish building index");
@@ -161,7 +165,11 @@ public class IndexBuilder {
 		System.out.println(args[0]);
 
         IndexBuilder indexBuilder = new IndexBuilder(args[0]);
-        indexBuilder.buildIndex();
-	}
+        try {
+            indexBuilder.buildIndex();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -20,9 +20,8 @@ public class PageRank {
 
     /// Calculate the pagerank of the document
     /// pageRank_filePath is the path and name of the index returned
-    public void calcPageRank(String pageRank_filePath) {
-        String pageRank_fileName = "Doc2MD5.txt";
-        pageRank_filePath = DocumentIndexFolderPath + pageRank_fileName;
+    public void calcPageRank(String pageRank_fileName) {
+        String pageRank_filePath = DocumentIndexFolderPath + pageRank_fileName;
 
     }
 }

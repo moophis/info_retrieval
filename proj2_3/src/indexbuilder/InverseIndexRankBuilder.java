@@ -13,9 +13,8 @@ public class InverseIndexRankBuilder {
     }
 
     // return the index file built
-    public String build(String inverseIndexFileName) {
-        String inverseIndexRankFileName = DocumentIndexFolderPath + "InverseIndexRank.txt";
-        return inverseIndexRankFileName;
+    public void build(String InverseIndex_fileName) {
+        String inverseIndexRankFilePath = DocumentIndexFolderPath + InverseIndex_fileName;
     }
 
 }

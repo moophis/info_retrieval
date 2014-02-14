@@ -12,10 +12,10 @@ public class PageRank {
 		return uniqueInstance;
 	}
 
-    public void write2Disk() {
+    public void write2Disk(String filePath) {
 
     }
-    public void readFromDisk() {
+    public void readFromDisk(String filePath) {
 
     }
 

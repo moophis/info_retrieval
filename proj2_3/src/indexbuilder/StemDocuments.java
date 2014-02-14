@@ -18,4 +18,8 @@ public class StemDocuments {
     public void stem(ArrayList<Word_Page_Position> splitLists) {
 
     }
+
+    public String stemWord(String word) {
+        return word;
+    }
 }
