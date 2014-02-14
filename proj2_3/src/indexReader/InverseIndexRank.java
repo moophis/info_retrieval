@@ -1,4 +1,4 @@
-package indexbuilder;
+package indexReader;
 
 public class InverseIndexRank {
 	private static InverseIndexRank uniqueInstance;

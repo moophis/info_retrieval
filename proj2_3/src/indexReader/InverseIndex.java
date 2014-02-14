@@ -1,4 +1,4 @@
-package indexbuilder;
+package indexReader;
 
 public class InverseIndex {
 	private static InverseIndex uniqueInstance;
@@ -9,4 +9,6 @@ public class InverseIndex {
 		}
 		return uniqueInstance;
 	}
+
+
 }
