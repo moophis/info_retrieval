@@ -25,5 +25,4 @@ public class SplitDocuments {
     public void split(ArrayList<WordPagePosition> splitLists) {
 
     }
-
 }

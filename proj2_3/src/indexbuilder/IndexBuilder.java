@@ -11,8 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Main entry. 
+ */
 public class IndexBuilder {
-    private boolean Initialization;
+    private boolean initialization;
     private final String path;
     private final String inverseIndexFolder;
     private final String documentIndexFolder;
@@ -39,17 +42,17 @@ public class IndexBuilder {
         if (!success) {
             System.out.println("Fail to find the raw html data at "
                     + this.path + rawHTMLFolder + " !");
-            Initialization = false;
+            initialization = false;
             return;
         }
         success = (new File(this.path + rawInfoFolder)).exists();
         if (!success) {
             System.out.println("Fail to find the raw info data at "
                     + this.path + rawInfoFolder + " !");
-            Initialization = false;
+            initialization = false;
             return;
         }
-        Initialization = true;
+        initialization = true;
 
         // check InverseIndex Folder
         success = (new File(this.path + inverseIndexFolder)).exists();
@@ -58,7 +61,7 @@ public class IndexBuilder {
             if (!success) {
                 System.out.println("Fail to creat directory "
                         + inverseIndexFolder + "!");
-                Initialization = false;
+                initialization = false;
             }
         }
         // check InverseIndex Folder
@@ -68,7 +71,7 @@ public class IndexBuilder {
             if (!success) {
                 System.out.println("Fail to creat directory "
                         + documentIndexFolder + "!");
-                Initialization = false;
+                initialization = false;
             }
         }
         // check Temp Folder
@@ -78,7 +81,7 @@ public class IndexBuilder {
             if (!success) {
                 System.out.println("Fail to creat directory "
                         + tempFolder + "!");
-                Initialization = false;
+                initialization = false;
             }
         }
     }
@@ -87,7 +90,7 @@ public class IndexBuilder {
     /// Main function to build the index
     public void buildIndex() throws IOException {
         System.out.println("Begin building index");
-        if (!Initialization) {
+        if (!initialization) {
             System.out.println("Fail to initialize index builder!");
             return;
         }

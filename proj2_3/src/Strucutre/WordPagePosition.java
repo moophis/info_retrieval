@@ -6,5 +6,5 @@ package Strucutre;
 public class WordPagePosition {
     public String word;
     public String md5;
-    public int position;
+    public int position; // int should be OK in this project.
 }
