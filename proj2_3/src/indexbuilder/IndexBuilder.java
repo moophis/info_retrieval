@@ -32,7 +32,7 @@ public class IndexBuilder {
         this.path = path + "/";
         inverseIndexFolder = "InverseIndex/";
         documentIndexFolder = "DocumentIndex/";
-        tempFolder = "Temp";
+        tempFolder = "Temp/";
         rawHTMLFolder = "raw/text/";
         rawInfoFolder = "raw/info/";
 
@@ -101,11 +101,11 @@ public class IndexBuilder {
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
         DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
                 documentIndexFolder, rawHTMLFolder, rawInfoFolder);
-        // docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
-        Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
-        // Doc2MD5.getInstance().write2Disk(path + DocumentIndexFolder + "copy " + URL2MD5_fileName);
-        MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
-        // MD52Doc.getInstance().write2Disk(path + DocumentIndexFolder + "copy " + MD52URL_fileName);
+        docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
+//        Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
+        Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
+//        MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
+        MD52Doc.getInstance().write2Disk(path + documentIndexFolder + "copy " + MD52URL_fileName);
 
         // build page rank
         System.out.println("Build the PageRank index");
