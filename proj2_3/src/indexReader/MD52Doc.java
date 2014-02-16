@@ -56,13 +56,12 @@ public class MD52Doc {
         }
     }
 
-    public boolean getURL(String MD5, String URL) {
+    public String getURL(String MD5) {
         if (dictionary.containsKey(MD5)) {
-            URL = dictionary.get(MD5);
-            return true;
+            return dictionary.get(MD5);
         }
         else {
-            return false;
+            return null;
         }
     }
     public void setURL(String MD5, String URL) {

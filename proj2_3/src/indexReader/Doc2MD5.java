@@ -76,7 +76,10 @@ public class Doc2MD5 {
 
     public boolean getHtmlFileInfo(String URL, HtmlFileInfo htmlFileInfo) {
         if(dictionary.containsKey(URL)) {
-            htmlFileInfo = dictionary.get(URL);
+            htmlFileInfo.fileName = dictionary.get(URL).fileName;
+            htmlFileInfo.htmlLen = dictionary.get(URL).htmlLen;
+            htmlFileInfo.startPos = dictionary.get(URL).startPos;
+            htmlFileInfo.MD5 = dictionary.get(URL).MD5;
             return true;
         }
         return false;
