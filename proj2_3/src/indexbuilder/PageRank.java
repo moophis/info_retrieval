@@ -4,24 +4,24 @@ package indexbuilder;
  * Created by soushimei on 2/13/14.
  */
 public class PageRank {
-    private final String DocumentIndexFolderPath;
-    private final String RawHTMLFolderPath;
-    private final String RawInfoFolderPath;
+    private final String documentIndexFolderPath;
+    private final String rawHTMLFolderPath;
+    private final String rawInfoFolderPath;
 
 
     public PageRank(String path,
-                    String DocumentIndexFolder,
-                    String RawHTMLFolder,
-                    String RawInfoFolder) {
-        DocumentIndexFolderPath = path + DocumentIndexFolder;
-        RawHTMLFolderPath = path + RawHTMLFolder;
-        RawInfoFolderPath = path + RawInfoFolder;
+                    String documentIndexFolder,
+                    String rawHTMLFolder,
+                    String rawInfoFolder) {
+        documentIndexFolderPath = path + documentIndexFolder;
+        rawHTMLFolderPath = path + rawHTMLFolder;
+        rawInfoFolderPath = path + rawInfoFolder;
     }
 
     /// Calculate the pagerank of the document
     /// pageRank_filePath is the path and name of the index returned
-    public void calcPageRank(String pageRank_fileName) {
-        String pageRank_filePath = DocumentIndexFolderPath + pageRank_fileName;
+    public void calcPageRank(String pageRankzFileName) {
+        String pageRank_filePath = documentIndexFolderPath + pageRankzFileName;
 
     }
 }

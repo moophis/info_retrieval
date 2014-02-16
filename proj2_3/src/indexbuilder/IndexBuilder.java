@@ -1,8 +1,8 @@
 package indexbuilder;
 
 
-import Strucutre.Page_Positions;
-import Strucutre.Word_Page_Position;
+import Strucutre.PagePositions;
+import Strucutre.WordPagePosition;
 import indexReader.Doc2MD5;
 import indexReader.MD52Doc;
 
@@ -14,11 +14,11 @@ import java.util.HashMap;
 public class IndexBuilder {
     private boolean Initialization;
     private final String path;
-    private final String InverseIndexFolder;
-    private final String DocumentIndexFolder;
-    private final String TempFolder;
-    private final String RawHTMLFolder;
-    private final String RawInfoFolder;
+    private final String inverseIndexFolder;
+    private final String documentIndexFolder;
+    private final String tempFolder;
+    private final String rawHTMLFolder;
+    private final String rawInfoFolder;
 
     private String URL2MD5_fileName = "URL_to_MD5.txt";
     private String MD52URL_fileName = "MD5_to_URL.txt";
@@ -27,57 +27,57 @@ public class IndexBuilder {
 
     public IndexBuilder(String path) {
         this.path = path + "/";
-        InverseIndexFolder = "InverseIndex/";
-        DocumentIndexFolder = "DocumentIndex/";
-        TempFolder = "Temp";
-        RawHTMLFolder = "raw/text/";
-        RawInfoFolder = "raw/info/";
+        inverseIndexFolder = "InverseIndex/";
+        documentIndexFolder = "DocumentIndex/";
+        tempFolder = "Temp";
+        rawHTMLFolder = "raw/text/";
+        rawInfoFolder = "raw/info/";
 
         // check if the directory exists
         boolean success;
-        success = (new File(this.path + RawHTMLFolder)).exists();
+        success = (new File(this.path + rawHTMLFolder)).exists();
         if (!success) {
             System.out.println("Fail to find the raw html data at "
-                    + this.path + RawHTMLFolder + " !");
+                    + this.path + rawHTMLFolder + " !");
             Initialization = false;
             return;
         }
-        success = (new File(this.path + RawInfoFolder)).exists();
+        success = (new File(this.path + rawInfoFolder)).exists();
         if (!success) {
             System.out.println("Fail to find the raw info data at "
-                    + this.path + RawInfoFolder + " !");
+                    + this.path + rawInfoFolder + " !");
             Initialization = false;
             return;
         }
         Initialization = true;
 
         // check InverseIndex Folder
-        success = (new File(this.path + InverseIndexFolder)).exists();
+        success = (new File(this.path + inverseIndexFolder)).exists();
         if (!success) {
-            success = (new File(this.path + InverseIndexFolder)).mkdir();
+            success = (new File(this.path + inverseIndexFolder)).mkdir();
             if (!success) {
                 System.out.println("Fail to creat directory "
-                        + InverseIndexFolder + "!");
+                        + inverseIndexFolder + "!");
                 Initialization = false;
             }
         }
         // check InverseIndex Folder
-        success = (new File(this.path + DocumentIndexFolder)).exists();
+        success = (new File(this.path + documentIndexFolder)).exists();
         if (!success) {
-            success = (new File(this.path + DocumentIndexFolder)).mkdir();
+            success = (new File(this.path + documentIndexFolder)).mkdir();
             if (!success) {
                 System.out.println("Fail to creat directory "
-                        + DocumentIndexFolder + "!");
+                        + documentIndexFolder + "!");
                 Initialization = false;
             }
         }
         // check Temp Folder
-        success = (new File(this.path + TempFolder)).exists();
+        success = (new File(this.path + tempFolder)).exists();
         if (!success) {
-            success = (new File(this.path + TempFolder)).mkdir();
+            success = (new File(this.path + tempFolder)).mkdir();
             if (!success) {
                 System.out.println("Fail to creat directory "
-                        + TempFolder + "!");
+                        + tempFolder + "!");
                 Initialization = false;
             }
         }
@@ -97,17 +97,17 @@ public class IndexBuilder {
         // this is quite easy, one class can finish this
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
         DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
-                DocumentIndexFolder, RawHTMLFolder, RawInfoFolder);
+                documentIndexFolder, rawHTMLFolder, rawInfoFolder);
         // docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
-        Doc2MD5.getInstance().readFromDisk(path + DocumentIndexFolder + URL2MD5_fileName);
+        Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
         // Doc2MD5.getInstance().write2Disk(path + DocumentIndexFolder + "copy " + URL2MD5_fileName);
-        MD52Doc.getInstance().readFromDisk(path + DocumentIndexFolder + MD52URL_fileName);
+        MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
         // MD52Doc.getInstance().write2Disk(path + DocumentIndexFolder + "copy " + MD52URL_fileName);
 
         // build page rank
         System.out.println("Build the PageRank index");
         PageRank pageRank = new PageRank(path,
-                DocumentIndexFolder, RawHTMLFolder, RawInfoFolder);
+                documentIndexFolder, rawHTMLFolder, rawInfoFolder);
         pageRank.calcPageRank(URL2MD5_fileName);
 
         System.out.println("Begin build inverse index");
@@ -116,39 +116,39 @@ public class IndexBuilder {
 
          */
         // for building index
-        ArrayList<Word_Page_Position> splitLists = new ArrayList<>();
-        HashMap<String, Page_Positions> mergeFirstPhaseMap = new HashMap<>();
+        ArrayList<WordPagePosition> splitLists = new ArrayList<>();
+        HashMap<String, PagePositions> mergeFirstPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
         System.out.println("split the documents");
         SplitDocuments splitDocuments;
         splitDocuments = new SplitDocuments(path,
-                TempFolder, RawHTMLFolder, RawInfoFolder);
+                tempFolder, rawHTMLFolder, rawInfoFolder);
         splitDocuments.split(splitLists);
 
         // step 2: stem the term into stemmed version
         System.out.println("stem the documents");
         StemDocuments stemDocuments;
-        stemDocuments = new StemDocuments(path, TempFolder);
+        stemDocuments = new StemDocuments(path, tempFolder);
         stemDocuments.stem(splitLists);
 
         // step 3: merge the pair <term, URL1, pos1>... to <term, <URL1, pos1>, <URL1, pos2>,... >
         System.out.println("First merging phase");
         MergeTermFirstPhase mergeTermFirstPhase;
-        mergeTermFirstPhase = new MergeTermFirstPhase(path, TempFolder);
+        mergeTermFirstPhase = new MergeTermFirstPhase(path, tempFolder);
         mergeTermFirstPhase.merge(splitLists, mergeFirstPhaseMap);
 
         // step 4: merge the pair <term, <URL1, pos1>, <URL1, pos2>,... > to <term, <URL/MD5, <pos1, pos2, pos3,...,> > >
         // In this phase, the generated file is already the inverse index needed
         System.out.println("Second merging phase; inverse index built");
         MergeTermSecondPhase mergeTermSecondPhase;
-        mergeTermSecondPhase = new MergeTermSecondPhase(path, TempFolder, DocumentIndexFolder);
+        mergeTermSecondPhase = new MergeTermSecondPhase(path, tempFolder, documentIndexFolder);
         String inverseIndexFileName;
         inverseIndexFileName = mergeTermSecondPhase.merge(mergeFirstPhaseMap);
 
         // step 5: stat the inverse index and output inverse index rank
         System.out.println("Calculate the tf-idf rank of inverse index");
         InverseIndexRankBuilder inverseIndexRankBuilder;
-        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, DocumentIndexFolder);
+        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
         inverseIndexRankBuilder.build(InverseIndex_fileName);
 
 

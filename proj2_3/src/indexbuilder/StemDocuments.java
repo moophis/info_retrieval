@@ -1,6 +1,6 @@
 package indexbuilder;
 
-import Strucutre.Word_Page_Position;
+import Strucutre.WordPagePosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.List;
  * Created by soushimei on 2/13/14.
  */
 public class StemDocuments {
-    private final String TempFolderPath;
+    private final String tempFolderPath;
     public StemDocuments(String path,
-                                    String TempFolder) {
-        TempFolderPath = path + TempFolder;
+                                    String tempFolder) {
+        tempFolderPath = path + tempFolder;
     }
 
-    public void stem(ArrayList<Word_Page_Position> splitLists) {
+    public void stem(ArrayList<WordPagePosition> splitLists) {
 
     }
 

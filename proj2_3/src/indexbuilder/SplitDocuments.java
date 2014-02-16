@@ -1,6 +1,6 @@
 package indexbuilder;
 
-import Strucutre.Word_Page_Position;
+import Strucutre.WordPagePosition;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,19 +10,19 @@ import java.util.List;
  * Created by soushimei on 2/13/14.
  */
 public class SplitDocuments {
-    private final String TempFolderPath;
-    private final String RawHTMLFolderPath;
-    private final String RawInfoFolderPath;
+    private final String tempFolderPath;
+    private final String rawHTMLFolderPath;
+    private final String rawInfoFolderPath;
     public SplitDocuments(String path,
-                          String TempFolder,
-                          String RawHTMLFolder,
-                          String RawInfoFolder) {
-        TempFolderPath = path + TempFolder;
-        RawHTMLFolderPath = path + RawHTMLFolder;
-        RawInfoFolderPath = path + RawInfoFolder;
+                          String tempFolder,
+                          String rawHTMLFolder,
+                          String rawInfoFolder) {
+        tempFolderPath = path + tempFolder;
+        rawHTMLFolderPath = path + rawHTMLFolder;
+        rawInfoFolderPath = path + rawInfoFolder;
     }
 
-    public void split(ArrayList<Word_Page_Position> splitLists) {
+    public void split(ArrayList<WordPagePosition> splitLists) {
 
     }
 

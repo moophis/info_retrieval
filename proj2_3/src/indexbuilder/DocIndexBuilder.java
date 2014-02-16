@@ -10,26 +10,26 @@ import org.apache.commons.codec.digest.DigestUtils;
  * Created by soushimei on 2/13/14.
  */
 public class DocIndexBuilder {
-    private final String DocumentIndexFolderPath;
-    private final String RawHTMLFolderPath;
-    private final String RawInfoFolderPath;
+    private final String documentIndexFolderPath;
+    private final String rawHTMLFolderPath;
+    private final String rawInfoFolderPath;
 
 
     public DocIndexBuilder(String path,
-                           String DocumentIndexFolder,
-                           String RawHTMLFolder,
-                           String RawInfoFolder) {
-        DocumentIndexFolderPath = path + DocumentIndexFolder;
-        RawHTMLFolderPath = path + RawHTMLFolder;
-        RawInfoFolderPath = path + RawInfoFolder;
+                           String documentIndexFolder,
+                           String rawHTMLFolder,
+                           String rawInfoFolder) {
+        documentIndexFolderPath = path + documentIndexFolder;
+        rawHTMLFolderPath = path + rawHTMLFolder;
+        rawInfoFolderPath = path + rawInfoFolder;
     }
 
 
 
     /// Building the index of document
-    public void build(String URL2MD5_fileName, String MD52URL_fileName) throws IOException {
-        String URL2MD5_filePath = DocumentIndexFolderPath + URL2MD5_fileName;
-        String MD52URL_filePath = DocumentIndexFolderPath + MD52URL_fileName;
+    public void build(String urlToMD5FileName, String md5ToUrlFileName) throws IOException {
+        String URL2MD5_filePath = documentIndexFolderPath + urlToMD5FileName;
+        String MD52URL_filePath = documentIndexFolderPath + md5ToUrlFileName;
 
         Doc2MD5 doc2MD5 = Doc2MD5.getInstance();
         doc2MD5.clear();
@@ -38,8 +38,8 @@ public class DocIndexBuilder {
 
         for (Integer i = 13; i <= 19; i++) {
             String fileName = "thread" + i.toString() + ".txt";
-            String infPath = RawInfoFolderPath + fileName;
-            String txtPath = RawHTMLFolderPath + fileName;
+            String infPath = rawInfoFolderPath + fileName;
+            String txtPath = rawHTMLFolderPath + fileName;
             File infoFile = new File(infPath);
             File textFile = new File(txtPath);
             BufferedReader reader = null;

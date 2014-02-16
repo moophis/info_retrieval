@@ -32,6 +32,7 @@ public class MD52Doc {
             e.printStackTrace();
         }
     }
+    
     public void readFromDisk(String filePath) {
         File f = new File(filePath);
         BufferedReader reader;
