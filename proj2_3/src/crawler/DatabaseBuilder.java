@@ -38,7 +38,7 @@ public class DatabaseBuilder {
 		long pos = -1;
 		
 		RandomAccessFile raf = null;
-		String filePath = Controller.crawlStorageFolder + "data/text/"
+		String filePath = Controller.crawlStorageFolder + "raw/text/"
 							+ "thread" + threadId.toString() + ".txt";
 		
 		try {

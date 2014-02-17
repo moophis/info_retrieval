@@ -71,7 +71,7 @@ public class Stats {
         List<Frequency> list = null;
         List<String> urls = new ArrayList<String>();
         for (Integer i = 13; i <= 19; i++) {
-            String path = Controller.crawlStorageFolder + "data/info/thread"
+            String path = Controller.crawlStorageFolder + "raw/info/thread"
                     + i.toString() + ".txt";
             File f = new File(path);
             BufferedReader reader = null;
@@ -93,7 +93,7 @@ public class Stats {
             list = WordFrequencyCounter.computeWordFrequencies(urls);
             for (Frequency fr : list) {
                 StringToFile.toFile(fr.toString(),
-                        Controller.crawlStorageFolder + "data/info/Subdomains.txt");
+                        Controller.crawlStorageFolder + "raw/info/Subdomains.txt");
                 System.out.println(fr);
             }
         }
@@ -109,9 +109,9 @@ public class Stats {
         String longestPage = null;
 
         for (Integer i = 13; i <= 19; i++) {
-            String infPath = Controller.crawlStorageFolder + "data/info/thread"
+            String infPath = Controller.crawlStorageFolder + "raw/info/thread"
                     + i.toString() + ".txt";
-            String txtPath = Controller.crawlStorageFolder + "data/text/thread"
+            String txtPath = Controller.crawlStorageFolder + "raw/text/thread"
                     + i.toString() + ".txt";
             File infoFile = new File(infPath);
             File textFile = new File(txtPath);

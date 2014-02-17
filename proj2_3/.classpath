@@ -20,5 +20,8 @@
 	<classpathentry kind="lib" path="lib/crawler4j-3.5/crawler4j-3.5.jar" sourcepath="/crawler4j/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/IR_Assignment 1"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.7.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.7.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.7.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
