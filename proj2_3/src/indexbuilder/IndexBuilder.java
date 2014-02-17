@@ -1,15 +1,18 @@
 package indexbuilder;
 
 
+import Strucutre.HtmlFileInfo;
 import Strucutre.PagePositions;
 import Strucutre.WordPagePosition;
 import indexReader.Doc2MD5;
 import indexReader.MD52Doc;
+import indexReader.PageRank;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Main entry. 
@@ -25,7 +28,7 @@ public class IndexBuilder {
 
     private String URL2MD5_fileName = "URL_to_MD5.txt";
     private String MD52URL_fileName = "MD5_to_URL.txt";
-    private String PageRank_fileName = "PageRank.txt";
+    private String PageRank_fileName = "PageRankBuilder.txt";
     private String InverseIndex_fileName = "InverseIndex.txt";
 
     public IndexBuilder(String path) {
@@ -59,7 +62,7 @@ public class IndexBuilder {
         if (!success) {
             success = (new File(this.path + inverseIndexFolder)).mkdir();
             if (!success) {
-                System.out.println("Fail to creat directory "
+                System.out.println("Fail to create directory "
                         + inverseIndexFolder + "!");
                 initialization = false;
             }
@@ -101,17 +104,20 @@ public class IndexBuilder {
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
         DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
                 documentIndexFolder, rawHTMLFolder, rawInfoFolder);
-        docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
-//        Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
-        Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
-//        MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
-        MD52Doc.getInstance().write2Disk(path + documentIndexFolder + "copy " + MD52URL_fileName);
+        // docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
+        Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
+        // Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
+        MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
+        // MD52Doc.getInstance().write2Disk(path + documentIndexFolder + "copy " + MD52URL_fileName);
 
         // build page rank
-        System.out.println("Build the PageRank index");
-        PageRank pageRank = new PageRank(path,
-                documentIndexFolder, rawHTMLFolder, rawInfoFolder);
-        pageRank.calcPageRank(URL2MD5_fileName);
+        System.out.println("Build the PageRankBuilder index");
+        // PageRankBuilder pageRankBuilder = new PageRankBuilder(path,
+        //        documentIndexFolder, rawInfoFolder);
+        // pageRankBuilder.calcPageRank();
+        // PageRank.getInstance().write2Disk(path + documentIndexFolder + PageRank_fileName);
+        PageRank.getInstance().readFromDisk(path + documentIndexFolder + PageRank_fileName);
+
 
         System.out.println("Begin build inverse index");
         /*

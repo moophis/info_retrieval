@@ -5,8 +5,12 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -97,6 +101,8 @@ public class CrawlerSW extends WebCrawler{
 	* This function is called when a page is fetched and ready 
 	* to be processed by your program.
 	*/
+    public static HashMap<String, HashSet<String> > pageRankData = new HashMap<>();
+    public static HashMap<String, Integer> outDegree = new HashMap<>();
 	@Override
 	public synchronized void visit(Page page) {   
 		Long threadId = Thread.currentThread().getId();
@@ -106,27 +112,39 @@ public class CrawlerSW extends WebCrawler{
 		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String text = htmlParseData.getHtml();
+//			String text = htmlParseData.getHtml();
 //			String html = htmlParseData.getHtml();
-			List<WebURL> links = htmlParseData.getOutgoingUrls();
-			
-			Integer size = links.size();
+
+            List<WebURL> links = htmlParseData.getOutgoingUrls();
+
+            String urlMD5 = DigestUtils.md5Hex(url);
+            outDegree.put(urlMD5, links.size());
+
+            for (WebURL link : links) {
+                String linkMD5 = DigestUtils.md5Hex(link.toString());
+                if (!pageRankData.containsKey(linkMD5)) {
+                    pageRankData.put(linkMD5, new HashSet<String>());
+                }
+                pageRankData.get(linkMD5).add(urlMD5);
+            }
+
+			// Integer size = links.size();
 			
 			/*
 			 * Pages fetched from different crawler threads are 
 			 * stored separately. 
 			 */
-			long offset = -1;
-			try {
-				offset = DatabaseBuilder.writePageContent(threadId, text);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			String meta = null;
-			if (offset != -1) {
-				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
-				DatabaseBuilder.writePageIndex(threadId, meta);
-			}
+//			long offset = -1;
+//			try {
+//				offset = DatabaseBuilder.writePageContent(threadId, text);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			String meta = null;
+//			if (offset != -1) {
+//				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
+//				DatabaseBuilder.writePageIndex(threadId, meta);
+//			}
 			
 //			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" 
 //					+ fileName + ".txt");

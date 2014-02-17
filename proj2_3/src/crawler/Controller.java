@@ -6,10 +6,14 @@ import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
+import java.io.FileWriter;
+import java.util.HashSet;
+import java.util.Map;
+
 public class Controller {
-	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
+//	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
 	
-//	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
+	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
     public static void main(String[] args) throws Exception {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
@@ -45,6 +49,30 @@ public class Controller {
          * will reach the line after this only when crawling is finished.
          */
         controller.start(CrawlerSW.class, numberOfCrawlers);
+
+        System.out.println("Start saving data");
+        FileWriter fw;
+        String filePath = crawlStorageFolder + "data/info/pageRank.txt";
+        fw = new FileWriter(filePath, false);
+        for (Map.Entry<String, HashSet<String> > m : CrawlerSW.pageRankData.entrySet()) {
+            StringBuilder buf = new StringBuilder().append(m.getKey());
+            for (String s : m.getValue()) {
+                buf.append(":").append(s);
+            }
+            fw.write(buf.toString()+"\n");
+        }
+        fw.flush();
+        fw.close();
+
+        filePath = crawlStorageFolder + "data/info/pageOutDegree.txt";
+        fw = new FileWriter(filePath, false);
+        for (Map.Entry<String, Integer> m : CrawlerSW.outDegree.entrySet()) {
+            StringBuilder buf = new StringBuilder().append(m.getKey()).append(":").append(m.getValue());
+            fw.write(buf.toString()+"\n");
+        }
+        fw.flush();
+        fw.close();
+
         System.out.println("Finish!");
     }
 }
