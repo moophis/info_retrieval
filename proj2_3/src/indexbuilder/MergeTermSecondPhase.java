@@ -12,14 +12,14 @@ public class MergeTermSecondPhase {
     private final String documentIndexFolderPath;
 
     public MergeTermSecondPhase(String path,
-                               String tempFolder,
-                               String documentIndexFolder) {
+                                String tempFolder,
+                                String documentIndexFolder) {
         tempFolderPath = path + tempFolder;
         documentIndexFolderPath = path + documentIndexFolder;
     }
 
     public String merge(HashMap<String, PagePositions> mergeFirstPhaseMap) {
         String inverseIndexFileName = documentIndexFolderPath + "InverseIndex.txt";
-        return  inverseIndexFileName;
+        return inverseIndexFileName;
     }
 }

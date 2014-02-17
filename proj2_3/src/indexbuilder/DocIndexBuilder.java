@@ -1,11 +1,11 @@
 package indexbuilder;
 
-import crawler.Controller;
 import indexReader.Doc2MD5;
 import indexReader.MD52Doc;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
-import org.apache.commons.codec.digest.DigestUtils;
+
 /**
  * Created by soushimei on 2/13/14.
  */
@@ -23,7 +23,6 @@ public class DocIndexBuilder {
         rawHTMLFolderPath = path + rawHTMLFolder;
         rawInfoFolderPath = path + rawInfoFolder;
     }
-
 
 
     /// Building the index of document
@@ -52,7 +51,7 @@ public class DocIndexBuilder {
             }
 
 			/*
-			 * Should really care about the first line and the last line of
+             * Should really care about the first line and the last line of
 			 * the info files.
 			 */
             String line, url;
@@ -80,6 +79,7 @@ public class DocIndexBuilder {
         doc2MD5.write2Disk(URL2MD5_filePath);
         md52Doc.write2Disk(MD52URL_filePath);
     }
+
     /**
      * Extract the page information from an "info" line.
      */

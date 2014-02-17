@@ -2,7 +2,10 @@ package indexbuilder;
 
 import indexReader.PageRank;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,7 +24,8 @@ public class PageRankBuilder {
         documentIndexFolderPath = path + documentIndexFolder;
         rawInfoFolderPath = path + rawInfoFolder;
     }
-    private static HashMap<String, HashSet<String> > pageRankData = new HashMap<>();
+
+    private static HashMap<String, HashSet<String>> pageRankData = new HashMap<>();
     private static HashMap<String, Integer> outDegree = new HashMap<>();
 
     /// Calculate the pagerank of the document
@@ -31,7 +35,7 @@ public class PageRankBuilder {
         readRawDataFromDisk();
         // begin calc page rank
         // set the page rank to be uniformly equal
-        double initPageRank = 1.0/outDegree.size();
+        double initPageRank = 1.0 / outDegree.size();
         HashMap<String, Double> pageRank = new HashMap<>();
         for (Map.Entry<String, Integer> m : outDegree.entrySet()) {
             pageRank.put(m.getKey(), initPageRank);
@@ -49,11 +53,11 @@ public class PageRankBuilder {
 
                 } else {
                     for (String page : pagePoint2Me) {
-                        rank += (double)(pageRank.get(page)) / (double)(outDegree.get(page));
+                        rank += (double) (pageRank.get(page)) / (double) (outDegree.get(page));
                     }
                 }
                 // compute the error
-                rank = lambda/outDegree.size() + (1-lambda)*rank;
+                rank = lambda / outDegree.size() + (1 - lambda) * rank;
                 error += Math.abs(pageRank.get(m.getKey()) - rank);
                 pageRank.put(m.getKey(), rank);
             }
@@ -62,6 +66,7 @@ public class PageRankBuilder {
         // set the page rank to the PageRankBuilder
         PageRank.getInstance().setPageRank(pageRank);
     }
+
     private void readRawDataFromDisk() {
         String pageOutDegree_filePath = rawInfoFolderPath + "pageOutDegree.txt";
         String pageRank_filePath = rawInfoFolderPath + "pageRank.txt";

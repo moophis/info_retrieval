@@ -8,7 +8,7 @@ public class InverseIndexRankBuilder {
 
 
     public InverseIndexRankBuilder(String path,
-                                String DocumentIndexFolder) {
+                                   String DocumentIndexFolder) {
         documentIndexFolderPath = path + DocumentIndexFolder;
     }
 

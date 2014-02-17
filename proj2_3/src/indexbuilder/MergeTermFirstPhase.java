@@ -5,7 +5,6 @@ import Strucutre.WordPagePosition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by soushimei on 2/13/14.

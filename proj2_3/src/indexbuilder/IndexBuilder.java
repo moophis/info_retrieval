@@ -1,7 +1,6 @@
 package indexbuilder;
 
 
-import Strucutre.HtmlFileInfo;
 import Strucutre.PagePositions;
 import Strucutre.WordPagePosition;
 import indexReader.Doc2MD5;
@@ -12,10 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Main entry. 
+ * Main entry.
  */
 public class IndexBuilder {
     private boolean initialization;
@@ -166,12 +164,12 @@ public class IndexBuilder {
 
 
     public static void main(String[] args) {
-		if (args.length != 1) {
+        if (args.length != 1) {
             System.out.println("Usage: add \"path\"");
             return;
         }
         System.out.println(args.length);
-		System.out.println(args[0]);
+        System.out.println(args[0]);
 
         IndexBuilder indexBuilder = new IndexBuilder(args[0]);
         try {
