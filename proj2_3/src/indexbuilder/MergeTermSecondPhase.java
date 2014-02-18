@@ -2,6 +2,7 @@ package indexbuilder;
 
 import Strucutre.PagePosition;
 import Strucutre.TF_IDF_Positions;
+import indexReader.InverseIndex;
 
 import java.util.ArrayList;
 import java.util.HashMap;

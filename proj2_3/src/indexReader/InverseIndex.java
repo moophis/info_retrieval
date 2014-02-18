@@ -15,7 +15,7 @@ public class InverseIndex {
 	}
 
     public void write2Disk(String filePath) {
-
+        
     }
     public void readFromDisk(String filePath) {
 
