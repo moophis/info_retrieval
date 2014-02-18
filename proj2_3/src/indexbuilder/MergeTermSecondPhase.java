@@ -32,10 +32,10 @@ public class MergeTermSecondPhase {
             ArrayList<PagePosition> pagePositions = mergeFirstPhaseMap.get(m.getKey());
 
             for (PagePosition pp : pagePositions) {
-                if (!tf_idf_positionsHashMap.containsKey(pp.md5)) {
-                    tf_idf_positionsHashMap.put(pp.md5, new TF_IDF_Positions());
+                if (!tf_idf_positionsHashMap.containsKey(pp.urlMD5)) {
+                    tf_idf_positionsHashMap.put(pp.urlMD5, new TF_IDF_Positions());
                 }
-                tf_idf_positionsHashMap.get(pp.md5).positions.add(pp.position);
+                tf_idf_positionsHashMap.get(pp.urlMD5).positions.add(pp.position);
             }
         }
     }

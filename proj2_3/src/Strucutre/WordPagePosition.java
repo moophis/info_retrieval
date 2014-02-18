@@ -5,6 +5,6 @@ package Strucutre;
  */
 public class WordPagePosition {
     public String word;
-    public String md5;
+    public String urlMd5;
     public int position; // int should be OK in this project.
 }

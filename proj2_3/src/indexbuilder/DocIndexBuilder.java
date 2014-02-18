@@ -90,7 +90,7 @@ public class DocIndexBuilder {
         String[] strings = line.split(":");
 
         switch (type) {
-            case "md5": // (string)
+            case "urlMd5": // (string)
                 return strings[0];
             case "position": // starting position (long)
                 return strings[1];
