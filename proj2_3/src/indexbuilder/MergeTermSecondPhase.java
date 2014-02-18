@@ -1,8 +1,11 @@
 package indexbuilder;
 
-import Strucutre.PagePositions;
+import Strucutre.PagePosition;
+import Strucutre.TF_IDF_Positions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by soushimei on 2/13/14.
@@ -17,9 +20,23 @@ public class MergeTermSecondPhase {
         tempFolderPath = path + tempFolder;
         documentIndexFolderPath = path + documentIndexFolder;
     }
+    // merge the pair <term, <URL1, pos1>, <URL1, pos2>,... > to <term, <URL/MD5, <pos1, pos2, pos3,...,> > >
+    public void merge(HashMap<String, ArrayList<PagePosition>> mergeFirstPhaseMap,
+                      HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap) {
 
-    public String merge(HashMap<String, PagePositions> mergeFirstPhaseMap) {
-        String inverseIndexFileName = documentIndexFolderPath + "InverseIndex.txt";
-        return inverseIndexFileName;
+        for (Map.Entry<String, ArrayList<PagePosition>> m : mergeFirstPhaseMap.entrySet()) {
+            if (!mergeSecondPhaseMap.containsKey(m.getKey())) {
+                mergeSecondPhaseMap.put(m.getKey(), new HashMap<String, TF_IDF_Positions>());
+            }
+            HashMap<String, TF_IDF_Positions> tf_idf_positionsHashMap = mergeSecondPhaseMap.get(m.getKey());
+            ArrayList<PagePosition> pagePositions = mergeFirstPhaseMap.get(m.getKey());
+
+            for (PagePosition pp : pagePositions) {
+                if (!tf_idf_positionsHashMap.containsKey(pp.md5)) {
+                    tf_idf_positionsHashMap.put(pp.md5, new TF_IDF_Positions());
+                }
+                tf_idf_positionsHashMap.get(pp.md5).positions.add(pp.position);
+            }
+        }
     }
 }

@@ -1,7 +1,8 @@
 package indexbuilder;
 
 
-import Strucutre.PagePositions;
+import Strucutre.PagePosition;
+import Strucutre.TF_IDF_Positions;
 import Strucutre.WordPagePosition;
 import indexReader.Doc2MD5;
 import indexReader.MD52Doc;
@@ -124,7 +125,8 @@ public class IndexBuilder {
          */
         // for building index
         ArrayList<WordPagePosition> splitLists = new ArrayList<>();
-        HashMap<String, PagePositions> mergeFirstPhaseMap = new HashMap<>();
+        HashMap<String, ArrayList<PagePosition> > mergeFirstPhaseMap = new HashMap<>();
+        HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
         System.out.println("split the documents");
         SplitDocuments splitDocuments;
@@ -149,8 +151,7 @@ public class IndexBuilder {
         System.out.println("Second merging phase; inverse index built");
         MergeTermSecondPhase mergeTermSecondPhase;
         mergeTermSecondPhase = new MergeTermSecondPhase(path, tempFolder, documentIndexFolder);
-        String inverseIndexFileName;
-        inverseIndexFileName = mergeTermSecondPhase.merge(mergeFirstPhaseMap);
+        mergeTermSecondPhase.merge(mergeFirstPhaseMap, mergeSecondPhaseMap);
 
         // step 5: stat the inverse index and output inverse index rank
         System.out.println("Calculate the tf-idf rank of inverse index");

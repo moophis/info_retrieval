@@ -1,6 +1,6 @@
 package indexbuilder;
 
-import Strucutre.PagePositions;
+import Strucutre.PagePosition;
 import Strucutre.WordPagePosition;
 
 import java.util.ArrayList;
@@ -17,8 +17,18 @@ public class MergeTermFirstPhase {
         tempFolderPath = path + TempFolder;
     }
 
+    // merge the pair <term, URL1, pos1>... to <term, <URL1, pos1>, <URL1, pos2>,... >
     public void merge(ArrayList<WordPagePosition> splitLists,
-                      HashMap<String, PagePositions> mergeFirstPhaseMap) {
-
+                      HashMap<String, ArrayList<PagePosition> > mergeFirstPhaseMap) {
+        for (WordPagePosition wpp : splitLists) {
+            if (!mergeFirstPhaseMap.containsKey(wpp.word)) {
+                ArrayList<PagePosition> pagePositions = new ArrayList<>();
+                mergeFirstPhaseMap.put(wpp.word, pagePositions);
+            }
+            PagePosition pagePosition = new PagePosition();
+            pagePosition.md5 = wpp.md5;
+            pagePosition.position = wpp.position;
+            mergeFirstPhaseMap.get(wpp.word).add(pagePosition);
+        }
     }
 }

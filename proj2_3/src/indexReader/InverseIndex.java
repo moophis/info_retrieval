@@ -21,6 +21,10 @@ public class InverseIndex {
 
     }
 
+    public void setInverseIndex(HashMap<String, HashMap<String, TF_IDF_Positions> > result) {
+        dictionary = result;
+    }
+
     private HashMap<String, HashMap<String, TF_IDF_Positions> > dictionary;
 
 }
