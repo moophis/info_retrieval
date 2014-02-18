@@ -41,7 +41,7 @@ public class Stats {
     /**
      * Extract the page information from an "info" line.
      */
-    private static String getPageInfo(String line, String type) {
+    public static String getPageInfo(String line, String type) {
         if (line == null)
             return line;
 
