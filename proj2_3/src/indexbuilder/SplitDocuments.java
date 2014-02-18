@@ -38,12 +38,12 @@ public class SplitDocuments {
         rawInfoFolderPath = this.path + rawInfoFolder;
     }
 
-    public void split(ArrayList<WordPagePosition> splitLists) {
+    public void split(ArrayList<WordPagePosition> splitLists) throws IOException {
     	String fileName = "thread";
     }
     
     /** test */
-    private void splitTest(String filePath) throws IOException {
+    private static void splitTest(String filePath) throws IOException {
     	RandomAccessFile lineRead = null;
     	RandomAccessFile charRead = null;
     	
@@ -55,31 +55,43 @@ public class SplitDocuments {
 		}
     	
     	String line;
-    	long pos = 0, linePos = 0;;
+    	int pos = 0, linePos = 0;;
     	int lineNo = 0;
-    	while (!(line = lineRead.readLine()).isEmpty()) {
-    		String[] buf = line.toLowerCase().split("[^0-9A-Za-z'_-]+");
+    	while ((line = lineRead.readLine()) != null) {
+    		String[] buf = line.toLowerCase().split("[^0-9A-Za-z]+");
 
     		lineNo++;
+    		
+    		for (int i = 0; i < line.length() 
+					&& !Character.isLetterOrDigit(line.charAt(i)); i++)
+				linePos++;
     		for (String s : buf) {
-    			System.out.println("Line " + lineNo + ": word: " + s + ", beginning at " + pos);
+    			System.out.println("Line " + lineNo + ": word: " + s + ", beginning at "
+    						+ pos + "+" + linePos);
     			int wordLen = s.length();
-    			charRead.seek(pos + linePos);
+//    			byte[] bytes = new byte[wordLen];
+//    			charRead.seek(pos + linePos);
+//    			charRead.read(bytes, 0, wordLen);
+//    			String buffer = new String(bytes);
+    			String buffer = line.substring(linePos, linePos + wordLen);
     			
-    			System.out.print("-->Read char by char, word: ");
-    			for (int i = 0; i < wordLen; i++) {
-    				System.out.print(charRead.readChar());
-    			}
-    			System.out.print('\n');
+    			System.out.println("-->Read byte by byte, word: " + buffer);
+//    			for (int i = 0; i < wordLen; i++) {
+//    				System.out.print(charRead.readChar());
+//    			}
+//    			System.out.println(", @" + charRead.getFilePointer());
     			
     			linePos += wordLen;
-    			for (int i = wordLen; i < line.length() 
-    					|| !Character.isLetterOrDigit(line.charAt(i)); i++)
+    			while (linePos < line.length() 
+    					&& !Character.isLetterOrDigit(line.charAt(linePos)))
     				linePos++;
     		}
     		
     		pos += linePos + 1; // '\n'. XXX: do not know if there is a 'r'.
     		linePos = 0;
+    		
+    		// XXX: force to call garbage collector.
+    		System.gc();
     	}
     }
     
@@ -174,6 +186,7 @@ public class SplitDocuments {
      * @throws IOException */
     public static void main(String args[]) throws IOException {
     	System.out.println("In SplitDocuments test ...");
-    	htmlToText();
+//    	htmlToText();
+    	splitTest("/Users/liqiangw/Test/IR/pure/text/thread13.txt");
     }
 }

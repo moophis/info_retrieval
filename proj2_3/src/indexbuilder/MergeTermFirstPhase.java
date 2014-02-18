@@ -26,7 +26,7 @@ public class MergeTermFirstPhase {
                 mergeFirstPhaseMap.put(wpp.word, pagePositions);
             }
             PagePosition pagePosition = new PagePosition();
-            pagePosition.urlMD5 = wpp.urlMd5;
+            pagePosition.urlMD5 = wpp.urlMD5;
             pagePosition.position = wpp.position;
             mergeFirstPhaseMap.get(wpp.word).add(pagePosition);
         }
