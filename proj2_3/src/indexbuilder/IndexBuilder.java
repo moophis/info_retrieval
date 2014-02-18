@@ -5,6 +5,7 @@ import Strucutre.PagePosition;
 import Strucutre.TF_IDF_Positions;
 import Strucutre.WordPagePosition;
 import indexReader.Doc2MD5;
+import indexReader.InverseIndex;
 import indexReader.MD52Doc;
 import indexReader.PageRank;
 
@@ -101,8 +102,8 @@ public class IndexBuilder {
          */
         // this is quite easy, one class can finish this
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
-        DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
-                documentIndexFolder, rawHTMLFolder, rawInfoFolder);
+        // DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
+        //        documentIndexFolder, rawHTMLFolder, rawInfoFolder);
         // docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
         Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
         // Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
@@ -157,7 +158,8 @@ public class IndexBuilder {
         System.out.println("Calculate the tf-idf rank of inverse index");
         InverseIndexRankBuilder inverseIndexRankBuilder;
         inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
-        inverseIndexRankBuilder.build(InverseIndex_fileName);
+        inverseIndexRankBuilder.build(mergeSecondPhaseMap);
+        InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
 
 
         System.out.println("Finish building index");
