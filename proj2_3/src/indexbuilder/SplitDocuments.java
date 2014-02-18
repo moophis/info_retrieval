@@ -26,6 +26,8 @@ public class SplitDocuments {
     private final String tempFolderPath;
     private final String rawHTMLFolderPath;
     private final String rawInfoFolderPath;
+    private final String pureInfoFolderPath;
+    private final String pureTextFolderPath;
     private final String path;
     
     public SplitDocuments(String path,
@@ -36,26 +38,89 @@ public class SplitDocuments {
         tempFolderPath = this.path + tempFolder;
         rawHTMLFolderPath = this.path + rawHTMLFolder;
         rawInfoFolderPath = this.path + rawInfoFolder;
+        pureInfoFolderPath = this.path + "/pure/info";
+        pureTextFolderPath = this.path + "/pure/text";
     }
 
+    /**
+     * Extract each word from pure text database, find relative position in 
+     * a document and retrieve its URL (represented as MD5 value). Assemble
+     * those information as an element of @param splitLists. 
+     */
     public void split(ArrayList<WordPagePosition> splitLists) throws IOException {
-    	String fileName = "thread";
+    	RandomAccessFile infoFile = null;
+    	RandomAccessFile textFile = null;
+    	
+    	for (Integer t = 13; t <= 19; t++) {
+    		String pureInfoPath = pureInfoFolderPath + "/thread" + t.toString() + ".txt";
+    		String pureTextPath = pureInfoFolderPath + "/thread" + t.toString() + ".txt";
+    		try {
+    			infoFile = new RandomAccessFile(pureInfoPath, "r");
+    			textFile = new RandomAccessFile(pureTextPath, "r");
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    		}
+    		
+    		String line;
+        	int pos = 0, linePos = 0;
+        	
+        	String adjInfo = infoFile.readLine();
+        	String nextInfo = infoFile.readLine();
+        	int adjPos = Integer.parseInt(getPureIndexLine(adjInfo, "position"));
+        	int nextPos = Integer.parseInt(getPureIndexLine(nextInfo, "position"));
+        	
+        	while ((line = textFile.readLine()) != null) {
+        		String[] buf = line.toLowerCase().split("[^0-9A-Za-z]+");
+        		
+        		for (int i = 0; i < line.length() 
+    					&& !Character.isLetterOrDigit(line.charAt(i)); i++)
+    				linePos++;
+        		for (String s : buf) {
+        			int wordLen = s.length();
+        			String word = line.substring(linePos, linePos + wordLen);
+        			
+        			int curPos = pos + linePos;
+        			// Always maintain the condition: adjPos <= curPos < nextPos
+        			while (curPos >= nextPos) {
+        				adjPos = nextPos;
+        				adjInfo = nextInfo;
+        				nextInfo = infoFile.readLine();
+        				nextPos = Integer.parseInt(getPureIndexLine(nextInfo, "position"));
+        			}
+        			assert(curPos >= adjPos);
+        			
+        			int offset = curPos - adjPos;
+        			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
+        			splitLists.add(new WordPagePosition(word, adjMD5, offset));
+        			
+        			linePos += wordLen;
+        			while (linePos < line.length() 
+        					&& !Character.isLetterOrDigit(line.charAt(linePos)))
+        				linePos++;
+        		}
+        		
+        		pos += linePos + 1; 
+        		linePos = 0;
+        	}
+
+    		
+    		infoFile.close();
+    		textFile.close();
+    	}
     }
     
     /** test */
     private static void splitTest(String filePath) throws IOException {
     	RandomAccessFile lineRead = null;
-    	RandomAccessFile charRead = null;
     	
     	try {
 			lineRead = new RandomAccessFile(filePath, "r");
-			charRead = new RandomAccessFile(filePath, "r");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
     	
     	String line;
-    	int pos = 0, linePos = 0;;
+    	int pos = 0, linePos = 0;
     	int lineNo = 0;
     	while ((line = lineRead.readLine()) != null) {
     		String[] buf = line.toLowerCase().split("[^0-9A-Za-z]+");
@@ -89,9 +154,6 @@ public class SplitDocuments {
     		
     		pos += linePos + 1; // '\n'. XXX: do not know if there is a 'r'.
     		linePos = 0;
-    		
-    		// XXX: force to call garbage collector.
-    		System.gc();
     	}
     }
     
@@ -159,6 +221,24 @@ public class SplitDocuments {
     	return DigestUtils.md5Hex(url) + ":" + pos.toString();
     }
     
+    private String getPureIndexLine(String line, String type) {
+    	String[] strings = line.split(":");
+    	
+    	if (line == "")
+    		return null;
+    	
+    	switch (type) {
+    	case "url-md5":
+    		return strings[0];
+    	case "position":
+    		return strings[1];
+    	default:
+    		System.err.println("In vaild input type!");
+    	}
+    	
+    	return null;
+    }
+    
     /**
      * @deprecated 
      */
@@ -187,6 +267,18 @@ public class SplitDocuments {
     public static void main(String args[]) throws IOException {
     	System.out.println("In SplitDocuments test ...");
 //    	htmlToText();
-    	splitTest("/Users/liqiangw/Test/IR/pure/text/thread13.txt");
+//    	splitTest("/Users/liqiangw/Test/IR/pure/text/thread13.txt");
+    	
+    	String testPath = "/Users/liqiangw/Test/IR/test/test2.txt";
+    	String testOutputPath = "/Users/liqiangw/Test/IR/test/test2out.txt";
+    	File input = new File(testPath);
+    	Document doc;
+		try {
+			doc = Jsoup.parse(input, "UTF-8");
+			StringToFile.toFile(doc.text(), testOutputPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
