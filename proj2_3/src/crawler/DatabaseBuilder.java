@@ -130,7 +130,7 @@ public class DatabaseBuilder {
 		}
 		// get the tail of the file 
 		RandomAccessFile raf = null;
-		filePath = Controller.crawlStorageFolder + "data/text/";
+		filePath = Controller.crawlStorageFolder + "raw/text/";
 		try {
 			raf = new RandomAccessFile(filePath+fileName, "r");
 			int post = (int) raf.length();
@@ -155,7 +155,7 @@ public class DatabaseBuilder {
 		}
 		
 		// begin read the text file
-		filePath = Controller.crawlStorageFolder + "data/text/";
+		filePath = Controller.crawlStorageFolder + "raw/text/";
 		try {
 			raf = new RandomAccessFile(filePath+fileName, "r");
 		} catch (FileNotFoundException e) {
