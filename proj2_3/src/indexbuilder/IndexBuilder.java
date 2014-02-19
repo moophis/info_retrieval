@@ -9,7 +9,9 @@ import indexReader.InverseIndex;
 import indexReader.MD52Doc;
 import indexReader.PageRank;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ public class IndexBuilder {
     private String MD52URL_fileName = "MD5_to_URL.txt";
     private String PageRank_fileName = "PageRankBuilder.txt";
     private String InverseIndex_fileName = "InverseIndex.txt";
+    private String wordList_fileName = "WordList.txt";
 
     public IndexBuilder(String path) {
         this.path = path + "/";
@@ -125,7 +128,7 @@ public class IndexBuilder {
 
          */
         // for building index
-        ArrayList<WordPagePosition> splitLists = new ArrayList<>();
+        ArrayList<WordPagePosition> splitLists;
         HashMap<String, ArrayList<PagePosition> > mergeFirstPhaseMap = new HashMap<>();
         HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
@@ -133,8 +136,11 @@ public class IndexBuilder {
         SplitDocuments splitDocuments;
         splitDocuments = new SplitDocuments(path,
                 tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.split(splitLists);
+        splitDocuments.split(path + documentIndexFolder + wordList_fileName);
 
+
+        // read split word list;
+        splitLists = readWordList(path + documentIndexFolder + wordList_fileName);
         // step 2: stem the term into stemmed version
         System.out.println("stem the documents");
         StemDocuments stemDocuments;
@@ -165,6 +171,30 @@ public class IndexBuilder {
         System.out.println("Finish building index");
     }
 
+    private ArrayList<WordPagePosition> readWordList(String filePath) {
+        ArrayList<WordPagePosition> wordList = new ArrayList<>();
+        File f = new File(filePath);
+        BufferedReader reader;
+
+        try {
+            reader = new BufferedReader(new FileReader(f));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] strings = line.split(":");
+                WordPagePosition wordPagePosition = new WordPagePosition();
+                wordPagePosition.word = strings[0];
+                wordPagePosition.urlMD5 = strings[1];
+                wordPagePosition.position = Integer.parseInt(strings[2]);
+                wordList.add(wordPagePosition);
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("Error process " + filePath);
+            e.printStackTrace();
+        }
+
+        return wordList;
+    }
 
     public static void main(String[] args) {
         if (args.length != 1) {
