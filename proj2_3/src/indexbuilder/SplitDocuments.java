@@ -1,6 +1,7 @@
 package indexbuilder;
 
 import Strucutre.PagePosition;
+import Strucutre.TF_IDF_Positions;
 import Strucutre.WordPagePosition;
 import crawler.StringToFile;
 import crawler.Stats;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -54,7 +56,7 @@ public class SplitDocuments {
      * Extract each word from pure text database, find relative position in 
      * a document and retrieve its URL (represented as MD5 value). 
      */
-    public void splitAndMerge(HashMap<String, ArrayList<PagePosition> > mergeFirstPhaseMap) throws IOException {
+    public void splitAndMerge(HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap) throws IOException {
     	RandomAccessFile infoFile = null;
     	RandomAccessFile textFile = null;
     	
@@ -104,14 +106,16 @@ public class SplitDocuments {
 
                         // merge
                         word = porterStemmer.stem(word);
-                        if (!mergeFirstPhaseMap.containsKey(word)) {
-                            ArrayList<PagePosition> pagePositions = new ArrayList<>();
-                            mergeFirstPhaseMap.put(word, pagePositions);
+                        if (!mergeSecondPhaseMap.containsKey(word)) {
+                            mergeSecondPhaseMap.put(word, new HashMap<String, TF_IDF_Positions>());
                         }
-                        PagePosition pagePosition = new PagePosition();
-                        pagePosition.urlMD5 = adjMD5;
-                        pagePosition.position = offset;
-                        mergeFirstPhaseMap.get(word).add(pagePosition);
+                        HashMap<String, TF_IDF_Positions> tf_idf_positionsHashMap = mergeSecondPhaseMap.get(word);
+                        if (!tf_idf_positionsHashMap.containsKey(adjMD5)) {
+                            tf_idf_positionsHashMap.put(adjMD5,new TF_IDF_Positions());
+                            tf_idf_positionsHashMap.get(adjMD5).tf_idf = 0.0;
+                            tf_idf_positionsHashMap.get(adjMD5).positions = new ArrayList<>();
+                        }
+                        tf_idf_positionsHashMap.get(adjMD5).positions.add(offset);
         			}
         			
         			linePos += wordLen;
@@ -122,7 +126,6 @@ public class SplitDocuments {
         		
         		pos += linePos + 1; 
         		linePos = 0;
-                System.gc();
         	}
 
     		

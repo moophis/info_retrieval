@@ -3,6 +3,7 @@ package indexReader;
 import Strucutre.TF_IDF_Positions;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class InverseIndex {
 
     public void write2Disk(String filePath) {
         if (inverseIndex == null) {
-            System.err.println("page rank index has not been initilized yet. Tyr build pagerank first.");
+            System.err.println("page rank index has not been initialized yet. Tyr build pagerank first.");
             return;
         }
         FileWriter fw;
@@ -29,13 +30,13 @@ public class InverseIndex {
                 String term = m.getKey();
                 // write term
                 fw.write(term + "\n");
-                HashMap<String, TF_IDF_Positions> doc_tfidfPoisitions = m.getValue();
+                HashMap<String, TF_IDF_Positions> doc_tfidf_Positions = m.getValue();
                 // write doc number
-                Integer docNum = new Integer(doc_tfidfPoisitions.size());
+                Integer docNum = new Integer(doc_tfidf_Positions.size());
                 fw.write(docNum.toString() + "\n");
-                for (Map.Entry<String, TF_IDF_Positions> n : doc_tfidfPoisitions.entrySet()) {
+                for (Map.Entry<String, TF_IDF_Positions> n : doc_tfidf_Positions.entrySet()) {
                     // write document md5
-                    fw.write(n.getKey());
+                    fw.write(n.getKey() + "\n");
                     // write tf idf value
                     TF_IDF_Positions tf_idf_positions = n.getValue();
                     Double tf_idf = new Double(tf_idf_positions.tf_idf);
@@ -45,7 +46,7 @@ public class InverseIndex {
                     fw.write(posNum.toString() + "\n");
                     // write positions
                     for (Integer integer : tf_idf_positions.positions) {
-                        fw.write(integer + "\n");
+                        fw.write(integer.toString() + "\n");
                     }
                 }
             }
@@ -89,6 +90,7 @@ public class InverseIndex {
 
                     // read number of positions
                     line = reader.readLine();
+                    tf_idf_positions.positions = new ArrayList<>();
                     int posNum = Integer.parseInt(line);
                     for (int posi = 0; posi < posNum; ++posi) {
                         // read positions

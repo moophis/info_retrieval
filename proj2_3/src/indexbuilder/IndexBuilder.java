@@ -136,16 +136,9 @@ public class IndexBuilder {
         SplitDocuments splitDocuments;
         splitDocuments = new SplitDocuments(path,
                 tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.splitAndMerge(mergeFirstPhaseMap);
+        splitDocuments.splitAndMerge(mergeSecondPhaseMap);
 
         System.gc();
-        // step 4: merge the pair <term, <URL1, pos1>, <URL1, pos2>,... > to <term, <URL/MD5, <pos1, pos2, pos3,...,> > >
-        // In this phase, the generated file is already the inverse index needed
-        System.out.println("Second merging phase; inverse index built");
-        MergeTermSecondPhase mergeTermSecondPhase;
-        mergeTermSecondPhase = new MergeTermSecondPhase(path, tempFolder, documentIndexFolder);
-        mergeTermSecondPhase.merge(mergeFirstPhaseMap, mergeSecondPhaseMap);
-
         // step 5: stat the inverse index and output inverse index rank
         System.out.println("Calculate the tf-idf rank of inverse index");
         InverseIndexRankBuilder inverseIndexRankBuilder;
