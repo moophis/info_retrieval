@@ -186,7 +186,6 @@ public class SplitDocuments {
             Document doc;
             
             line = htmlInfoReader.readLine(); // first line
-            System.out.println(line);
             url = Stats.getPageInfo(line, "url");
             StringToFile.toFile(buildPureIndexLine(url, curPurePos), pureInfoPath);
             while ((line = htmlInfoReader.readLine()) != null) {
@@ -194,9 +193,9 @@ public class SplitDocuments {
                 htmlLen = nextHtmlPos - curHtmlPos;
                 
                 byte[] b = new byte[(int) htmlLen];
-                System.out.println("curHtmlPos = " + curHtmlPos + ", htmlLen = " + htmlLen);
                 htmlTextReader.read(b, 0, (int) htmlLen);
                 String buf = new String(b);
+                
                 doc = Jsoup.parse(buf);
                 StringToFile.toFile(doc.text(), pureTextPath);
                 curPurePos += doc.text().length();
@@ -210,8 +209,11 @@ public class SplitDocuments {
             byte[] b = new byte[(int) htmlLen];
             htmlTextReader.read(b, 0, (int) htmlLen);
             String buf = new String(b);
-            StringToFile.toFile(buf, pureTextPath);
             
+            doc = Jsoup.parse(buf);
+            StringToFile.toFile(doc.text(), pureTextPath);
+            curPurePos += doc.text().length();
+
             htmlInfoReader.close();
             htmlTextReader.close();
     	}
@@ -266,19 +268,19 @@ public class SplitDocuments {
      * @throws IOException */
     public static void main(String args[]) throws IOException {
     	System.out.println("In SplitDocuments test ...");
-//    	htmlToText();
+    	htmlToText();
 //    	splitTest("/Users/liqiangw/Test/IR/pure/text/thread13.txt");
     	
-    	String testPath = "/Users/liqiangw/Test/IR/test/test2.txt";
-    	String testOutputPath = "/Users/liqiangw/Test/IR/test/test2out.txt";
-    	File input = new File(testPath);
-    	Document doc;
-		try {
-			doc = Jsoup.parse(input, "UTF-8");
-			StringToFile.toFile(doc.text(), testOutputPath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//    	String testPath = "/Users/liqiangw/Test/IR/test/test2.txt";
+//    	String testOutputPath = "/Users/liqiangw/Test/IR/test/test2out.txt";
+//    	File input = new File(testPath);
+//    	Document doc;
+//		try {
+//			doc = Jsoup.parse(input, "UTF-8");
+//			StringToFile.toFile(doc.text(), testOutputPath);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     }
 }
