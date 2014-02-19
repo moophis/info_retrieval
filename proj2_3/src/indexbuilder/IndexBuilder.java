@@ -136,7 +136,7 @@ public class IndexBuilder {
         SplitDocuments splitDocuments;
         splitDocuments = new SplitDocuments(path,
                 tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.split(wordList_fileName);
+        splitDocuments.splitAndMerge(wordList_fileName);
 
 
         // read split word list;
