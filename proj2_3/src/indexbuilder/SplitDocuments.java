@@ -47,7 +47,7 @@ public class SplitDocuments {
      * a document and retrieve its URL (represented as MD5 value). Assemble
      * those information as an element of @param splitLists. 
      */
-    public void split(ArrayList<WordPagePosition> splitLists) throws IOException {
+    public void split(String tmpFileName) throws IOException {
     	RandomAccessFile infoFile = null;
     	RandomAccessFile textFile = null;
     	
@@ -93,7 +93,8 @@ public class SplitDocuments {
         			
         			int offset = curPos - adjPos;
         			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
-        			splitLists.add(new WordPagePosition(word, adjMD5, offset));
+        			String str = new WordPagePosition(word, adjMD5, offset).toString();
+        			StringToFile.toFile(str, tempFolderPath + "/" + tmpFileName);
         			
         			linePos += wordLen;
         			while (linePos < line.length() 

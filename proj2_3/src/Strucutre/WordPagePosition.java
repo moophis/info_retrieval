@@ -17,4 +17,8 @@ public class WordPagePosition {
     public WordPagePosition() {
     	
     }
+    
+    public String toString() {
+    	return word + ":" + urlMD5 + ":" + position;
+    }
 }
