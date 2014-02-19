@@ -48,10 +48,9 @@ public class SplitDocuments {
 
     /**
      * Extract each word from pure text database, find relative position in 
-     * a document and retrieve its URL (represented as MD5 value). Assemble
-     * those information as an element of @param splitLists. 
+     * a document and retrieve its URL (represented as MD5 value). 
      */
-    public void split(String tmpFileName) throws IOException {
+    public void splitAndMerge(String tmpFileName) throws IOException {
     	RandomAccessFile infoFile = null;
     	RandomAccessFile textFile = null;
     	
@@ -72,6 +71,7 @@ public class SplitDocuments {
         	String nextInfo = infoFile.readLine();
         	int adjPos = Integer.parseInt(getPureIndexLine(adjInfo, "position"));
         	int nextPos = Integer.parseInt(getPureIndexLine(nextInfo, "position"));
+        	String lastMD5 = "";
         	
         	while ((line = textFile.readLine()) != null) {
         		String[] buf = line.toLowerCase().split("[^0-9A-Za-z]+");
@@ -98,7 +98,13 @@ public class SplitDocuments {
         			if (!FILTERS.matcher(word).matches()) {
 	        			int offset = curPos - adjPos;
 	        			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
-	        			String str = new WordPagePosition(word, adjMD5, offset).toString();
+	        			
+	        			if (adjMD5 != lastMD5) {
+	        				StringToFile.toFile("$", tempFolderPath + "/" + tmpFileName);
+	        				StringToFile.toFile(adjMD5, tempFolderPath + "/" + tmpFileName);
+	        				lastMD5 = adjMD5;
+	        			}
+	        			String str = word + ":" + offset;
 	        			StringToFile.toFile(str, tempFolderPath + "/" + tmpFileName);
         			}
         			
