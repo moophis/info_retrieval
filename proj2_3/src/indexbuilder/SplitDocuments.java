@@ -53,7 +53,7 @@ public class SplitDocuments {
     	
     	for (Integer t = 13; t <= 19; t++) {
     		String pureInfoPath = pureInfoFolderPath + "/thread" + t.toString() + ".txt";
-    		String pureTextPath = pureInfoFolderPath + "/thread" + t.toString() + ".txt";
+    		String pureTextPath = pureTextFolderPath + "/thread" + t.toString() + ".txt";
     		try {
     			infoFile = new RandomAccessFile(pureInfoPath, "r");
     			textFile = new RandomAccessFile(pureTextPath, "r");
@@ -85,6 +85,8 @@ public class SplitDocuments {
         				adjPos = nextPos;
         				adjInfo = nextInfo;
         				nextInfo = infoFile.readLine();
+                        if (nextInfo == null)
+                            break;
         				nextPos = Integer.parseInt(getPureIndexLine(nextInfo, "position"));
         			}
         			assert(curPos >= adjPos);
@@ -224,10 +226,9 @@ public class SplitDocuments {
     }
     
     private String getPureIndexLine(String line, String type) {
+        if (line == null || line == "")
+            return null;
     	String[] strings = line.split(":");
-    	
-    	if (line == "")
-    		return null;
     	
     	switch (type) {
     	case "url-md5":

@@ -35,8 +35,10 @@ public class MergeTermSecondPhase {
             for (PagePosition pp : pagePositions) {
                 if (!tf_idf_positionsHashMap.containsKey(pp.urlMD5)) {
                     tf_idf_positionsHashMap.put(pp.urlMD5, new TF_IDF_Positions());
+                    tf_idf_positionsHashMap.get(pp.urlMD5).positions = new ArrayList<>();
                 }
-                tf_idf_positionsHashMap.get(pp.urlMD5).positions.add(pp.position);
+                TF_IDF_Positions tf_idf_positions = tf_idf_positionsHashMap.get(pp.urlMD5);
+                tf_idf_positions.positions.add(pp.position);
             }
         }
     }
