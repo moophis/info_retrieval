@@ -1,19 +1,14 @@
 package indexbuilder;
 
 
-import Strucutre.PagePosition;
 import Strucutre.TF_IDF_Positions;
-import Strucutre.WordPagePosition;
 import indexReader.Doc2MD5;
 import indexReader.InverseIndex;
 import indexReader.MD52Doc;
 import indexReader.PageRank;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -128,27 +123,31 @@ public class IndexBuilder {
 
          */
         // for building index
-        ArrayList<WordPagePosition> splitLists;
-        HashMap<String, ArrayList<PagePosition> > mergeFirstPhaseMap = new HashMap<>();
         HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
         System.out.println("split the documents");
-        SplitDocuments splitDocuments;
-        splitDocuments = new SplitDocuments(path,
-                tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.splitAndMerge(mergeSecondPhaseMap);
+//        SplitDocuments splitDocuments;
+//        splitDocuments = new SplitDocuments(path,
+//                tempFolder, rawHTMLFolder, rawInfoFolder);
+//        splitDocuments.splitAndMerge(mergeSecondPhaseMap);
 
         System.gc();
         // step 5: stat the inverse index and output inverse index rank
         System.out.println("Calculate the tf-idf rank of inverse index");
-        InverseIndexRankBuilder inverseIndexRankBuilder;
-        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
-        inverseIndexRankBuilder.build(mergeSecondPhaseMap);
-        InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
-        // InverseIndex.getInstance().readFromDisk(path + documentIndexFolder + InverseIndex_fileName);
+//        InverseIndexRankBuilder inverseIndexRankBuilder;
+//        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
+//        inverseIndexRankBuilder.build(mergeSecondPhaseMap);
+//        InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
+        InverseIndex.getInstance().readFromDisk(path + documentIndexFolder + InverseIndex_fileName);
 
 
         System.out.println("Finish building index");
+
+        System.out.println("Begin printing statistics");
+        Doc2MD5.getInstance().printNumberDocuments();
+        PageRank.getInstance().printMaxPageRank();
+        InverseIndex.getInstance().printMostFreqWord();
+        InverseIndex.getInstance().printNumberTerm();
     }
 
     public static void main(String[] args) {

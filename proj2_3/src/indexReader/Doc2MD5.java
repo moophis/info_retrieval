@@ -26,6 +26,10 @@ public class Doc2MD5 {
             public String fileName = "";
      */
 
+    public void printNumberDocuments() {
+        System.out.println("Number of documents: " + Integer.toString(dictionary.size()));
+    }
+
     public void write2Disk(String filePath) {
         FileWriter fw;
         try {

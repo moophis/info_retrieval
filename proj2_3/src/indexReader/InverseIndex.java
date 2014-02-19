@@ -17,6 +17,35 @@ public class InverseIndex {
 		return uniqueInstance;
 	}
 
+    public void printMostFreqWord() {
+        double maxTf_idf = 0.0;
+        String maxString = "";
+        String maxMd5 = "";
+        for (Map.Entry<String, HashMap<String, TF_IDF_Positions>> m : inverseIndex.entrySet()) {
+            String term = m.getKey();
+            // write term
+            HashMap<String, TF_IDF_Positions> doc_tfidf_Positions = m.getValue();
+
+            for (Map.Entry<String, TF_IDF_Positions> n : doc_tfidf_Positions.entrySet()) {
+                // get tf idf value
+                TF_IDF_Positions tf_idf_positions = n.getValue();
+                double tf_idf = tf_idf_positions.tf_idf;
+                if (maxTf_idf < tf_idf) {
+                    maxTf_idf = tf_idf;
+                    maxString = term;
+                    maxMd5 = n.getKey();
+                }
+            }
+        }
+        System.out.println("Term with maximum tf-idf: " + maxString);
+        System.out.println("Maximum tf-idf: " + Double.toString(maxTf_idf));
+        System.out.println("url of the term: " + MD52Doc.getInstance().getURL(maxMd5));
+        System.out.println("PageRank of the url: " + PageRank.getInstance().getAPageRank(maxMd5));
+    }
+
+    public void printNumberTerm() {
+        System.out.println("Total Number of terms: " + Integer.toString(inverseIndex.size()));
+    }
     public void write2Disk(String filePath) {
         if (inverseIndex == null) {
             System.err.println("page rank index has not been initialized yet. Tyr build pagerank first.");

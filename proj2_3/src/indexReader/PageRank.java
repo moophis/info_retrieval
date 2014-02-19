@@ -75,6 +75,19 @@ public class PageRank {
         pageRank.clear();
     }
 
+    public void printMaxPageRank() {
+        double maxPageRank = 0.0;
+        String maxMd5 = "";
+        for (Map.Entry<String, Double> m : pageRank.entrySet()) {
+            if (maxPageRank < m.getValue()) {
+                maxPageRank = m.getValue();
+                maxMd5 = m.getKey();
+            }
+        }
+        System.out.println("URL with maximum page rank: " + MD52Doc.getInstance().getURL(maxMd5));
+        System.out.println("Maximum page rank is: " + maxPageRank);
+    }
+
     public int size() {
         return pageRank.size();
     }
