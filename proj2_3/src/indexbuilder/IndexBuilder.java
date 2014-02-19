@@ -138,6 +138,7 @@ public class IndexBuilder {
                 tempFolder, rawHTMLFolder, rawInfoFolder);
         splitDocuments.splitAndMerge(mergeFirstPhaseMap);
 
+        System.gc();
         // step 4: merge the pair <term, <URL1, pos1>, <URL1, pos2>,... > to <term, <URL/MD5, <pos1, pos2, pos3,...,> > >
         // In this phase, the generated file is already the inverse index needed
         System.out.println("Second merging phase; inverse index built");
