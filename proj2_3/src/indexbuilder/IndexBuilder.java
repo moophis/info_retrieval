@@ -136,11 +136,11 @@ public class IndexBuilder {
         SplitDocuments splitDocuments;
         splitDocuments = new SplitDocuments(path,
                 tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.split(path + documentIndexFolder + wordList_fileName);
+        splitDocuments.split(wordList_fileName);
 
 
         // read split word list;
-        splitLists = readWordList(path + documentIndexFolder + wordList_fileName);
+        splitLists = readWordList(path + tempFolder + wordList_fileName);
         // step 2: stem the term into stemmed version
         System.out.println("stem the documents");
         StemDocuments stemDocuments;
