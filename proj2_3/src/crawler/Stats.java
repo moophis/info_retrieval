@@ -171,7 +171,7 @@ public class Stats {
     /**
      * Stop words pattern.
      */
-    private final static String stopWords = "([a-z]|[0-9]+|about|above|after|again|against|all|also"
+    public final static String stopWords = "([a-z]|[0-9]+|about|above|after|again|against|all|also"
             + "|am|an|another|and|any|are|aren't|as|at|be|because|been|before|being|below|between"
             + "|both|but|by|can|can't|cannot|could|couldn't|did|didn't|do|does|doesn't|doing"
             + "|don't|down|during|each|few|for|from|further|had|hadn't|has|hasn't|have|haven't"

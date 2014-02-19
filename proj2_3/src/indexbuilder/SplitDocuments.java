@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 import org.jsoup.nodes.*;
@@ -29,6 +31,8 @@ public class SplitDocuments {
     private final String pureInfoFolderPath;
     private final String pureTextFolderPath;
     private final String path;
+    
+    private final static Pattern FILTERS = Pattern.compile(Stats.stopWords);
     
     public SplitDocuments(String path,
                           String tempFolder,
@@ -91,10 +95,12 @@ public class SplitDocuments {
         			}
         			assert(curPos >= adjPos);
         			
-        			int offset = curPos - adjPos;
-        			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
-        			String str = new WordPagePosition(word, adjMD5, offset).toString();
-        			StringToFile.toFile(str, tempFolderPath + "/" + tmpFileName);
+        			if (!FILTERS.matcher(word).matches()) {
+	        			int offset = curPos - adjPos;
+	        			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
+	        			String str = new WordPagePosition(word, adjMD5, offset).toString();
+	        			StringToFile.toFile(str, tempFolderPath + "/" + tmpFileName);
+        			}
         			
         			linePos += wordLen;
         			while (linePos < line.length() 
