@@ -99,23 +99,25 @@ public class SplitDocuments {
         				nextPos = Integer.parseInt(getPureIndexLine(nextInfo, "position"));
         			}
         			assert(curPos >= adjPos);
-        			
-        			if (!FILTERS.matcher(word).matches()) {
+
+                    word = porterStemmer.stem(word.toLowerCase());
+        			if (!FILTERS.matcher(word).matches() && word != null && !word.isEmpty()) {
 	        			int offset = curPos - adjPos;
 	        			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
 
                         // merge
-                        word = porterStemmer.stem(word);
-                        if (!mergeSecondPhaseMap.containsKey(word)) {
-                            mergeSecondPhaseMap.put(word, new HashMap<String, TF_IDF_Positions>());
+                        if (adjMD5 != null && !adjMD5.isEmpty()) {
+                            if (!mergeSecondPhaseMap.containsKey(word)) {
+                                mergeSecondPhaseMap.put(word, new HashMap<String, TF_IDF_Positions>());
+                            }
+                            HashMap<String, TF_IDF_Positions> tf_idf_positionsHashMap = mergeSecondPhaseMap.get(word);
+                            if (!tf_idf_positionsHashMap.containsKey(adjMD5)) {
+                                tf_idf_positionsHashMap.put(adjMD5,new TF_IDF_Positions());
+                                tf_idf_positionsHashMap.get(adjMD5).tf_idf = 0.0;
+                                tf_idf_positionsHashMap.get(adjMD5).positions = new ArrayList<>();
+                            }
+                            tf_idf_positionsHashMap.get(adjMD5).positions.add(offset);
                         }
-                        HashMap<String, TF_IDF_Positions> tf_idf_positionsHashMap = mergeSecondPhaseMap.get(word);
-                        if (!tf_idf_positionsHashMap.containsKey(adjMD5)) {
-                            tf_idf_positionsHashMap.put(adjMD5,new TF_IDF_Positions());
-                            tf_idf_positionsHashMap.get(adjMD5).tf_idf = 0.0;
-                            tf_idf_positionsHashMap.get(adjMD5).positions = new ArrayList<>();
-                        }
-                        tf_idf_positionsHashMap.get(adjMD5).positions.add(offset);
         			}
         			
         			linePos += wordLen;

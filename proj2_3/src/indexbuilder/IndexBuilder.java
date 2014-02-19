@@ -133,19 +133,19 @@ public class IndexBuilder {
         HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
         System.out.println("split the documents");
-        // SplitDocuments splitDocuments;
-        // splitDocuments = new SplitDocuments(path,
-        //        tempFolder, rawHTMLFolder, rawInfoFolder);
-        // splitDocuments.splitAndMerge(mergeSecondPhaseMap);
+        SplitDocuments splitDocuments;
+        splitDocuments = new SplitDocuments(path,
+                tempFolder, rawHTMLFolder, rawInfoFolder);
+        splitDocuments.splitAndMerge(mergeSecondPhaseMap);
 
         System.gc();
         // step 5: stat the inverse index and output inverse index rank
         System.out.println("Calculate the tf-idf rank of inverse index");
-        // InverseIndexRankBuilder inverseIndexRankBuilder;
-        // inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
-        // inverseIndexRankBuilder.build(mergeSecondPhaseMap);
-        // InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
-        InverseIndex.getInstance().readFromDisk(path + documentIndexFolder + InverseIndex_fileName);
+        InverseIndexRankBuilder inverseIndexRankBuilder;
+        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
+        inverseIndexRankBuilder.build(mergeSecondPhaseMap);
+        InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
+        // InverseIndex.getInstance().readFromDisk(path + documentIndexFolder + InverseIndex_fileName);
 
 
         System.out.println("Finish building index");
