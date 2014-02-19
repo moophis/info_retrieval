@@ -112,7 +112,7 @@ public class CrawlerSW extends WebCrawler{
 		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-//			String text = htmlParseData.getHtml();
+			String text = htmlParseData.getText();
 //			String html = htmlParseData.getHtml();
 
             List<WebURL> links = htmlParseData.getOutgoingUrls();
@@ -128,23 +128,23 @@ public class CrawlerSW extends WebCrawler{
                 pageRankData.get(linkMD5).add(urlMD5);
             }
 
-			// Integer size = links.size();
+			Integer size = links.size();
 			
 			/*
 			 * Pages fetched from different crawler threads are 
 			 * stored separately. 
 			 */
-//			long offset = -1;
-//			try {
-//				offset = DatabaseBuilder.writePageContent(threadId, text);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			String meta = null;
-//			if (offset != -1) {
-//				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
-//				DatabaseBuilder.writePageIndex(threadId, meta);
-//			}
+			long offset = -1;
+			try {
+				offset = DatabaseBuilder.writePageContent(threadId, text);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String meta = null;
+			if (offset != -1) {
+				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
+				DatabaseBuilder.writePageIndex(threadId, meta);
+			}
 			
 //			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" 
 //					+ fileName + ".txt");

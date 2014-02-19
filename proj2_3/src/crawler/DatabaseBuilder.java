@@ -38,9 +38,9 @@ public class DatabaseBuilder {
 		long pos = -1;
 		
 		RandomAccessFile raf = null;
-		String filePath = Controller.crawlStorageFolder + "raw/text/"
+		String filePath = Controller.crawlStorageFolder + "data/text/"
 							+ "thread" + threadId.toString() + ".txt";
-		
+		System.out.println(filePath);
 		try {
 			raf = new RandomAccessFile(filePath, "rws");
 			pos = raf.length();
@@ -80,7 +80,7 @@ public class DatabaseBuilder {
 		
 		// write a-z 10 times
 		String text = "abcdefghijklmnopqrstuvwxyz";
-		int times = 10;
+		int times = 100;
 		
 		// begin write page into text and info file
 		long offset = -1;
@@ -174,7 +174,7 @@ public class DatabaseBuilder {
 			for (int i = 0; i < positions.size()-1; ++i) {
 				int beg = positions.get(i);
 				int size = positions.get(i+1) - positions.get(i);
-				byte[] b = new byte[size*10];
+				byte[] b = new byte[size];
 				raf.seek(beg);
 				raf.read(b, 0, size);
 				System.out.println(beg);
