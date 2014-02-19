@@ -140,6 +140,7 @@ public class IndexBuilder {
 
 
         // read split word list;
+        System.out.println("read in the word list");
         splitLists = readWordList(path + tempFolder + wordList_fileName);
         // step 2: stem the term into stemmed version
         System.out.println("stem the documents");
