@@ -136,23 +136,7 @@ public class IndexBuilder {
         SplitDocuments splitDocuments;
         splitDocuments = new SplitDocuments(path,
                 tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.splitAndMerge(wordList_fileName);
-
-
-        // read split word list;
-        System.out.println("read in the word list");
-        splitLists = readWordList(path + tempFolder + wordList_fileName);
-        // step 2: stem the term into stemmed version
-        System.out.println("stem the documents");
-        StemDocuments stemDocuments;
-        stemDocuments = new StemDocuments(path, tempFolder);
-        stemDocuments.stem(splitLists);
-
-        // step 3: merge the pair <term, URL1, pos1>... to <term, <URL1, pos1>, <URL1, pos2>,... >
-        System.out.println("First merging phase");
-        MergeTermFirstPhase mergeTermFirstPhase;
-        mergeTermFirstPhase = new MergeTermFirstPhase(path, tempFolder);
-        mergeTermFirstPhase.merge(splitLists, mergeFirstPhaseMap);
+        splitDocuments.splitAndMerge(mergeFirstPhaseMap);
 
         // step 4: merge the pair <term, <URL1, pos1>, <URL1, pos2>,... > to <term, <URL/MD5, <pos1, pos2, pos3,...,> > >
         // In this phase, the generated file is already the inverse index needed
@@ -170,31 +154,6 @@ public class IndexBuilder {
 
 
         System.out.println("Finish building index");
-    }
-
-    private ArrayList<WordPagePosition> readWordList(String filePath) {
-        ArrayList<WordPagePosition> wordList = new ArrayList<>();
-        File f = new File(filePath);
-        BufferedReader reader;
-
-        try {
-            reader = new BufferedReader(new FileReader(f));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] strings = line.split(":");
-                WordPagePosition wordPagePosition = new WordPagePosition();
-                wordPagePosition.word = strings[0];
-                wordPagePosition.urlMD5 = strings[1];
-                wordPagePosition.position = Integer.parseInt(strings[2]);
-                wordList.add(wordPagePosition);
-            }
-            reader.close();
-        } catch (IOException e) {
-            System.err.println("Error process " + filePath);
-            e.printStackTrace();
-        }
-
-        return wordList;
     }
 
     public static void main(String[] args) {
