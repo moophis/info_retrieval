@@ -2,14 +2,13 @@ package indexbuilder;
 
 
 import Strucutre.TF_IDF_Positions;
-import indexReader.Doc2MD5;
-import indexReader.InverseIndex;
-import indexReader.MD52Doc;
-import indexReader.PageRank;
+import indexReader.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Main entry.
@@ -155,8 +154,6 @@ public class IndexBuilder {
             System.out.println("Usage: add \"path\"");
             return;
         }
-        System.out.println(args.length);
-        System.out.println(args[0]);
 
         IndexBuilder indexBuilder = new IndexBuilder(args[0]);
         try {

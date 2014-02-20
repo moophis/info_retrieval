@@ -10,6 +10,10 @@ import java.util.ArrayList;
 public class StemDocuments {
     private final String tempFolderPath;
 
+    public StemDocuments() {
+        tempFolderPath = "";
+    }
+
     public StemDocuments(String path, String tempFolder) {
         tempFolderPath = path + tempFolder;
     }

@@ -64,7 +64,10 @@ public class PageRank {
     }
 
     public double getAPageRank(String md5) {
-        return pageRank.get(md5);
+        if (pageRank.containsKey(md5))
+            return pageRank.get(md5);
+        else
+            return 0.0;
     }
 
     public void setPageRank(HashMap<String, Double> pk) {

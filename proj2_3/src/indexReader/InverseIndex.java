@@ -140,6 +140,7 @@ public class InverseIndex {
     public void setInverseIndex(HashMap<String, HashMap<String, TF_IDF_Positions> > result) {
         inverseIndex = result;
     }
+    public HashMap<String, HashMap<String, TF_IDF_Positions> > getInverseIndex() { return inverseIndex; }
 
     private HashMap<String, HashMap<String, TF_IDF_Positions> > inverseIndex;
 
