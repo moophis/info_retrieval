@@ -11,9 +11,9 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Controller {
-//	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
+	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
 	
-	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
+//	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
     public static void main(String[] args) throws Exception {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
@@ -52,7 +52,7 @@ public class Controller {
 
         System.out.println("Start saving data");
         FileWriter fw;
-        String filePath = crawlStorageFolder + "data/info/pageRank.txt";
+        String filePath = crawlStorageFolder + "raw/info/pageRank.txt";
         fw = new FileWriter(filePath, false);
         for (Map.Entry<String, HashSet<String> > m : CrawlerSW.pageRankData.entrySet()) {
             StringBuilder buf = new StringBuilder().append(m.getKey());
@@ -64,7 +64,7 @@ public class Controller {
         fw.flush();
         fw.close();
 
-        filePath = crawlStorageFolder + "data/info/pageOutDegree.txt";
+        filePath = crawlStorageFolder + "raw/info/pageOutDegree.txt";
         fw = new FileWriter(filePath, false);
         for (Map.Entry<String, Integer> m : CrawlerSW.outDegree.entrySet()) {
             StringBuilder buf = new StringBuilder().append(m.getKey()).append(":").append(m.getValue());
