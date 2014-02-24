@@ -184,7 +184,7 @@ public class SplitDocuments {
     	}
     }
     
-    public static void htmlToText() throws IOException {
+    public static void htmlToTitle() throws IOException {
     	for (Integer i = 13; i <= 19; i++) {
     		String pureTextPath = "/Users/liqiangw/Test/IR/pure/text/thread" 
     				+ i.toString() + ".txt";
@@ -194,6 +194,7 @@ public class SplitDocuments {
 					+ i.toString() + ".txt";
     		String htmlInfoPath = "/Users/liqiangw/Test/IR/raw/info/thread" 
 					+ i.toString() + ".txt";
+    		
     		
     		File htmlTextFile = new File(htmlTextPath);
     		RandomAccessFile htmlInfoReader = null, htmlTextReader = null;
@@ -244,10 +245,88 @@ public class SplitDocuments {
             htmlInfoReader.close();
             htmlTextReader.close();
     	}
+
     }
     
-    private static String buildPureIndexLine(String url, Long pos) {
-    	return DigestUtils.md5Hex(url) + ":" + pos.toString();
+    public static void htmlToText() throws IOException {
+    	for (Integer i = 13; i <= 19; i++) {
+    		String pureTextPath = "/Users/liqiangw/Test/IR/pure/text/thread" 
+    				+ i.toString() + ".txt";
+    		String pureInfoPath = "/Users/liqiangw/Test/IR/pure/info/thread" 
+					+ i.toString() + ".txt";
+    		String pureTitlePath = "/Users/liqiangw/Test/IR/pure/title/thread"
+    				+ i.toString() + ".txt";
+    		String htmlTextPath = "/Users/liqiangw/Test/IR/raw/text/thread" 
+					+ i.toString() + ".txt";
+    		String htmlInfoPath = "/Users/liqiangw/Test/IR/raw/info/thread" 
+					+ i.toString() + ".txt";
+    		
+    		File htmlTextFile = new File(htmlTextPath);
+    		RandomAccessFile htmlInfoReader = null, htmlTextReader = null;
+    		
+    		try {
+                htmlInfoReader = new RandomAccessFile(htmlInfoPath, "r");
+                htmlTextReader = new RandomAccessFile(htmlTextPath, "r");
+                System.out.println(htmlInfoReader.toString());
+                System.out.println(htmlTextReader.toString());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+    		
+    		String line, urlMd5;
+            long curHtmlPos = 0, nextHtmlPos = 0, htmlLen = 0;
+            long curPurePos = 0;
+            Document doc;
+            
+            line = htmlInfoReader.readLine(); // first line
+            urlMd5 = Stats.getPageInfo(line, "urlMd5");
+            StringToFile.toFile(buildPureIndexLine(urlMd5, curPurePos), pureInfoPath);
+            while ((line = htmlInfoReader.readLine()) != null) {
+                nextHtmlPos = Long.parseLong(Stats.getPageInfo(line, "position"));
+                htmlLen = nextHtmlPos - curHtmlPos;
+                
+                byte[] b = new byte[(int) htmlLen];
+                htmlTextReader.read(b, 0, (int) htmlLen);
+                String buf = new String(b);
+                
+                doc = Jsoup.parse(buf);
+                StringToFile.toFile(doc.text(), pureTextPath); // body text
+                
+                // store title
+                StringToFile.toFile(buildPureTitleLine(urlMd5, doc.title()), pureTitlePath);
+                
+                curPurePos += doc.text().length();
+                
+                curHtmlPos = nextHtmlPos;
+                urlMd5 = Stats.getPageInfo(line, "urlMd5");
+                StringToFile.toFile(buildPureIndexLine(urlMd5, curPurePos), pureInfoPath);
+            }
+            // deal with the last line
+            htmlLen = htmlTextFile.length() - curHtmlPos;
+            byte[] b = new byte[(int) htmlLen];
+            htmlTextReader.read(b, 0, (int) htmlLen);
+            String buf = new String(b);
+            
+            doc = Jsoup.parse(buf);
+            StringToFile.toFile(doc.text(), pureTextPath);
+            
+            // store title
+            StringToFile.toFile(buildPureTitleLine(urlMd5, doc.title()), pureTitlePath);
+            
+            curPurePos += doc.text().length();
+
+            htmlInfoReader.close();
+            htmlTextReader.close();
+    	}
+    }
+    
+    private static String buildPureIndexLine(String urlMd5, Long pos) {
+    	return urlMd5 + ":" + pos.toString();
+    }
+    
+    private static String buildPureTitleLine(String urlMd5, String title) {
+    	System.out.println(title);
+    	return urlMd5 + title;
     }
     
     private String getPureIndexLine(String line, String type) {
