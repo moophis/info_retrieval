@@ -7,14 +7,16 @@ import indexReader.PageRank;
 
 import javax.swing.*;
 
-import com.sleepycat.je.tree.SearchResult;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by soushimei on 2/19/14.
@@ -37,9 +39,24 @@ public class SearchICS extends JFrame {
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(null);
 		
+		// text area for querying words
+		this.inputArea = new JTextField("Type your query...", 25);
+		inputArea.setEditable(true);
+		inputArea.setColumns(40);
+		inputArea.setBounds(50, 100, 500, 30);
+		inputArea.setHorizontalAlignment(JTextField.LEFT);
+		inputArea.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AboutDialog ad = new AboutDialog();
+				ad.setVisible(true);
+			}
+		});
+		mainPanel.add(inputArea);
+		
 		// button
-		JButton quitButton = new JButton("Quit");
-		quitButton.setBounds(50, 200, 80, 30);
+		quitButton = new JButton("Quit");
+		quitButton.setBounds(150, 150, 80, 30);
 		quitButton.setToolTipText("Exit this program");
 		quitButton.addActionListener(new ActionListener() {
 			@Override
@@ -49,8 +66,8 @@ public class SearchICS extends JFrame {
 		});
 		mainPanel.add(quitButton);
 		
-		JButton aboutButton = new JButton("About");
-		aboutButton.setBounds(150, 200, 80, 30);
+		aboutButton = new JButton("About");
+		aboutButton.setBounds(250, 150, 80, 30);
 		aboutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -61,8 +78,8 @@ public class SearchICS extends JFrame {
 		});
 		mainPanel.add(aboutButton);
 		
-		JButton searchButton = new JButton("Search");
-		searchButton.setBounds(250, 200, 80, 30);
+		searchButton = new JButton("Search");
+		searchButton.setBounds(350, 150, 80, 30);
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -106,8 +123,11 @@ public class SearchICS extends JFrame {
 			aboutPanel.setPreferredSize(getPreferredSize());
 			setLayout(new BorderLayout(10, 10));
 			
+			queryWords = inputArea.getText();
 			String about = "<html>This software is for the ICS 221 course project 3. <br>"
-					+ "It is a simple GUI program that provides web page query services.<br></html>";
+					+ "It is a simple GUI program that provides web page query services.<br> " 
+					+ "Author: Siming Song (42682148) and Liqiang Wang (93845414)<br>"
+					+ "<b>User Input: </b>" + queryWords + "</html>";
 			JLabel aboutText = new JLabel(about);
 	        aboutText.setFont(new Font("", Font.PLAIN, 13));
 	        aboutText.setAlignmentX(0.5f);
@@ -142,6 +162,23 @@ public class SearchICS extends JFrame {
 	class ResultDialog extends JDialog {
 		public ResultDialog() {
 			initSearchResult();
+			
+			// Try to open the result page on default browser.
+			if (Desktop.isDesktopSupported()) {
+				desktop = Desktop.getDesktop();
+				
+				if (desktop.isSupported(Desktop.Action.BROWSE)) {
+					try {
+						desktop.browse(new URI("file:///Users/liqiangw/Desktop/example.html"));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		
 		private void initSearchResult() {
@@ -177,7 +214,16 @@ public class SearchICS extends JFrame {
 	        setLocationRelativeTo(null);
 	        setSize(1024, 768);
 		}
+		
+		private Desktop desktop = null;
 	}
+	
+	private String queryWords = "uci";
+	
+	JTextField inputArea = null;
+	JButton quitButton = null;
+	JButton aboutButton = null;
+	JButton searchButton = null;
 	
 	public static void main(String[] args) {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
