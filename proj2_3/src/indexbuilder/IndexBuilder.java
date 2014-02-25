@@ -21,12 +21,13 @@ public class IndexBuilder {
     private final String tempFolder;
     private final String rawHTMLFolder;
     private final String rawInfoFolder;
+    private final String pureTitleFolder;
 
     private String URL2MD5_fileName = "URL_to_MD5.txt";
     private String MD52URL_fileName = "MD5_to_URL.txt";
     private String PageRank_fileName = "PageRankBuilder.txt";
+    private String title_fileName = "title.txt";
     private String InverseIndex_fileName = "InverseIndex.txt";
-    private String wordList_fileName = "WordList.txt";
 
     public IndexBuilder(String path) {
         this.path = path + "/";
@@ -35,6 +36,8 @@ public class IndexBuilder {
         tempFolder = "Temp/";
         rawHTMLFolder = "raw/text/";
         rawInfoFolder = "raw/info/";
+        pureTitleFolder = "pure/title";
+
 
         // check if the directory exists
         boolean success;
@@ -49,6 +52,13 @@ public class IndexBuilder {
         if (!success) {
             System.out.println("Fail to find the raw info data at "
                     + this.path + rawInfoFolder + " !");
+            initialization = false;
+            return;
+        }
+        success = (new File(this.path + pureTitleFolder)).exists();
+        if (!success) {
+            System.out.println("Fail to find the pure title data at "
+                    + this.path + pureTitleFolder + " !");
             initialization = false;
             return;
         }
@@ -107,15 +117,24 @@ public class IndexBuilder {
         MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
         // MD52Doc.getInstance().write2Disk(path + documentIndexFolder + "copy " + MD52URL_fileName);
 
-        // build page rank
+        /*
+                                build MD52URL/URL2MD5
+        */
         System.out.println("Build the PageRankBuilder index");
         // PageRankBuilder pageRankBuilder = new PageRankBuilder(path,
         //        documentIndexFolder, rawInfoFolder);
         // pageRankBuilder.calcPageRank();
         // PageRank.getInstance().write2Disk(path + documentIndexFolder + PageRank_fileName);
         PageRank.getInstance().readFromDisk(path + documentIndexFolder + PageRank_fileName);
+        /*
+                                build MD52URL/URL2MD5
+        */
+        System.out.println("Build the Title index");
+        MD52Title.getInstance().readFromDisk(path + documentIndexFolder + title_fileName);
 
 
+
+        System.gc();
         System.out.println("Begin build inverse index");
         /*
                                 build inverse index
@@ -125,19 +144,19 @@ public class IndexBuilder {
         HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
         System.out.println("split the documents");
-        SplitDocuments splitDocuments;
-        splitDocuments = new SplitDocuments(path,
-                tempFolder, rawHTMLFolder, rawInfoFolder);
-        splitDocuments.splitAndMerge(mergeSecondPhaseMap);
+//        SplitDocuments splitDocuments;
+//        splitDocuments = new SplitDocuments(path,
+//                tempFolder, rawHTMLFolder, rawInfoFolder);
+//        splitDocuments.splitAndMerge(mergeSecondPhaseMap);
 
         System.gc();
         // step 5: stat the inverse index and output inverse index rank
         System.out.println("Calculate the tf-idf rank of inverse index");
-        InverseIndexRankBuilder inverseIndexRankBuilder;
-        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
-        inverseIndexRankBuilder.build(mergeSecondPhaseMap);
-        InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
-//        InverseIndex.getInstance().readFromDisk(path + documentIndexFolder + InverseIndex_fileName);
+//        InverseIndexRankBuilder inverseIndexRankBuilder;
+//        inverseIndexRankBuilder = new InverseIndexRankBuilder(path, documentIndexFolder);
+//        inverseIndexRankBuilder.build(mergeSecondPhaseMap);
+//        InverseIndex.getInstance().write2Disk(path + documentIndexFolder + InverseIndex_fileName);
+        InverseIndex.getInstance().readFromDisk(path + documentIndexFolder + InverseIndex_fileName);
 
 
         System.out.println("Finish building index");

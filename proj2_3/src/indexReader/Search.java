@@ -69,13 +69,30 @@ public class Search {
         }
     }
 
+    private static void calcTitleScores(ArrayList<String> queriesList,
+                                      ArrayList<String> hitMd5s,
+                                      HashMap<String, Double> titleScores) {
+        if (queriesList.isEmpty() || hitMd5s.isEmpty())
+            return;
+        for (String hitMd5 : hitMd5s) {
+            double score = 0.0;
+            for (String query : queriesList) {
+                if (MD52Title.getInstance().contains(hitMd5, query)) {
+                    score += 1.0;
+                }
+            }
+            titleScores.put(hitMd5, score);
+        }
+
+    }
 
     public static void search(String query_input,
                        ArrayList<String> hitMd5s, HashMap<String, Integer> hitPositions,
                        HashMap<String, Double> scores,
                        HashMap<String, Double> tf_idfs,
                        HashMap<String, Double> closeness,
-                       HashMap<String, Double> pageRanks) {
+                       HashMap<String, Double> pageRanks,
+                       HashMap<String, Double> titleScores) {
         if (query_input == null || query_input.isEmpty())
             return;
         String[] queries = query_input.split("\\W");
@@ -130,8 +147,11 @@ public class Search {
                 pageRanks.put(m.getKey(), PageRank.getInstance().getAPageRank(m.getKey()));
             }
         }
-        // calcuate the closeness
+        // calculate the closeness
         calcCloseness(queriesList, hitMd5s, closeness);
+
+        // calculate the title score;
+        calcTitleScores(queriesList, hitMd5s, titleScores);
 
         // calculate the Cosine Similarity
         double corpus = MD52Doc.getInstance().size();
@@ -152,6 +172,8 @@ public class Search {
         double maxPageRank = EPS;
         double maxTfIdf = EPS;
         double maxCloseness = EPS;
+        double maxTitleScores = EPS;
+
         for (String hitMd5 : hitMd5s) {
             // calc max tf-idf
             double tf_idf = tf_idfs.get(hitMd5) / Math.sqrt(maginitude.get(hitMd5));
@@ -169,25 +191,33 @@ public class Search {
             if (cl > maxCloseness) {
                 maxCloseness = cl;
             }
+            // calc max title score
+            double ts = titleScores.get(hitMd5);
+            if (ts > maxTitleScores) {
+                maxTitleScores = ts;
+            }
         }
 
         // normalizing
+        // int lenUrl = MD52Doc.getInstance().getURL(hitMd5).length();
+        double a1,a2,a3,a4;
+        if (queriesList.size() == 1) {
+            a1 = .4; a2 = .4; a3 = 0; a4 = 0.2;
+        } else {
+            a1 = .2; a2 = .2; a3 = .4; a4 = 0.2;
+        }
+        // assigning scores
         for (String hitMd5 : hitMd5s) {
             double pageRank = pageRanks.get(hitMd5) / maxPageRank;
             double tf_idf = tf_idfs.get(hitMd5) / maxTfIdf;
             double cl = closeness.get(hitMd5) / maxCloseness;
+            double ts = titleScores.get(hitMd5) / maxTitleScores;
             pageRanks.put(hitMd5, pageRank);
             closeness.put(hitMd5, cl);
             tf_idfs.put(hitMd5, tf_idf);
+            titleScores.put(hitMd5, ts);
 
-            // int lenUrl = MD52Doc.getInstance().getURL(hitMd5).length();
-            double a1,a2,a3;
-            if (queriesList.size() == 1) {
-                a1 = .5; a2 = .5; a3 = 0;
-            } else {
-                a1 = .25; a2 = .25; a3 = .5;
-            }
-            double score = (pageRank * a1 + tf_idf * a2 + cl * a3);
+            double score = (pageRank * a1 + tf_idf * a2 + cl * a3 + ts * a4);
             scores.put(hitMd5, score);
         }
     }
@@ -224,22 +254,27 @@ public class Search {
             HashMap<String, Double> pageRanks = new HashMap<>();
             HashMap<String, Double> tf_idfs = new HashMap<>();
             HashMap<String, Double> closeness = new HashMap<>();
+            HashMap<String, Double> titleScores = new HashMap<>();
             Search.search(query_input, md5s, positions,
                     scores,
                     tf_idfs,
                     closeness,
-                    pageRanks);
+                    pageRanks,
+                    titleScores);
             for (String md5 : md5s) {
                 String url = MD52Doc.getInstance().getURL(md5);
                 Double score = scores.get(md5);
                 Double pageRank = pageRanks.get(md5);
                 Double tf_idf = tf_idfs.get(md5);
                 Double cl = closeness.get(md5);
+                Double ts = titleScores.get(md5);
                 System.out.println(new StringBuilder().append(url)
                         .append(":\tscore: ").append(score.toString())
                         .append("\tPageRank: ").append(pageRank.toString())
                         .append("\ttf_idf: ").append(tf_idf.toString())
-                        .append("\tcloseness: ").append(cl.toString()).toString());
+                        .append("\tcloseness: ").append(cl.toString())
+                        .append("\ttitleScores: ").append(ts.toString()).toString());
+
             }
             if (query_input.equals("quit"))
                 break;
