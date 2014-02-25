@@ -209,14 +209,14 @@ public class SplitDocuments {
                 e.printStackTrace();
             }
     		
-    		String line, urlMd5;
+    		String line, url;
             long curHtmlPos = 0, nextHtmlPos = 0, htmlLen = 0;
             long curPurePos = 0;
             Document doc;
             
             line = htmlInfoReader.readLine(); // first line
-            urlMd5 = Stats.getPageInfo(line, "urlMd5");
-            StringToFile.toFile(buildPureIndexLine(urlMd5, curPurePos), pureInfoPath);
+            url = Stats.getPageInfo(line, "url");
+            StringToFile.toFile(buildPureIndexLine(url, curPurePos), pureInfoPath);
             while ((line = htmlInfoReader.readLine()) != null) {
                 nextHtmlPos = Long.parseLong(Stats.getPageInfo(line, "position"));
                 htmlLen = nextHtmlPos - curHtmlPos;
@@ -229,13 +229,13 @@ public class SplitDocuments {
                 StringToFile.toFile(doc.text(), pureTextPath); // body text
                 
                 // store title
-                StringToFile.toFile(buildPureTitleLine(urlMd5, doc.title()), pureTitlePath);
+                StringToFile.toFile(buildPureTitleLine(url, doc.title()), pureTitlePath);
                 
                 curPurePos += doc.text().length();
                 
                 curHtmlPos = nextHtmlPos;
-                urlMd5 = Stats.getPageInfo(line, "urlMd5");
-                StringToFile.toFile(buildPureIndexLine(urlMd5, curPurePos), pureInfoPath);
+                url = Stats.getPageInfo(line, "url");
+                StringToFile.toFile(buildPureIndexLine(url, curPurePos), pureInfoPath);
             }
             // deal with the last line
             htmlLen = htmlTextFile.length() - curHtmlPos;
@@ -247,7 +247,7 @@ public class SplitDocuments {
             StringToFile.toFile(doc.text(), pureTextPath);
             
             // store title
-            StringToFile.toFile(buildPureTitleLine(urlMd5, doc.title()), pureTitlePath);
+            StringToFile.toFile(buildPureTitleLine(url, doc.title()), pureTitlePath);
             
             curPurePos += doc.text().length();
 
@@ -256,13 +256,13 @@ public class SplitDocuments {
     	}
     }
     
-    private static String buildPureIndexLine(String urlMd5, Long pos) {
-    	return urlMd5 + ":" + pos.toString();
+    private static String buildPureIndexLine(String url, Long pos) {
+    	return DigestUtils.md5Hex(url) + ":" + pos.toString();
     }
     
-    private static String buildPureTitleLine(String urlMd5, String title) {
+    private static String buildPureTitleLine(String url, String title) {
     	System.out.println(title);
-    	return urlMd5 + title;
+    	return DigestUtils.md5Hex(url) + title;
     }
     
     private String getPureIndexLine(String line, String type) {
