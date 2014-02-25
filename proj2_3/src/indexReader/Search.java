@@ -148,9 +148,10 @@ public class Search {
         }
 
         // calc max
-        double maxPageRank = 0.0;
-        double maxTfIdf = 0.0;
-        double maxCloseness = 0.0;
+        final double EPS = 1e-7;
+        double maxPageRank = EPS;
+        double maxTfIdf = EPS;
+        double maxCloseness = EPS;
         for (String hitMd5 : hitMd5s) {
             // calc max tf-idf
             double tf_idf = tf_idfs.get(hitMd5) / Math.sqrt(maginitude.get(hitMd5));
