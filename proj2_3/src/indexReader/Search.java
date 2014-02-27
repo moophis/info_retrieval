@@ -104,7 +104,7 @@ public class Search {
     }
 
     // NOTE: this is the method user should use
-    public static void search(String query_input,
+    public static long search(String query_input,
                               ArrayList<String> hitMd5s, HashMap<String, Integer> hitPositions,
                               HashMap<String, Double> scores) {
         HashMap<String, Double> pageRanks = new HashMap<>();
@@ -112,11 +112,11 @@ public class Search {
         HashMap<String, Double> closeness = new HashMap<>();
         HashMap<String, Double> titleScores = new HashMap<>();
         HashMap<String, Double> anchorScores = new HashMap<>();
-        searchDebug(query_input, hitMd5s,hitPositions,
+        return searchDebug(query_input, hitMd5s,hitPositions,
                 scores, tf_idfs, closeness, pageRanks, titleScores, anchorScores);
     }
 
-    public static void searchBasic(String query_input,
+    public static long searchBasic(String query_input,
                               ArrayList<String> hitMd5s, HashMap<String, Integer> hitPositions,
                               HashMap<String, Double> scores) {
         HashMap<String, Double> pageRanks = new HashMap<>();
@@ -124,7 +124,8 @@ public class Search {
         HashMap<String, Double> closeness = new HashMap<>();
         HashMap<String, Double> titleScores = new HashMap<>();
         HashMap<String, Double> anchorScores = new HashMap<>();
-        searchDebug(query_input, hitMd5s,hitPositions,
+        long timeSpent = 0;
+        timeSpent = searchDebug(query_input, hitMd5s,hitPositions,
                 scores, tf_idfs, closeness, pageRanks, titleScores, anchorScores);
         // clear the advanced scores
         scores.clear();
@@ -132,9 +133,10 @@ public class Search {
         for (Map.Entry<String, Double> m : tf_idfs.entrySet()) {
             scores.put(m.getKey(), m.getValue());
         }
+        return timeSpent;
     }
 
-    public static void searchDebug(String query_input,
+    public static long searchDebug(String query_input,
                                    ArrayList<String> hitMd5s, HashMap<String, Integer> hitPositions,
                                    HashMap<String, Double> scores,
                                    HashMap<String, Double> tf_idfs,
@@ -142,8 +144,9 @@ public class Search {
                                    HashMap<String, Double> pageRanks,
                                    HashMap<String, Double> titleScores,
                                    HashMap<String, Double> anchorScores) {
+        long beginTime = System.nanoTime();
         if (query_input == null || query_input.isEmpty())
-            return;
+            return System.nanoTime() - beginTime;
         String[] queries = query_input.split("\\W");
         ArrayList<String> queriesList = new ArrayList<>();
         HashSet<String> checkExists = new HashSet<>();
@@ -164,7 +167,7 @@ public class Search {
         if (!inverseIndex.containsKey(queriesList.get(0))) {
             // cannot find the term
             System.out.println("Cannot find the term: " + queriesList.get(0));
-            return;
+            return System.nanoTime() - beginTime;
         }
         HashMap<String, TF_IDF_Positions> firstInverseIndex = inverseIndex.get(queriesList.get(0));
         // use this to calc the closeness
@@ -176,7 +179,7 @@ public class Search {
                 if (!inverseIndex.containsKey(term)) {
                     // cannot find the term
                     System.out.println("Cannot find the term: " + term);
-                    return;
+                    return System.nanoTime() - beginTime;
                 }
                 HashMap<String, TF_IDF_Positions> otherInverseIndex = inverseIndex.get(term);
                 if (!otherInverseIndex.containsKey(m.getKey())) {
@@ -285,6 +288,7 @@ public class Search {
                     + as * fracAnchor);
             scores.put(hitMd5, score);
         }
+        return System.nanoTime() - beginTime;
     }
 
     public static void main(String[] args) {
@@ -321,7 +325,8 @@ public class Search {
             HashMap<String, Double> closeness = new HashMap<>();
             HashMap<String, Double> titleScores = new HashMap<>();
             HashMap<String, Double> anchorScores = new HashMap<>();
-            Search.searchDebug(query_input, md5s, positions,
+            long timeSpent = 0;
+            timeSpent = Search.searchDebug(query_input, md5s, positions,
                     scores,
                     tf_idfs,
                     closeness,
@@ -345,6 +350,7 @@ public class Search {
                         .append("\ttitleScores: ").append(ts.toString()).toString());
 
             }
+            System.out.println("Total time spent " + new Long(timeSpent).toString());
             if (query_input.equals("quit"))
                 break;
         }
