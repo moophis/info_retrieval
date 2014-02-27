@@ -112,7 +112,7 @@ public class Search {
         HashMap<String, Double> closeness = new HashMap<>();
         HashMap<String, Double> titleScores = new HashMap<>();
         HashMap<String, Double> anchorScores = new HashMap<>();
-        return searchDebug(query_input, hitMd5s,hitPositions,
+        return searchDebug(query_input, hitMd5s, hitPositions,
                 scores, tf_idfs, closeness, pageRanks, titleScores, anchorScores);
     }
 
@@ -125,7 +125,7 @@ public class Search {
         HashMap<String, Double> titleScores = new HashMap<>();
         HashMap<String, Double> anchorScores = new HashMap<>();
         long timeSpent = 0;
-        timeSpent = searchDebug(query_input, hitMd5s,hitPositions,
+        timeSpent = searchDebug(query_input, hitMd5s, hitPositions,
                 scores, tf_idfs, closeness, pageRanks, titleScores, anchorScores);
         // clear the advanced scores
         scores.clear();
