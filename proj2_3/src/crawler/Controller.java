@@ -11,14 +11,15 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Controller {
-	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
+//	public final static String crawlStorageFolder = "/Users/liqiangw/Test/IR/";
 	
-//	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
+	public final static String crawlStorageFolder = "/Users/soushimei/Documents/Test/IR/";
     public static void main(String[] args) throws Exception {
         int numberOfCrawlers = 7;
         int politenessDelay = 300;
         String userAgentString = "UCI IR 42682148 93845414";
         int maxDepthOfCrawling = 30;
+        int timeOut = 60*1000;
         
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
@@ -28,6 +29,7 @@ public class Controller {
         // Unlimited number of pages can be crawled.
         config.setMaxPagesToFetch(-1);
         config.setMaxDepthOfCrawling(maxDepthOfCrawling);
+        config.setConnectionTimeout(timeOut);
         /*
          * Instantiate the controller for this crawl.
          */
@@ -53,22 +55,36 @@ public class Controller {
         System.out.println("Start saving data");
         FileWriter fw;
         String filePath = crawlStorageFolder + "raw/info/pageRank.txt";
-        fw = new FileWriter(filePath, false);
-        for (Map.Entry<String, HashSet<String> > m : CrawlerSW.pageRankData.entrySet()) {
-            StringBuilder buf = new StringBuilder().append(m.getKey());
-            for (String s : m.getValue()) {
-                buf.append(":").append(s);
-            }
-            fw.write(buf.toString()+"\n");
-        }
-        fw.flush();
-        fw.close();
+//        fw = new FileWriter(filePath, false);
+//        for (Map.Entry<String, HashSet<String> > m : CrawlerSW.pageRankData.entrySet()) {
+//            StringBuilder buf = new StringBuilder().append(m.getKey());
+//            for (String s : m.getValue()) {
+//                buf.append(":").append(s);
+//            }
+//            fw.write(buf.toString()+"\n");
+//        }
+//        fw.flush();
+//        fw.close();
+//
+//        filePath = crawlStorageFolder + "raw/info/pageOutDegree.txt";
+//        fw = new FileWriter(filePath, false);
+//        for (Map.Entry<String, Integer> m : CrawlerSW.outDegree.entrySet()) {
+//            StringBuilder buf = new StringBuilder().append(m.getKey()).append(":").append(m.getValue());
+//            fw.write(buf.toString()+"\n");
+//        }
+//        fw.flush();
+//        fw.close();
 
-        filePath = crawlStorageFolder + "raw/info/pageOutDegree.txt";
+        System.out.println("Start saving anchor text data");
+        filePath = crawlStorageFolder + "data/info/anchorText.txt";
         fw = new FileWriter(filePath, false);
-        for (Map.Entry<String, Integer> m : CrawlerSW.outDegree.entrySet()) {
-            StringBuilder buf = new StringBuilder().append(m.getKey()).append(":").append(m.getValue());
-            fw.write(buf.toString()+"\n");
+        for (Map.Entry<String, HashSet<String>> anchorTexts : CrawlerSW.anchorText.entrySet()) {
+            StringBuilder buf = new StringBuilder().append(anchorTexts.getKey());
+            for (String anchor : anchorTexts.getValue()) {
+                buf.append("$").append(anchor);
+            }
+            // write to the disk
+            fw.write(buf.toString() + "\n");
         }
         fw.flush();
         fw.close();

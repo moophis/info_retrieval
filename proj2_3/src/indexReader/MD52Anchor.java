@@ -10,25 +10,26 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Created by soushimei on 2/24/14.
+ * Created by soushimei on 2/27/14.
  */
-public class MD52Title {
-    private static MD52Title uniqueInstance;
-    private MD52Title() {}
-    public static MD52Title getInstance() {
+public class MD52Anchor {
+    private MD52Anchor(){}
+    private static MD52Anchor uniqueInstance;
+    public static MD52Anchor getInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new MD52Title();
+            uniqueInstance = new MD52Anchor();
         }
         return uniqueInstance;
     }
 
+    private HashMap<String, HashSet<String>> anchorTexts = new HashMap<>();
+
     public void readFromDisk(String filePath) {
         File f = new File(filePath);
         BufferedReader reader;
-        md5Title.clear();
+        anchorTexts.clear();
 
         StemDocuments stemmer = new StemDocuments();
-
         try {
             reader = new BufferedReader(new FileReader(f));
             String line;
@@ -38,13 +39,13 @@ public class MD52Title {
 
                 String[] strs = title.split("\\W");
 
-                if (!md5Title.containsKey(md5)) {
-                    md5Title.put(md5, new HashSet<String>());
+                if (!anchorTexts.containsKey(md5)) {
+                    anchorTexts.put(md5, new HashSet<String>());
                 }
 
                 for (String str :strs) {
                     if (str != null && !str.isEmpty()) {
-                        md5Title.get(md5).add(stemmer.stemWord(str));
+                        anchorTexts.get(md5).add(stemmer.stemWord(str));
                     }
                 }
             }
@@ -56,12 +57,9 @@ public class MD52Title {
     }
 
     public boolean contains(String md5, String str) {
-        if (!md5Title.containsKey(md5)) {
+        if (!anchorTexts.containsKey(md5)) {
             return false;
         }
-
-        return md5Title.get(md5).contains(str);
+        return anchorTexts.get(md5).contains(str);
     }
-
-    private HashMap<String, HashSet<String>> md5Title = new HashMap<>();;
 }

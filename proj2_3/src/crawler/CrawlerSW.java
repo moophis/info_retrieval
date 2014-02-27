@@ -101,8 +101,9 @@ public class CrawlerSW extends WebCrawler{
 	* This function is called when a page is fetched and ready 
 	* to be processed by your program.
 	*/
-    public static HashMap<String, HashSet<String> > pageRankData = new HashMap<>();
-    public static HashMap<String, Integer> outDegree = new HashMap<>();
+//    public static HashMap<String, HashSet<String> > pageRankData = new HashMap<>();
+//    public static HashMap<String, Integer> outDegree = new HashMap<>();
+    public static HashMap<String, HashSet<String>> anchorText = new HashMap<>();
 	@Override
 	public synchronized void visit(Page page) {   
 		Long threadId = Thread.currentThread().getId();
@@ -112,39 +113,60 @@ public class CrawlerSW extends WebCrawler{
 		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String text = htmlParseData.getText();
+//			String text = htmlParseData.getText();
 //			String html = htmlParseData.getHtml();
 
             List<WebURL> links = htmlParseData.getOutgoingUrls();
 
-            String urlMD5 = DigestUtils.md5Hex(url);
-            outDegree.put(urlMD5, links.size());
+//            String urlMD5 = DigestUtils.md5Hex(url);
+//            outDegree.put(urlMD5, links.size());
 
             for (WebURL link : links) {
                 String linkMD5 = DigestUtils.md5Hex(link.toString());
-                if (!pageRankData.containsKey(linkMD5)) {
-                    pageRankData.put(linkMD5, new HashSet<String>());
+//                if (!pageRankData.containsKey(linkMD5)) {
+//                    pageRankData.put(linkMD5, new HashSet<String>());
+//                }
+//                pageRankData.get(linkMD5).add(urlMD5);
+                if (!anchorText.containsKey(linkMD5)) {
+                    anchorText.put(linkMD5, new HashSet<String>());
                 }
-                pageRankData.get(linkMD5).add(urlMD5);
+                if (link.getAnchor() != null && // not null
+                        !link.getAnchor().isEmpty() && // not zero size
+                        !anchorText.get(linkMD5).contains(link.getAnchor())) {// not contain the link
+                    // add the anchor text
+                    anchorText.get(linkMD5).add(link.getAnchor());
+                }
             }
 
-			Integer size = links.size();
+            // output the anchor text so far to the url
+            String md5Url = DigestUtils.md5Hex(url);
+            if (anchorText.containsKey(md5Url)) {
+                StringBuilder outMessage = new StringBuilder();
+                outMessage.append("Anchor text of " + url + " is: ");
+                for (String anchor : anchorText.get(md5Url)) {
+                    outMessage.append("$").append(anchor);
+                }
+                System.out.println(outMessage.toString());
+            }
+
+
+//			Integer size = links.size();
 			
 			/*
 			 * Pages fetched from different crawler threads are 
 			 * stored separately. 
 			 */
-			long offset = -1;
-			try {
-				offset = DatabaseBuilder.writePageContent(threadId, text);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			String meta = null;
-			if (offset != -1) {
-				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
-				DatabaseBuilder.writePageIndex(threadId, meta);
-			}
+//			long offset = -1;
+//			try {
+//				offset = DatabaseBuilder.writePageContent(threadId, text);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			String meta = null;
+//			if (offset != -1) {
+//				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
+//				DatabaseBuilder.writePageIndex(threadId, meta);
+//			}
 			
 //			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" 
 //					+ fileName + ".txt");

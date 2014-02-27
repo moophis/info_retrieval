@@ -27,6 +27,7 @@ public class IndexBuilder {
     private String MD52URL_fileName = "MD5_to_URL.txt";
     private String PageRank_fileName = "PageRankBuilder.txt";
     private String title_fileName = "title.txt";
+    private String anchor_fileName = "anchorText.txt";
     private String InverseIndex_fileName = "InverseIndex.txt";
 
     public IndexBuilder(String path) {
@@ -127,11 +128,15 @@ public class IndexBuilder {
         // PageRank.getInstance().write2Disk(path + documentIndexFolder + PageRank_fileName);
         PageRank.getInstance().readFromDisk(path + documentIndexFolder + PageRank_fileName);
         /*
-                                build MD52URL/URL2MD5
+                                build MD5 to Title
         */
         System.out.println("Build the Title index");
         MD52Title.getInstance().readFromDisk(path + documentIndexFolder + title_fileName);
-
+        /*
+                                build MD5 to anchor text
+        */
+        System.out.println("Build the anchor text index");
+        MD52Anchor.getInstance().readFromDisk(path + documentIndexFolder + anchor_fileName);
 
 
         System.gc();
