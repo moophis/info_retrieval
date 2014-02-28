@@ -145,17 +145,25 @@ public class Search {
                                    HashMap<String, Double> titleScores,
                                    HashMap<String, Double> anchorScores) {
         long beginTime = System.nanoTime();
-        if (query_input == null || query_input.isEmpty())
+        if (query_input == null || query_input.isEmpty()) {
             return System.nanoTime() - beginTime;
+        }
         String[] queries = query_input.split("\\W");
         ArrayList<String> queriesList = new ArrayList<>();
         HashSet<String> checkExists = new HashSet<>();
         StemDocuments stemmer = new StemDocuments();
         for (String q : queries) {
+            if (q == null || q.isEmpty()) {
+                continue;
+            }
             if (!checkExists.contains(q)) {
                 queriesList.add(stemmer.stemWord(q));
                 checkExists.add(q);
             }
+        }
+
+        if (queriesList.isEmpty()) {
+            return System.nanoTime() - beginTime;
         }
         /*
             calculate posting urls

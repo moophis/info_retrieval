@@ -80,7 +80,7 @@ public class IndexBuilder {
         if (!success) {
             success = (new File(this.path + documentIndexFolder)).mkdir();
             if (!success) {
-                System.out.println("Fail to creat directory "
+                System.out.println("Fail to create directory "
                         + documentIndexFolder + "!");
                 initialization = false;
             }
@@ -90,7 +90,7 @@ public class IndexBuilder {
         if (!success) {
             success = (new File(this.path + tempFolder)).mkdir();
             if (!success) {
-                System.out.println("Fail to creat directory "
+                System.out.println("Fail to create directory "
                         + tempFolder + "!");
                 initialization = false;
             }
@@ -146,7 +146,7 @@ public class IndexBuilder {
 
          */
         // for building index
-        HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
+//        HashMap<String, HashMap<String, TF_IDF_Positions> > mergeSecondPhaseMap = new HashMap<>();
         // step 1: split the documents into <term, URL(MD5), pos> same below
         System.out.println("split the documents");
 //        SplitDocuments splitDocuments;
