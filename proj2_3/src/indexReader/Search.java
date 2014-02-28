@@ -104,6 +104,30 @@ public class Search {
 
     }
 
+
+    private static void sortResults(ArrayList<String> hitMd5s,
+                                    HashMap<String, Double> scores) {
+        TreeMap<Double, HashSet<String>> sortedHitMd5 = new TreeMap<>();
+        for (String md5 : hitMd5s) {
+            double score;
+            if (scores.containsKey(md5)) {
+                score = scores.get(md5);
+            } else {
+                score = 0.0;
+            }
+            if (!sortedHitMd5.containsKey(-score)) {
+                sortedHitMd5.put(-score, new HashSet<String>());
+            }
+            sortedHitMd5.get(-score).add(md5);
+        }
+        hitMd5s.clear();
+        for (Map.Entry<Double, HashSet<String>> m : sortedHitMd5.entrySet()) {
+            for (String md5 : m.getValue()) {
+                hitMd5s.add(md5);
+            }
+        }
+    }
+
     // NOTE: this is the method user should use
     public static long search(String query_input,
                               ArrayList<String> hitMd5s, HashMap<String, Integer> hitPositions,
@@ -113,8 +137,13 @@ public class Search {
         HashMap<String, Double> closeness = new HashMap<>();
         HashMap<String, Double> titleScores = new HashMap<>();
         HashMap<String, Double> anchorScores = new HashMap<>();
-        return searchDebug(query_input, hitMd5s, hitPositions,
+        long timeSpent;
+        timeSpent = searchDebug(query_input, hitMd5s, hitPositions,
                 scores, tf_idfs, closeness, pageRanks, titleScores, anchorScores);
+        // insert to the sorted hitmap with order of minus score
+        sortResults(hitMd5s, scores);
+
+        return timeSpent;
     }
 
     public static long searchBasic(String query_input,
@@ -125,7 +154,7 @@ public class Search {
         HashMap<String, Double> closeness = new HashMap<>();
         HashMap<String, Double> titleScores = new HashMap<>();
         HashMap<String, Double> anchorScores = new HashMap<>();
-        long timeSpent = 0;
+        long timeSpent;
         timeSpent = searchDebug(query_input, hitMd5s, hitPositions,
                 scores, tf_idfs, closeness, pageRanks, titleScores, anchorScores);
         // clear the advanced scores
@@ -134,6 +163,10 @@ public class Search {
         for (Map.Entry<String, Double> m : tf_idfs.entrySet()) {
             scores.put(m.getKey(), m.getValue());
         }
+
+        // insert to the sorted hitmap with order of minus score
+        sortResults(hitMd5s, scores);
+
         return timeSpent;
     }
 
@@ -218,7 +251,7 @@ public class Search {
         calcAnchorScores(queriesList, hitMd5s, anchorScores);
 
         // calculate the Cosine Similarity
-        double corpus = MD52Doc.getInstance().size();
+//        double corpus = MD52Doc.getInstance().size();
         for (String query : queriesList) {
             for (String md5 : hitMd5s) {
                 double tf_idf = tf_idfs.get(md5);
@@ -329,36 +362,43 @@ public class Search {
             ArrayList<String> md5s = new ArrayList<>();
             HashMap<String, Integer> positions = new HashMap<>();
             HashMap<String, Double> scores = new HashMap<>();
-            HashMap<String, Double> pageRanks = new HashMap<>();
-            HashMap<String, Double> tf_idfs = new HashMap<>();
-            HashMap<String, Double> closeness = new HashMap<>();
-            HashMap<String, Double> titleScores = new HashMap<>();
-            HashMap<String, Double> anchorScores = new HashMap<>();
             long timeSpent = 0;
-            timeSpent = Search.searchDebug(query_input, md5s, positions,
-                    scores,
-                    tf_idfs,
-                    closeness,
-                    pageRanks,
-                    titleScores,
-                    anchorScores);
+            timeSpent = Search.search(query_input, md5s, positions, scores);
             for (String md5 : md5s) {
                 String url = MD52Doc.getInstance().getURL(md5);
                 Double score = scores.get(md5);
-                Double pageRank = pageRanks.get(md5);
-                Double tf_idf = tf_idfs.get(md5);
-                Double cl = closeness.get(md5);
-                Double ts = titleScores.get(md5);
-                Double anchor = anchorScores.get(md5);
                 System.out.println(new StringBuilder().append(url)
-                        .append(":\tscore: ").append(score.toString())
-                        .append("\tPageRank: ").append(pageRank.toString())
-                        .append("\ttf_idf: ").append(tf_idf.toString())
-                        .append("\tcloseness: ").append(cl.toString())
-                        .append("\tanchor: ").append(anchor.toString())
-                        .append("\ttitleScores: ").append(ts.toString()).toString());
-
+                        .append(":\tscore: ").append(score.toString()).toString());
             }
+//            HashMap<String, Double> pageRanks = new HashMap<>();
+//            HashMap<String, Double> tf_idfs = new HashMap<>();
+//            HashMap<String, Double> closeness = new HashMap<>();
+//            HashMap<String, Double> titleScores = new HashMap<>();
+//            HashMap<String, Double> anchorScores = new HashMap<>();
+//            timeSpent = Search.searchDebug(query_input, md5s, positions,
+//                    scores,
+//                    tf_idfs,
+//                    closeness,
+//                    pageRanks,
+//                    titleScores,
+//                    anchorScores);
+//            for (String md5 : md5s) {
+//                String url = MD52Doc.getInstance().getURL(md5);
+//                Double score = scores.get(md5);
+//                Double pageRank = pageRanks.get(md5);
+//                Double tf_idf = tf_idfs.get(md5);
+//                Double cl = closeness.get(md5);
+//                Double ts = titleScores.get(md5);
+//                Double anchor = anchorScores.get(md5);
+//                System.out.println(new StringBuilder().append(url)
+//                        .append(":\tscore: ").append(score.toString())
+//                        .append("\tPageRank: ").append(pageRank.toString())
+//                        .append("\ttf_idf: ").append(tf_idf.toString())
+//                        .append("\tcloseness: ").append(cl.toString())
+//                        .append("\tanchor: ").append(anchor.toString())
+//                        .append("\ttitleScores: ").append(ts.toString()).toString());
+//
+//            }
             System.out.println("Total time spent " + new Long(timeSpent).toString());
             if (query_input.equals("quit"))
                 break;
