@@ -1,8 +1,9 @@
 package indexbuilder;
 
-import Strucutre.WordPagePosition;
 
 import java.util.ArrayList;
+
+import structure.WordPagePosition;
 
 /**
  * Created by soushimei on 2/13/14.

@@ -1,8 +1,5 @@
 package indexbuilder;
 
-import Strucutre.PagePosition;
-import Strucutre.TF_IDF_Positions;
-import Strucutre.WordPagePosition;
 import crawler.StringToFile;
 import crawler.Stats;
 
@@ -21,6 +18,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import org.jsoup.nodes.*;
 import org.jsoup.Jsoup;
+
+import structure.PagePosition;
+import structure.TF_IDF_Positions;
+import structure.WordPagePosition;
 
 /**
  * Created by soushimei on 2/13/14.

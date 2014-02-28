@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import Strucutre.HtmlFileInfo;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import structure.HtmlFileInfo;
 
 public class Doc2MD5 {
 	private static Doc2MD5 uniqueInstance;

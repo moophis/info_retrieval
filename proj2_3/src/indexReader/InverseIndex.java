@@ -1,11 +1,12 @@
 package indexReader;
 
-import Strucutre.TF_IDF_Positions;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import structure.TF_IDF_Positions;
 
 public class InverseIndex {
 	private static InverseIndex uniqueInstance;

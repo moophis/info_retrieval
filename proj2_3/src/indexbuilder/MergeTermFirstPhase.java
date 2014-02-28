@@ -1,10 +1,11 @@
 package indexbuilder;
 
-import Strucutre.PagePosition;
-import Strucutre.WordPagePosition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import structure.PagePosition;
+import structure.WordPagePosition;
 
 /**
  * Created by soushimei on 2/13/14.

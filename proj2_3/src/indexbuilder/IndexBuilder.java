@@ -1,7 +1,6 @@
 package indexbuilder;
 
 
-import Strucutre.TF_IDF_Positions;
 import indexReader.*;
 
 import java.io.File;
@@ -9,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import structure.TF_IDF_Positions;
 
 /**
  * Main entry.

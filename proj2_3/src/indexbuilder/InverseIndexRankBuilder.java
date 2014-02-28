@@ -1,11 +1,12 @@
 package indexbuilder;
 
-import Strucutre.TF_IDF_Positions;
 import indexReader.InverseIndex;
 import indexReader.MD52Doc;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import structure.TF_IDF_Positions;
 
 /**
  * Created by soushimei on 2/13/14.

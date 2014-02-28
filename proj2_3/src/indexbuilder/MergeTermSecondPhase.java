@@ -1,12 +1,13 @@
 package indexbuilder;
 
-import Strucutre.PagePosition;
-import Strucutre.TF_IDF_Positions;
 import indexReader.InverseIndex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import structure.PagePosition;
+import structure.TF_IDF_Positions;
 
 /**
  * Created by soushimei on 2/13/14.

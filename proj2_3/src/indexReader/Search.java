@@ -1,6 +1,5 @@
 package indexReader;
 
-import Strucutre.TF_IDF_Positions;
 import indexbuilder.IndexBuilder;
 import indexbuilder.StemDocuments;
 
@@ -8,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+
+import structure.TF_IDF_Positions;
 
 /**
  * Created by soushimei on 2/19/14.
