@@ -36,6 +36,8 @@ public class MD52Title {
                 String md5 = line.substring(0, 32);
                 String title = line.substring(32);
 
+                md5OrigTitle.put(md5, title);
+
                 String[] strs = title.split("\\W");
 
                 if (!md5Title.containsKey(md5)) {
@@ -63,5 +65,13 @@ public class MD52Title {
         return md5Title.get(md5).contains(str);
     }
 
-    private HashMap<String, HashSet<String>> md5Title = new HashMap<>();;
+    public String getTitle(String md5) {
+        if (!md5OrigTitle.containsKey(md5)) {
+            return null;
+        }
+        return md5OrigTitle.get(md5);
+    }
+
+    private HashMap<String, HashSet<String>> md5Title = new HashMap<>();
+    private HashMap<String, String> md5OrigTitle = new HashMap<>();
 }
