@@ -57,6 +57,7 @@ public class MD52Title {
         }
     }
 
+    // see if an url's title contains a string
     public boolean contains(String md5, String str) {
         if (!md5Title.containsKey(md5)) {
             return false;
@@ -65,6 +66,7 @@ public class MD52Title {
         return md5Title.get(md5).contains(str);
     }
 
+    // get the original title
     public String getTitle(String md5) {
         if (!md5OrigTitle.containsKey(md5)) {
             return null;
