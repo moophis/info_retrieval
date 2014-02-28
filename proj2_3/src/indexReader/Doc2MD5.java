@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import structure.HtmlFileInfo;
+import structure.PureFileInfo;
 
 public class Doc2MD5 {
 	private static Doc2MD5 uniqueInstance;
@@ -19,7 +19,7 @@ public class Doc2MD5 {
         return uniqueInstance;
     }
 
-    private HashMap<String, HtmlFileInfo> dictionary = new HashMap<>();
+    private HashMap<String, PureFileInfo> dictionary = new HashMap<>();
     /*      HtmlFileInfo
             public String MD5 = "";
             public long startPos = 0;
@@ -36,8 +36,8 @@ public class Doc2MD5 {
         try {
             fw = new FileWriter(filePath, false);
 
-            for (Map.Entry<String, HtmlFileInfo> m : dictionary.entrySet()) {
-                String buf = new StringBuilder().append(m.getKey()).append("$").append(m.getValue().MD5).append("$").append(m.getValue().startPos).append("$").append(m.getValue().htmlLen).append("$").append(m.getValue().fileName).toString();
+            for (Map.Entry<String, PureFileInfo> m : dictionary.entrySet()) {
+                String buf = new StringBuilder().append(m.getKey()).append("$").append(m.getValue().MD5).append("$").append(m.getValue().startPos).append("$").append(m.getValue().fileLen).append("$").append(m.getValue().fileName).toString();
                 fw.write(buf + "\n");
             }
             fw.flush();
@@ -54,7 +54,7 @@ public class Doc2MD5 {
         try {
             reader = new BufferedReader(new FileReader(f));
             String line;
-            HtmlFileInfo htmlFileInfo = new HtmlFileInfo();
+            PureFileInfo htmlFileInfo = new PureFileInfo();
             String url = "";
             while ((line = reader.readLine()) != null) {
                 url = readLine2HtmlFileInfo(line, htmlFileInfo);
@@ -67,22 +67,22 @@ public class Doc2MD5 {
         }
     }
 
-    private String readLine2HtmlFileInfo(String line, HtmlFileInfo htmlFileInfo) {
+    private String readLine2HtmlFileInfo(String line, PureFileInfo htmlFileInfo) {
         if (line == null) {
             return null;
         }
         String[] strings = line.split("\\$");
         htmlFileInfo.MD5 = strings[1];
         htmlFileInfo.startPos = Long.parseLong(strings[2]);
-        htmlFileInfo.htmlLen = Long.parseLong(strings[3]);
+        htmlFileInfo.fileLen = Long.parseLong(strings[3]);
         htmlFileInfo.fileName = strings[4];
         return strings[0];
     }
 
-    public boolean getHtmlFileInfo(String URL, HtmlFileInfo htmlFileInfo) {
+    public boolean getHtmlFileInfo(String URL, PureFileInfo htmlFileInfo) {
         if(dictionary.containsKey(URL)) {
             htmlFileInfo.fileName = dictionary.get(URL).fileName;
-            htmlFileInfo.htmlLen = dictionary.get(URL).htmlLen;
+            htmlFileInfo.fileLen = dictionary.get(URL).fileLen;
             htmlFileInfo.startPos = dictionary.get(URL).startPos;
             htmlFileInfo.MD5 = dictionary.get(URL).MD5;
             return true;
@@ -91,10 +91,10 @@ public class Doc2MD5 {
     }
     public void putHtmlFileInfo(String URL,
                                 long startPos, long htmlLen, String fileName) {
-        HtmlFileInfo htmlFileInfo = new HtmlFileInfo();
+        PureFileInfo htmlFileInfo = new PureFileInfo();
         htmlFileInfo.MD5 = DigestUtils.md5Hex(URL);
         htmlFileInfo.startPos = startPos;
-        htmlFileInfo.htmlLen = htmlLen;
+        htmlFileInfo.fileLen = htmlLen;
         htmlFileInfo.fileName = fileName;
         dictionary.put(URL, htmlFileInfo);
     }

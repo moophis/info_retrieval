@@ -44,7 +44,7 @@ public class MD52Title {
                     md5Title.put(md5, new HashSet<String>());
                 }
 
-                for (String str :strs) {
+                for (String str : strs) {
                     if (str != null && !str.isEmpty()) {
                         md5Title.get(md5).add(stemmer.stemWord(str));
                     }

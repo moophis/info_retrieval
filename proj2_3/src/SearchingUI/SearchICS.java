@@ -77,6 +77,18 @@ public class SearchICS extends JFrame {
 		});
 		mainPanel.add(quitButton);
 		
+		searchButton = new JButton("Search");
+		searchButton.setBounds(350, 150, 80, 30);
+		searchButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				ResultDialog sr = new ResultDialog();
+				sr.setVisible(true);
+			}
+		});
+		mainPanel.add(searchButton);
+		
 		aboutButton = new JButton("About");
 		aboutButton.setBounds(250, 150, 80, 30);
 		aboutButton.addActionListener(new ActionListener() {
@@ -89,18 +101,6 @@ public class SearchICS extends JFrame {
 		});
 		mainPanel.add(aboutButton);
 		
-		searchButton = new JButton("Search");
-		searchButton.setBounds(350, 150, 80, 30);
-		searchButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO
-				ResultDialog sr = new ResultDialog();
-				sr.setVisible(true);
-			}
-		});
-		mainPanel.add(searchButton);
-
 		// menu bar
 		JMenuBar menubar = new JMenuBar();
 		JMenu file = new JMenu("File");
@@ -174,7 +174,8 @@ public class SearchICS extends JFrame {
 		public ResultDialog() {
 			queryWords = inputArea.getText();
 			
-			if (queryWords == null || queryWords == "")
+			if (queryWords == null || queryWords.length() <= 0
+					|| queryWords.matches("\\s+"))
 				return;
 			
 			ResultPage result = new ResultPage(queryWords, getResultPath());
@@ -253,10 +254,10 @@ public class SearchICS extends JFrame {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
         
         if (args.length != 1) {
-        	System.err.println("Usage: <path>");
+        	System.err.println("Usage: <working root path>");
         }
         
-        setResultPath(args[0] + "/ResultPages/");
+        setResultPath(args[0]);
         
         // load index first
         IndexBuilder ib = new IndexBuilder(args[0]);
