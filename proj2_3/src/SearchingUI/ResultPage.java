@@ -54,6 +54,8 @@ public class ResultPage {
 			
 			PureFileInfo pureInfo = new PureFileInfo();
 			String absBuf = null; // the abstract of the page
+			String absInfoBuf = new String();
+			
 			// find doc
 			if (!Doc2MD5.getInstance().getHtmlFileInfo(url, pureInfo)) {
 				System.err.println("Cannot find url for md5: " + url);
@@ -61,59 +63,64 @@ public class ResultPage {
 			} else {
 				String file = pureInfo.fileName;
 				String filePath = workingFolderPath + "/pure/text/" + file;
+				absInfoBuf += file + " ";
 				System.out.println(filePath);
 				
-//				System.out.println("filePos: " + pureInfo.startPos 
-//						+ " fileLen: " + pureInfo.fileLen);
-//				// find query word appearing in the doc
-//				int firstQueryPos = 0;
-//				if (hitPositions.containsKey(md5)) {
-//					long from, to;
-//					int size = 0; // [from, to), size = to - from
-//					
-//					firstQueryPos = hitPositions.get(md5);
-//					// around about 100 words
-//					from = (firstQueryPos > 50) ? 
-//							firstQueryPos - 50 : 0;
-//					to = (pureInfo.fileLen - firstQueryPos > 50) ?
-//							firstQueryPos + 50 : pureInfo.fileLen;
-//					System.out.println("first query pos" + firstQueryPos +
-//							"from " + from + ", to " + to);
-//					size = (int) (to - from);
-//					from += pureInfo.startPos;
-//					to += pureInfo.startPos;
-//					
-//					byte[] bytes = new byte[size];
-//					try {
-//						RandomAccessFile raf = new RandomAccessFile(filePath, "r");
-//						raf.seek(from);
-//						raf.read(bytes);
-//						raf.close();
-//					} catch (FileNotFoundException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					try {
-//						absBuf = new String(bytes, "UTF-8");
-//					} catch (UnsupportedEncodingException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				} else {
-//					System.err.println("Cannot find query in: " + url);
-//					continue;
-//				}
+				System.out.println("filePos: " + pureInfo.startPos 
+						+ " fileLen: " + pureInfo.fileLen);
+				absInfoBuf += "start @" + pureInfo.startPos + " len = " + pureInfo.fileLen;
+				// find query word appearing in the doc
+				int firstQueryPos = 0;
+				if (hitPositions.containsKey(md5)) {
+					long from, to;
+					int size = 0; // [from, to), size = to - from
+					
+					firstQueryPos = hitPositions.get(md5);
+					absInfoBuf += ", first query find @" + firstQueryPos + "\n";
+					// around about 100 words
+					from = (firstQueryPos > 50) ? 
+							firstQueryPos - 50 : 0;
+					to = (pureInfo.fileLen - firstQueryPos > 50) ?
+							firstQueryPos + 50 : pureInfo.fileLen;
+					System.out.println("first query pos " + firstQueryPos +
+							"from " + from + ", to " + to);
+					size = (int) (to - from);
+					from += pureInfo.startPos;
+					to += pureInfo.startPos;
+					
+					byte[] bytes = new byte[10];
+					try {
+						RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+						raf.seek(from);
+						raf.read(bytes);
+						raf.close();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						absInfoBuf += "first 10 bytes: ";
+						absBuf = new String(bytes, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					System.err.println("Cannot find query in: " + url);
+					continue;
+				}
 			}
 			
 			StringToFile.toFile("<p>", resultPath);
 			StringToFile.toFile("<a href=\"" + url + "\"><b>" + title + "</b></a><br>", resultPath);
 			StringToFile.toFile("<b>URL:</b><em>" + url+ "</em><br>", resultPath);
-//			if (absBuf != null) {
-//				StringToFile.toFile("<i>" + absBuf+ "</i><br>", resultPath);
-//			}
+			if (absBuf != null && absInfoBuf != null) {
+				StringToFile.toFile("<b>" + absInfoBuf+ "</b><br>", resultPath);
+				StringToFile.toFile("<i>" + absBuf+ "</i><br>", resultPath);
+			}
 			StringToFile.toFile("</p>", resultPath);
 		}
 		
