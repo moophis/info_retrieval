@@ -22,6 +22,8 @@ public class IndexBuilder {
     private final String tempFolder;
     private final String rawHTMLFolder;
     private final String rawInfoFolder;
+    private final String pureTextFolder;
+    private final String pureInfoFolder;
     private final String pureTitleFolder;
 
     private String URL2MD5_fileName = "URL_to_MD5.txt";
@@ -38,11 +40,27 @@ public class IndexBuilder {
         tempFolder = "Temp/";
         rawHTMLFolder = "raw/text/";
         rawInfoFolder = "raw/info/";
-        pureTitleFolder = "pure/title";
+        pureTextFolder = "pure/text/";
+        pureInfoFolder = "pure/info/";
+        pureTitleFolder = "pure/title/";
 
 
         // check if the directory exists
         boolean success;
+        success = (new File(this.path + pureTextFolder)).exists();
+        if (!success) {
+            System.out.println("Fail to find the raw html data at "
+                    + this.path + pureTextFolder + " !");
+            initialization = false;
+            return;
+        }
+        success = (new File(this.path + pureInfoFolder)).exists();
+        if (!success) {
+            System.out.println("Fail to find the raw info data at "
+                    + this.path + pureInfoFolder + " !");
+            initialization = false;
+            return;
+        }
         success = (new File(this.path + rawHTMLFolder)).exists();
         if (!success) {
             System.out.println("Fail to find the raw html data at "
@@ -111,16 +129,16 @@ public class IndexBuilder {
          */
         // this is quite easy, one class can finish this
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
-        // DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
-        //        documentIndexFolder, rawHTMLFolder, rawInfoFolder);
-        // docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
+//        DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
+//                documentIndexFolder, pureTextFolder, pureInfoFolder);
+//        docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
         Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
-        // Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
+//        Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
         MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
-        // MD52Doc.getInstance().write2Disk(path + documentIndexFolder + "copy " + MD52URL_fileName);
+//        MD52Doc.getInstance().write2Disk(path + documentIndexFolder + "copy " + MD52URL_fileName);
 
         /*
-                                build MD52URL/URL2MD5
+                                build PageRank
         */
         System.out.println("Build the PageRankBuilder index");
         // PageRankBuilder pageRankBuilder = new PageRankBuilder(path,

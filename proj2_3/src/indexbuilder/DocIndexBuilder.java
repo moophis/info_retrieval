@@ -11,17 +11,17 @@ import java.io.*;
  */
 public class DocIndexBuilder {
     private final String documentIndexFolderPath;
-    private final String rawHTMLFolderPath;
-    private final String rawInfoFolderPath;
+    private final String pureTextFolderPath;
+    private final String pureInfoFolderPath;
 
 
     public DocIndexBuilder(String path,
                            String documentIndexFolder,
-                           String rawHTMLFolder,
-                           String rawInfoFolder) {
+                           String pureHTMLFolder,
+                           String pureInfoFolder) {
         documentIndexFolderPath = path + documentIndexFolder;
-        rawHTMLFolderPath = path + rawHTMLFolder;
-        rawInfoFolderPath = path + rawInfoFolder;
+        pureTextFolderPath = path + pureHTMLFolder;
+        pureInfoFolderPath = path + pureInfoFolder;
     }
 
 
@@ -37,8 +37,8 @@ public class DocIndexBuilder {
 
         for (Integer i = 13; i <= 19; i++) {
             String fileName = "thread" + i.toString() + ".txt";
-            String infPath = rawInfoFolderPath + fileName;
-            String txtPath = rawHTMLFolderPath + fileName;
+            String infPath = pureInfoFolderPath + fileName;
+            String txtPath = pureTextFolderPath + fileName;
             File infoFile = new File(infPath);
             File textFile = new File(txtPath);
             BufferedReader reader = null;
