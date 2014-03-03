@@ -54,9 +54,9 @@ public class Doc2MD5 {
         try {
             reader = new BufferedReader(new FileReader(f));
             String line;
-            PureFileInfo htmlFileInfo = new PureFileInfo();
             String url = "";
             while ((line = reader.readLine()) != null) {
+                PureFileInfo htmlFileInfo = new PureFileInfo();
                 url = readLine2HtmlFileInfo(line, htmlFileInfo);
                 dictionary.put(url, htmlFileInfo);
             }
