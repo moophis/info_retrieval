@@ -38,7 +38,9 @@ public class NDCGMetric {
 
         for (String url : urls) {
             prevIdealDCG += idealDCGs.get(url);
-            prevActualDCG += actualDCGs.get(url);
+            if (actualDCGs.containsKey(url)) {
+            	prevActualDCG += actualDCGs.get(url);
+            }
             ndcgs.add(prevActualDCG / prevIdealDCG);
         }
         return ndcgs;

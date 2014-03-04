@@ -1,6 +1,7 @@
 package SearchingUI;
 
 import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import structure.PureFileInfo;
+import metrics.*;
 
 import indexReader.Doc2MD5;
 import indexReader.MD52Doc;
@@ -24,9 +26,25 @@ public class ResultPage {
 		
 		queryTime = new Date();
 		
-		Search.search(this.query, hitMD5s, hitPositions, scores);
+		nanoTime = Search.searchBasic(this.query, hitMD5s, hitPositions, scores);
+//		nanoTime = Search.search(this.query, hitMD5s, hitPositions, scores);
 		
+		GoogleSample.init();
 		assemble();
+	}
+	
+	private double evaluate(String query) {
+		if (GoogleSample.sample.containsKey(query) 
+				&& hitMD5s.size() >= GoogleSample.EVAL_NUM) {
+			ArrayList<String> candidate = new ArrayList<>();
+			for (int i = 0; i < GoogleSample.EVAL_NUM; i++) {
+				candidate.add(MD52Doc.getInstance().getURL(hitMD5s.get(i)));
+			}
+			return NDCGMetric.compute(GoogleSample.sample.get(query), candidate)
+					.get(GoogleSample.EVAL_NUM - 1);
+		} else {
+			return Double.NaN;
+		}
 	}
 	
 	public void assemble() {
@@ -42,6 +60,10 @@ public class ResultPage {
 		StringToFile.toFile("</head>", resultPath);
 		StringToFile.toFile("<body>", resultPath);
 		StringToFile.toFile("<h1>Result Pages For: " + query + "</h1>" , resultPath);
+		StringToFile.toFile("Query time: " + (nanoTime / 1000000l) + " ms<br>" , resultPath);
+		StringToFile.toFile("Find " + hitMD5s.size() + " results<br>", resultPath);
+		StringToFile.toFile("NDCG Value comparing with Google results: " + evaluate(query) 
+							+ " <br>", resultPath);
 		
 		for (String md5 : hitMD5s) {
 			String url = MD52Doc.getInstance().getURL(md5);
@@ -78,17 +100,18 @@ public class ResultPage {
 					firstQueryPos = hitPositions.get(md5);
 					absInfoBuf += ", first query find @" + firstQueryPos + "\n";
 					// around about 100 words
-					from = (firstQueryPos > 50) ? 
-							firstQueryPos - 50 : 0;
-					to = (pureInfo.fileLen - firstQueryPos > 50) ?
-							firstQueryPos + 50 : pureInfo.fileLen;
+//					from = (firstQueryPos > 50) ? 
+//							firstQueryPos - 50 : 0;
+					from = firstQueryPos;
+					to = (pureInfo.fileLen - firstQueryPos > 100) ?
+							firstQueryPos + 100 : pureInfo.fileLen;
 					System.out.println("first query pos " + firstQueryPos +
 							"from " + from + ", to " + to);
 					size = (int) (to - from);
 					from += pureInfo.startPos;
 					to += pureInfo.startPos;
 					
-					byte[] bytes = new byte[10];
+					byte[] bytes = new byte[100];
 					try {
 						RandomAccessFile raf = new RandomAccessFile(filePath, "r");
 						raf.seek(from);
@@ -146,6 +169,8 @@ public class ResultPage {
 	private Date queryTime;
 	
 	private String resultPath = null;
+	
+	private long nanoTime = 0;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

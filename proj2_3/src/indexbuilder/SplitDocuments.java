@@ -258,7 +258,10 @@ public class SplitDocuments {
     }
     
     private static String buildPureIndexLine(String url, Long pos) {
-    	return DigestUtils.md5Hex(url) + ":" + pos.toString();
+    	// no need to use out-degree, so just set it to 0
+    	// format of this should be compatible with the raw info
+    	return DigestUtils.md5Hex(url) + ":" + pos.toString()
+    			+ ":0:" + url;
     }
     
     private static String buildPureTitleLine(String url, String title) {
