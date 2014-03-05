@@ -89,6 +89,15 @@ public class Doc2MD5 {
         }
         return false;
     }
+
+    public long getPageSize(String URL) {
+        if(dictionary.containsKey(URL)) {
+            return dictionary.get(URL).fileLen;
+        } else {
+            return Long.MAX_VALUE;
+        }
+    }
+
     public void putHtmlFileInfo(String URL,
                                 long startPos, long htmlLen, String fileName) {
         PureFileInfo htmlFileInfo = new PureFileInfo();
