@@ -20,14 +20,17 @@ import indexReader.Search;
 import crawler.StringToFile;
 
 public class ResultPage {
-	public ResultPage(String query, String resultFolderPath) {
+	public ResultPage(String query, String resultFolderPath, boolean basic) {
 		this.query = query;
 		this.workingFolderPath = resultFolderPath;
+		this.basic = basic;
 		
 		queryTime = new Date();
 		
-		nanoTime = Search.searchBasic(this.query, hitMD5s, hitPositions, scores);
-//		nanoTime = Search.search(this.query, hitMD5s, hitPositions, scores);
+		if (basic)
+			nanoTime = Search.searchBasic(this.query, hitMD5s, hitPositions, scores);
+		else 
+			nanoTime = Search.search(this.query, hitMD5s, hitPositions, scores);
 		
 		GoogleSample.init();
 		assemble();
@@ -64,7 +67,10 @@ public class ResultPage {
 		StringToFile.toFile("Find " + hitMD5s.size() + " results<br>", resultPath);
 		StringToFile.toFile("NDCG Value comparing with Google results: " + evaluate(query) 
 							+ " <br>", resultPath);
+		StringToFile.toFile("Using " + (basic ? "basic " : "optimized ") 
+				+ " searching algorithm<br>", resultPath);
 		
+		int count = 0;
 		for (String md5 : hitMD5s) {
 			String url = MD52Doc.getInstance().getURL(md5);
 			String title = MD52Title.getInstance().getTitle(md5);
@@ -135,6 +141,10 @@ public class ResultPage {
 					System.err.println("Cannot find query in: " + url);
 					continue;
 				}
+				
+				// early termination
+				if (++count >= MAX_RESULTS)
+					break;
 			}
 			
 			StringToFile.toFile("<p>", resultPath);
@@ -154,9 +164,10 @@ public class ResultPage {
 	public String getResultPath() {
 		return resultPath;
 	}
+		
+	private String workingFolderPath = null;
 	
-	private String workingFolderPath 
-			= "/Users/liqiangw/Test/IR/ResultPages/";
+	private static final int MAX_RESULTS = 50;
 	
 	private String query = null;
 	
@@ -170,11 +181,11 @@ public class ResultPage {
 	
 	private String resultPath = null;
 	
+	private boolean basic = false;
+	
 	private long nanoTime = 0;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println(args[0]);
-		ResultPage rp = new ResultPage("machine learning", args[0]);
 	}
 }
