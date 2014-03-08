@@ -32,7 +32,7 @@ public class SearchICS extends JFrame {
 		init();
 	}
 	
-	public static void setResultPath(String path) {
+	public static void setRootPath(String path) {
 		resultPath = path;
 	}
 	
@@ -67,7 +67,7 @@ public class SearchICS extends JFrame {
 		
 		// button
 		quitButton = new JButton("Quit");
-		quitButton.setBounds(150, 150, 80, 30);
+		quitButton.setBounds(100, 150, 80, 30);
 		quitButton.setToolTipText("Exit this program");
 		quitButton.addActionListener(new ActionListener() {
 			@Override
@@ -78,19 +78,31 @@ public class SearchICS extends JFrame {
 		mainPanel.add(quitButton);
 		
 		searchButton = new JButton("Search");
-		searchButton.setBounds(350, 150, 80, 30);
+		searchButton.setBounds(400, 150, 80, 30);
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO
-				ResultDialog sr = new ResultDialog();
-				sr.setVisible(true);
+				ResultDialog sr = new ResultDialog(false);
+//				sr.setVisible(true);
+			}
+		});
+		mainPanel.add(searchButton);
+		
+		searchButton = new JButton("Basic Search");
+		searchButton.setBounds(300, 150, 80, 30);
+		searchButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				ResultDialog sr = new ResultDialog(true);
+//				sr.setVisible(true);
 			}
 		});
 		mainPanel.add(searchButton);
 		
 		aboutButton = new JButton("About");
-		aboutButton.setBounds(250, 150, 80, 30);
+		aboutButton.setBounds(200, 150, 80, 30);
 		aboutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -171,17 +183,20 @@ public class SearchICS extends JFrame {
 	 * Query result panel, shown after clicking "Search". 
 	 */
 	class ResultDialog extends JDialog {
-		public ResultDialog() {
+		/**
+		 * @param basic - choose whether use basic search algorithm. 
+		 */
+		public ResultDialog(boolean basic) {
 			queryWords = inputArea.getText();
 			
 			if (queryWords == null || queryWords.length() <= 0
 					|| queryWords.matches("\\s+"))
 				return;
 			
-			ResultPage result = new ResultPage(queryWords, getResultPath());
+			ResultPage result = new ResultPage(queryWords, getResultPath(), basic);
 			path = result.getResultPath();
 			
-			initSearchResult();
+//			initSearchResult();
 			
 			// Try to open the result page on default browser.
 			if (Desktop.isDesktopSupported()) {
@@ -257,7 +272,7 @@ public class SearchICS extends JFrame {
         	System.err.println("Usage: <working root path>");
         }
         
-        setResultPath(args[0]);
+        setRootPath(args[0]);
         
         // load index first
         IndexBuilder ib = new IndexBuilder(args[0]);
