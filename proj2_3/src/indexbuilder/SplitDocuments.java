@@ -102,9 +102,13 @@ public class SplitDocuments {
         			assert(curPos >= adjPos);
 
                     word = porterStemmer.stem(word.toLowerCase());
-        			if (!FILTERS.matcher(word).matches() && word != null && !word.isEmpty()) {
+        			if (adjInfo != null &&
+                            !FILTERS.matcher(word).matches() && word != null && !word.isEmpty()) {
 	        			int offset = curPos - adjPos;
-	        			String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
+	        			String url = getPureIndexLine(adjInfo, "url");
+
+                        String adjMD5 = DigestUtils.md5Hex(url);
+//                        String adjMD5 = getPureIndexLine(adjInfo, "url-md5");
 
                         // merge
                         if (adjMD5 != null && !adjMD5.isEmpty()) {
@@ -275,10 +279,12 @@ public class SplitDocuments {
     	String[] strings = line.split(":");
     	
     	switch (type) {
-    	case "url-md5":
-    		return strings[0];
-    	case "position":
-    		return strings[1];
+            case "url-md5":
+    		    return strings[0];
+            case "position":
+    		    return strings[1];
+            case "url":
+                return "http:" + strings[4];
     	default:
     		System.err.println("In vaild input type!");
     	}

@@ -312,9 +312,9 @@ public class Search {
         // int lenUrl = MD52Doc.getInstance().getURL(hitMd5).length();
         double fracPageRank, fracTf_idf, fracCloseness, fracTitle, fracAnchor;
         if (queriesList.size() == 1) {
-            fracPageRank = .2; fracTf_idf = .3; fracCloseness = 0; fracTitle = 0.25; fracAnchor = 0.25;
+            fracPageRank = .2; fracTf_idf = .3; fracCloseness = 0; fracTitle = 0.25; fracAnchor = 0.5;
         } else {
-            fracPageRank = .1; fracTf_idf = .4; fracCloseness = .25; fracTitle = 0.25; fracAnchor = 0.25;
+            fracPageRank = .2; fracTf_idf = .2; fracCloseness = .2; fracTitle = 0.4; fracAnchor = 0.4;
         }
         // assigning scores
         for (String hitMd5 : hitMd5s) {
@@ -338,8 +338,8 @@ public class Search {
 
             String url = MD52Doc.getInstance().getURL(hitMd5);
             // if it is a luci page, lower its score
-            if (url.contains("luci.ics")) {
-                score *= 0.9;
+            if (url.contains("luci.ics") || url.contains("eppstein/pix/")) {
+                score *= 0.6;
             }
 
             scores.put(hitMd5, score);
