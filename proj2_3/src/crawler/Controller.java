@@ -45,35 +45,38 @@ public class Controller {
          * which are found in these pages
          */
         controller.addSeed("http://www.ics.uci.edu/");
+        controller.addSeed("http://www.ics.uci.edu/~lopes/");
+        controller.addSeed("http://www.ics.uci.edu/~lopes/publications.html");
+        controller.addSeed("http://www.ics.uci.edu/~dgillen/Welcome.html");
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
         controller.start(CrawlerSW.class, numberOfCrawlers);
-
+/*
         System.out.println("Start saving data");
         FileWriter fw;
         String filePath = crawlStorageFolder + "raw/info/pageRank.txt";
-//        fw = new FileWriter(filePath, false);
-//        for (Map.Entry<String, HashSet<String> > m : CrawlerSW.pageRankData.entrySet()) {
-//            StringBuilder buf = new StringBuilder().append(m.getKey());
-//            for (String s : m.getValue()) {
-//                buf.append(":").append(s);
-//            }
-//            fw.write(buf.toString()+"\n");
-//        }
-//        fw.flush();
-//        fw.close();
-//
-//        filePath = crawlStorageFolder + "raw/info/pageOutDegree.txt";
-//        fw = new FileWriter(filePath, false);
-//        for (Map.Entry<String, Integer> m : CrawlerSW.outDegree.entrySet()) {
-//            StringBuilder buf = new StringBuilder().append(m.getKey()).append(":").append(m.getValue());
-//            fw.write(buf.toString()+"\n");
-//        }
-//        fw.flush();
-//        fw.close();
+        fw = new FileWriter(filePath, false);
+        for (Map.Entry<String, HashSet<String> > m : CrawlerSW.pageRankData.entrySet()) {
+            StringBuilder buf = new StringBuilder().append(m.getKey());
+            for (String s : m.getValue()) {
+                buf.append(":").append(s);
+            }
+            fw.write(buf.toString()+"\n");
+        }
+        fw.flush();
+        fw.close();
+
+        filePath = crawlStorageFolder + "raw/info/pageOutDegree.txt";
+        fw = new FileWriter(filePath, false);
+        for (Map.Entry<String, Integer> m : CrawlerSW.outDegree.entrySet()) {
+            StringBuilder buf = new StringBuilder().append(m.getKey()).append(":").append(m.getValue());
+            fw.write(buf.toString()+"\n");
+        }
+        fw.flush();
+        fw.close();
 
         System.out.println("Start saving anchor text data");
         filePath = crawlStorageFolder + "data/info/anchorText.txt";
@@ -88,7 +91,7 @@ public class Controller {
         }
         fw.flush();
         fw.close();
-
+*/
         System.out.println("Finish!");
     }
 }

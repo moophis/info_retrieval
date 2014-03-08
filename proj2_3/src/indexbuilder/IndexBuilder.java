@@ -31,6 +31,7 @@ public class IndexBuilder {
     private String PageRank_fileName = "PageRankBuilder.txt";
     private String title_fileName = "title.txt";
     private String anchor_fileName = "anchorText.txt";
+    private String MD52Depth_fileName = "MD5_to_Depth.txt";
     private String InverseIndex_fileName = "InverseIndex.txt";
 
     public IndexBuilder(String path) {
@@ -131,7 +132,7 @@ public class IndexBuilder {
         System.out.println("Build the indices from URL to MD5 and from MD5 to URL");
 //        DocIndexBuilder docIndexBuilder = new DocIndexBuilder(path,
 //                documentIndexFolder, pureTextFolder, pureInfoFolder);
-//        docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName);
+//        docIndexBuilder.build(URL2MD5_fileName, MD52URL_fileName, MD52Depth_fileName);
         Doc2MD5.getInstance().readFromDisk(path + documentIndexFolder + URL2MD5_fileName);
 //        Doc2MD5.getInstance().write2Disk(path + documentIndexFolder + "copy " + URL2MD5_fileName);
         MD52Doc.getInstance().readFromDisk(path + documentIndexFolder + MD52URL_fileName);
@@ -152,11 +153,15 @@ public class IndexBuilder {
         System.out.println("Build the Title index");
         MD52Title.getInstance().readFromDisk(path + documentIndexFolder + title_fileName);
         /*
-                                build MD5 to anchor text
+                                build MD5 to anchor text index
         */
         System.out.println("Build the anchor text index");
         MD52Anchor.getInstance().readFromDisk(path + documentIndexFolder + anchor_fileName);
-
+        /*
+                                build MD5 to depth index
+        */
+        System.out.println("Build the depth index");
+        MD52Depth.getInstance().readFromDisk(path + documentIndexFolder + MD52Depth_fileName);
 
         System.gc();
         System.out.println("Begin build inverse index");

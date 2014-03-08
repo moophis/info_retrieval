@@ -113,20 +113,23 @@ public class CrawlerSW extends WebCrawler{
 		
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-//			String text = htmlParseData.getText();
-//			String html = htmlParseData.getHtml();
+			String text = htmlParseData.getText();
 
             List<WebURL> links = htmlParseData.getOutgoingUrls();
 
-//            String urlMD5 = DigestUtils.md5Hex(url);
-//            outDegree.put(urlMD5, links.size());
+            /*
+            String urlMD5 = DigestUtils.md5Hex(url);
+            outDegree.put(urlMD5, links.size());
+
 
             for (WebURL link : links) {
                 String linkMD5 = DigestUtils.md5Hex(link.toString());
-//                if (!pageRankData.containsKey(linkMD5)) {
-//                    pageRankData.put(linkMD5, new HashSet<String>());
-//                }
-//                pageRankData.get(linkMD5).add(urlMD5);
+                // for page rank
+                if (!pageRankData.containsKey(linkMD5)) {
+                    pageRankData.put(linkMD5, new HashSet<String>());
+                }
+                pageRankData.get(linkMD5).add(urlMD5);
+                // for anchor text
                 if (!anchorText.containsKey(linkMD5)) {
                     anchorText.put(linkMD5, new HashSet<String>());
                 }
@@ -138,6 +141,7 @@ public class CrawlerSW extends WebCrawler{
                 }
             }
 
+
             // output the anchor text so far to the url
             String md5Url = DigestUtils.md5Hex(url);
             if (anchorText.containsKey(md5Url)) {
@@ -148,37 +152,25 @@ public class CrawlerSW extends WebCrawler{
                 }
                 System.out.println(outMessage.toString());
             }
+            */
 
-
-//			Integer size = links.size();
+			short depth = page.getWebURL().getDepth();
 			
 			/*
 			 * Pages fetched from different crawler threads are 
 			 * stored separately. 
 			 */
-//			long offset = -1;
-//			try {
-//				offset = DatabaseBuilder.writePageContent(threadId, text);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			String meta = null;
-//			if (offset != -1) {
-//				meta = DatabaseBuilder.buildIndexLine(getMD5(text), offset, size, url);
-//				DatabaseBuilder.writePageIndex(threadId, meta);
-//			}
-			
-//			StringToFile.toFile(url, Controller.crawlStorageFolder + "data/info/" 
-//					+ fileName + ".txt");
-//			StringToFile.toFile(size.toString(), Controller.crawlStorageFolder + "data/info/" 
-//					+ fileName + ".txt");
-//			StringToFile.toFile(text, Controller.crawlStorageFolder + "data/text/"
-//					+ fileName + ".txt");
-
-//			System.out.println("Text length: " + text.length());
-//			System.out.println("Html length: " + html.length());
-//			System.out.println("Number of outgoing links: " + links.size());
-//			System.out.println("Fetch time: " + currentTime);
+			long offset = -1;
+			try {
+				offset = DatabaseBuilder.writePageContent(threadId, text);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String meta;
+			if (offset != -1) {
+				meta = DatabaseBuilder.buildIndexLine(getMD5(url), offset, depth, url);
+				DatabaseBuilder.writePageIndex(threadId, meta);
+			}
 		}
 	}
 }
