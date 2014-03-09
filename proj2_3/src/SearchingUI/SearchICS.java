@@ -1,12 +1,6 @@
 package SearchingUI;
 
-import indexReader.InverseIndex;
-import indexReader.Doc2MD5;
-import indexReader.MD52Doc;
-import indexReader.PageRank;
-
 import indexbuilder.IndexBuilder;
-import indexbuilder.SplitDocuments;
 
 import javax.swing.*;
 
@@ -14,8 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;

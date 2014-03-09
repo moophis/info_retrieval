@@ -227,7 +227,7 @@ public class Search {
             calculate posting urls
          */
         HashMap<String, HashMap<String, TF_IDF_Positions>> inverseIndex = InverseIndex.getInstance().getInverseIndex();
-        HashMap<String, Double>maginitude = new HashMap<>();
+        HashMap<String, Double>magnitude = new HashMap<>();
 
         // get first term's inverse index
         if (!inverseIndex.containsKey(queriesList.get(0))) {
@@ -260,7 +260,7 @@ public class Search {
                 hitPositions.put(m.getKey(), inverseIndex.get(queriesList.get(0)).get(m.getKey()).positions.get(0));
                 // add tf_idfs
                 tf_idfs.put(m.getKey(), 0.0);
-                maginitude.put(m.getKey(), 0.0);
+                magnitude.put(m.getKey(), 0.0);
                 // add PageRank
                 pageRanks.put(m.getKey(), PageRank.getInstance().getAPageRank(m.getKey()));
             }
@@ -285,9 +285,9 @@ public class Search {
                 tf_idf += inverseIndex.get(query).get(md5).tf_idf;
                         // * Math.log(corpus / (1 + inverseIndex.get(query).size()));
                 tf_idfs.put(md5, tf_idf);
-                double mag = maginitude.get(md5);
+                double mag = magnitude.get(md5);
                 mag += inverseIndex.get(query).get(md5).tf_idf * inverseIndex.get(query).get(md5).tf_idf;
-                maginitude.put(md5, mag);
+                magnitude.put(md5, mag);
              }
         }
 
@@ -301,7 +301,7 @@ public class Search {
 
         for (String hitMd5 : hitMd5s) {
             // calc max tf-idf
-            double tf_idf = tf_idfs.get(hitMd5) / Math.sqrt(maginitude.get(hitMd5));
+            double tf_idf = tf_idfs.get(hitMd5) / Math.sqrt(magnitude.get(hitMd5));
             tf_idfs.put(hitMd5, tf_idf);
             if (tf_idf > maxTfIdf) {
                 maxTfIdf = tf_idf;

@@ -167,7 +167,7 @@ public class ResultPage {
 		
 	private String workingFolderPath = null;
 	
-	private static final int MAX_RESULTS = 50;
+	private static final int MAX_RESULTS = 5;
 	
 	private String query = null;
 	
@@ -184,8 +184,4 @@ public class ResultPage {
 	private boolean basic = false;
 	
 	private long nanoTime = 0;
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-	}
 }
