@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Created by soushimei on 2/24/14.
@@ -76,4 +77,30 @@ public class MD52Title {
 
     private HashMap<String, HashSet<String>> md5Title = new HashMap<>();
     private HashMap<String, String> md5OrigTitle = new HashMap<>();
+
+    public void stat() {
+        double untitleCount = 0.0;
+        double emptyCount = 0.0;
+        double homeCount = 0.0;
+        StemDocuments stemmer = new StemDocuments();
+
+        for (Map.Entry<String, HashSet<String>> m : md5Title.entrySet()) {
+            if (m.getValue().size() == 0) {
+                emptyCount += 1.0;
+            }
+            if (m.getValue().contains(stemmer.stemWord("untitle"))) {
+                untitleCount += 1.0;
+            }
+            if (m.getValue().contains(stemmer.stemWord("home"))) {
+                homeCount += 1.0;
+            }
+        }
+        untitleCount /= md5Title.size();
+        emptyCount /= md5Title.size();
+        homeCount /= md5Title.size();
+        System.out.println("Untitle Percentage: " + new Double(untitleCount).toString());
+        System.out.println("Empty Percentage: " + new Double(emptyCount).toString());
+        System.out.println("Home Percentage: " + new Double(homeCount).toString());
+    }
+
 }

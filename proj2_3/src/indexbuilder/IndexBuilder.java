@@ -152,6 +152,7 @@ public class IndexBuilder {
         */
         System.out.println("Build the Title index");
         MD52Title.getInstance().readFromDisk(path + documentIndexFolder + title_fileName);
+        MD52Title.getInstance().stat();
         /*
                                 build MD5 to anchor text index
         */
