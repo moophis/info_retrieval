@@ -143,7 +143,7 @@ public class ResultPage {
 				}
 				
 				// early termination
-				if (++count >= MAX_RESULTS)
+				if (++count > MAX_RESULTS)
 					break;
 			}
 			
