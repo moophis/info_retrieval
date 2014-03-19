@@ -105,19 +105,19 @@ public class ResultPage {
 					
 					firstQueryPos = hitPositions.get(md5);
 					absInfoBuf += ", first query find @" + firstQueryPos + "\n";
-					// around about 100 words
-//					from = (firstQueryPos > 50) ? 
-//							firstQueryPos - 50 : 0;
-					from = firstQueryPos;
-					to = (pureInfo.fileLen - firstQueryPos > 100) ?
-							firstQueryPos + 100 : pureInfo.fileLen;
+					// around about 200 words
+					from = (firstQueryPos > 10) ?
+							firstQueryPos - 10 : 0;
+//					from = firstQueryPos;
+					to = (pureInfo.fileLen - firstQueryPos > 200) ?
+							firstQueryPos + 200 : pureInfo.fileLen;
 					System.out.println("first query pos " + firstQueryPos +
 							"from " + from + ", to " + to);
 					size = (int) (to - from);
 					from += pureInfo.startPos;
 					to += pureInfo.startPos;
 					
-					byte[] bytes = new byte[100];
+					byte[] bytes = new byte[size];
 					try {
 						RandomAccessFile raf = new RandomAccessFile(filePath, "r");
 						raf.seek(from);
@@ -151,7 +151,7 @@ public class ResultPage {
 			StringToFile.toFile("<a href=\"" + url + "\"><b>" + title + "</b></a><br>", resultPath);
 			StringToFile.toFile("<b>URL:</b><em>" + url+ "</em><br>", resultPath);
 			if (absBuf != null && absInfoBuf != null) {
-				StringToFile.toFile("<b>" + absInfoBuf+ "</b><br>", resultPath);
+//				StringToFile.toFile("<b>" + absInfoBuf+ "</b><br>", resultPath);
 				StringToFile.toFile("<i>" + absBuf+ "</i><br>", resultPath);
 			}
 			StringToFile.toFile("</p>", resultPath);
